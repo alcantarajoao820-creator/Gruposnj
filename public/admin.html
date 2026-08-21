@@ -118,7 +118,7 @@ w<body>
         document.getElementById('admin-content').style.display = 'block';
         carregarDados();
       } else {
-        mostrarAviso('Erro', 'Senha incorreta!');
+        alert('Senha incorreta!');
       }
     }
 
@@ -127,49 +127,49 @@ w<body>
       carregarGrupos();
     }
 
-     async function carregarSolicitacoes() {
-      const container = document.getElementById('lista-solicitacoes');
+    async function carregarSolicitacoes() {
+      let container = document.getElementById('lista-solicitacoes');
+      if (!container) {
+        alert('ERRO CRITICO: O ID lista-solicitacoes não existe no HTML!');
+        return;
+      }
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
+        if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
         
-        // Se o servidor do Render estiver "dormindo", avisa na tela
-        if (!res.ok) {
-          throw new Error('Servidor respondeu com status ' + res.status);
-        }
-
         const sol = await res.json();
 
         if (!Array.isArray(sol) || sol.length === 0) {
           container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
-        } else {
-          container.innerHTML = sol.map(s => `
-            <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
-              <div class="info-text">
-                <strong>${escapeHtml(s.nome)}</strong><br>
-                <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
-              </div>
-              <div class="actions" style="margin-top:5px;">
-                <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
-                <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
-              </div>
-            </div>
-          `).join('');
+          return;
         }
+
+        container.innerHTML = sol.map(s => `
+          <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
+            <div class="info-text">
+              <strong>${s.nome || 'Sem nome'}</strong><br>
+              <small style="color:#38bdf8;">${s.link || ''}</small>
+            </div>
+            <div class="actions" style="margin-top:5px;">
+              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
+              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
+            </div>
+          </div>
+        `).join('');
       } catch(e) {
-        // ISSO VAI APARECER DIRETO NA TELA DO CELULAR SE DER ERRO!
         container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações: ' + e.message + '</p>';
-        alert('Erro nas solicitações: ' + e.message);
       }
     }
 
     async function carregarGrupos() {
-      const container = document.getElementById('lista-todos-grupos');
+      let container = document.getElementById('lista-todos-grupos');
+      if (!container) {
+        alert('ERRO CRITICO: O ID lista-todos-grupos não existe no HTML!');
+        return;
+      }
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/grupos');
-        
-        if (!res.ok) {
-          throw new Error('Servidor respondeu com status ' + res.status);
-        }
+        if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
 
         const grupos = await res.json();
 
@@ -181,22 +181,20 @@ w<body>
         container.innerHTML = grupos.map(g => `
           <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
             <div class="info-text">
-              <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
-              <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
+              <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
+              <small style="color:#94a3b8;">${g.link || ''}</small>
             </div>
             <div class="actions" style="margin-top:5px;">
               ${g.isVip ?
                 `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
-                `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
+                `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${g.nome}')">Dar VIP</button>`
               }
               <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
             </div>
           </div>
         `).join('');
       } catch(e) {
-        // ISSO VAI APARECER DIRETO NA TELA DO CELULAR SE DER ERRO!
         container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
-        alert('Erro nos grupos: ' + e.message);
       }
     }
 
