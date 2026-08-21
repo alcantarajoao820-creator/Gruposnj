@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Admin - GruposNJ</title>
   <style>
     * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
@@ -134,173 +129,168 @@
     }
 
 
-    async function carregarSolicitacoes() {
-      const container = document.getElementById('lista-solicitacoes');
-      try {
-        const res = await fetch('/api/admin/solicitacoes');
-        const sol = await res.json();
+   // Função para carregar as solicitações pendentes via API do Node
+async function carregarSolicitacoes() {
+  const container = document.getElementById('lista-solicitacoes');
+  try {
+    const res = await fetch('/api/admin/solicitacoes');
+    const sol = await res.json();
 
-        if (!Array.isArray(sol) || sol.length === 0) {
-          return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
-        }
-
-        container.innerHTML = sol.map(s => `
-          <div class="item">
-            <div class="info-text">
-              <strong>${escapeHtml(s.nome)}</strong><br>
-              <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
-            </div>
-            <div class="actions">
-              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
-              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
-            </div>
-          </div>
-        `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
-      }
+    if (!Array.isArray(sol) || sol.length === 0) {
+      return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
     }
 
-    // Inicializa a referência do Firestore
-    const db = firebase.firestore();
+    container.innerHTML = sol.map(s => `
+      <div class="item">
+        <div class="info-text">
+          <strong>${escapeHtml(s.nome)}</strong><br>
+          <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
+        </div>
+        <div class="actions">
+          <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
+          <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
+  }
+}
 
-    async function carregarSolicitacoes() {
-      const container = document.getElementById('lista-solicitacoes');
-      try {
-        const snapshot = await db.collection('solicitacoes').get();
-        const sol = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+// Função para carregar todos os grupos cadastrados via API do Node
+async function carregarGrupos() {
+  const container = document.getElementById('lista-todos-grupos');
+  try {
+    const res = await fetch('/api/grupos');
+    const grupos = await res.json();
 
-        if (!Array.isArray(sol) || sol.length === 0) {
-          return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
-        }
-
-        container.innerHTML = sol.map(s => `
-          <div class="item">
-            <div class="info-text">
-              <strong>${escapeHtml(s.nome)}</strong><br>
-              <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
-            </div>
-            <div class="actions">
-              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
-              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
-            </div>
-          </div>
-        `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
-      }
+    if (!Array.isArray(grupos) || grupos.length === 0) {
+      return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
     }
 
-    async function carregarGrupos() {
-      const container = document.getElementById('lista-todos-grupos');
-      try {
-        const snapshot = await db.collection('grupos').get();
-        const grupos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        if (!Array.isArray(grupos) || grupos.length === 0) {
-          return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
-        }
-
-        container.innerHTML = grupos.map(g => `
-          <div class="item">
-            <div class="info-text">
-              <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
-              <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
-            </div>
-            <div class="actions">
-              ${g.isVip ?
-                `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
-                `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
-              }
-              <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
-            </div>
-          </div>
-        `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos.</p>';
-      }
-    }
-
-    async function decidir(id, aceito) {
-      try {
-        if (aceito) {
-          // Pega os dados da solicitação para mover para a coleção de grupos
-          const docRef = db.collection('solicitacoes').doc(id);
-          const doc = await docRef.get();
-          if (doc.exists) {
-            const dados = doc.data();
-            // Adiciona na coleção de grupos
-            await db.collection('grupos').add({
-              nome: dados.nome,
-              link: dados.link,
-              isVip: false,
-              criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            // Remove das solicitações
-            await docRef.delete();
+    container.innerHTML = grupos.map(g => `
+      <div class="item">
+        <div class="info-text">
+          <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
+          <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
+        </div>
+        <div class="actions">
+          ${g.isVip ?
+            `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
+            `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
           }
-        } else {
-          // Se recusado, apenas deleta da coleção de solicitações
-          await db.collection('solicitacoes').doc(id).delete();
-        }
-        carregarDados();
-      } catch (err) {
-        mostrarAviso('Erro', 'Não foi possível processar a solicitação.');
-      }
-    }
+          <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos.</p>';
+  }
+}
 
-    function abrirModalVip(id, nome) {
-      grupoIdSelecionado = id;
-      document.getElementById('modal-vip-nome').innerText = 'Grupo: ' + nome;
-      document.getElementById('modal-vip').classList.add('active');
+async function decidir(id, aceito) {
+  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+  try {
+    const res = await fetch('/api/admin/decidir-solicitacao', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha: senhaAdmin, id, aceito })
+    });
+    const data = await res.json();
+    if (data.success) {
+      carregarSolicitacoes();
+      carregarGrupos();
+    } else {
+      alert(data.error || 'Erro ao processar solicitação.');
     }
+  } catch (err) {
+    alert('Erro de comunicação com o servidor.');
+  }
+}
 
-    async function confirmarVip(dias) {
-      fecharModal('modal-vip');
-      try {
-        await db.collection('grupos').doc(grupoIdSelecionado).update({
-          isVip: true,
-          vipDias: dias
-        });
-        mostrarAviso('Sucesso', 'VIP ativado por ' + dias + ' dias!');
-        carregarGrupos();
-      } catch (err) {
-        mostrarAviso('Erro', 'Não foi possível ativar o VIP.');
-      }
-    }
+let grupoIdSelecionado = null;
 
-    async function removerVip(id) {
-      try {
-        await db.collection('grupos').doc(id).update({
-          isVip: false,
-          vipDias: 0
-        });
-        mostrarAviso('Sucesso', 'VIP removido!');
-        carregarGrupos();
-      } catch (err) {
-        mostrarAviso('Erro', 'Não foi possível remover o VIP.');
-      }
-    }
+function abrirModalVip(id, nome) {
+  grupoIdSelecionado = id;
+  const dias = prompt('Quantos dias de VIP deseja dar?', '30');
+  if (dias) confirmarVip(parseInt(dias));
+}
 
-    function abrirModalDeletar(id) {
-      grupoIdSelecionado = id;
-      document.getElementById('modal-confirm').classList.add('active');
+async function confirmarVip(dias) {
+  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+  try {
+    const res = await fetch('/api/admin/ativar-vip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha: senhaAdmin, grupoId: grupoIdSelecionado, dias })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert('VIP ativado com sucesso!');
+      carregarGrupos();
+    } else {
+      alert(data.error || 'Erro ao ativar VIP.');
     }
+  } catch (err) {
+    alert('Erro ao conectar com o servidor.');
+  }
+}
 
-    async function executarDeletar() {
-      fecharModal('modal-confirm');
-      try {
-        await db.collection('grupos').doc(grupoIdSelecionado).delete();
-        mostrarAviso('Sucesso', 'Grupo removido!');
-        carregarGrupos();
-      } catch (err) {
-        mostrarAviso('Erro', 'Não foi possível deletar o grupo.');
-      }
+async function removerVip(id) {
+  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+  try {
+    const res = await fetch('/api/admin/remover-vip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha: senhaAdmin, grupoId: id })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert('VIP removido!');
+      carregarGrupos();
+    } else {
+      alert(data.error || 'Erro ao remover VIP.');
     }
+  } catch (err) {
+    alert('Erro ao conectar com o servidor.');
+  }
+}
 
-    function escapeHtml(str) {
-      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+function abrirModalDeletar(id) {
+  grupoIdSelecionado = id;
+  if (confirm('Tem certeza que deseja deletar este grupo?')) {
+    executarDeletar();
+  }
+}
+
+async function executarDeletar() {
+  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+  try {
+    const res = await fetch(`/api/grupos/${grupoIdSelecionado}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha: senhaAdmin })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert('Grupo removido!');
+      carregarGrupos();
+    } else {
+      alert(data.error || 'Erro ao deletar grupo.');
     }
+  } catch (err) {
+    alert('Erro ao conectar com o servidor.');
+  }
+}
+
+function escapeHtml(str) {
+  return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+// Inicializa carregando os dados ao abrir a página
+carregarSolicitacoes();
+carregarGrupos();
+
 
   </script>
 </body>
