@@ -2,117 +2,53 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Admin - GruposNJ</title>
   <style>
-    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
-    body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 15px 10px; }
-    .container { max-width: 700px; margin: 0 auto; width: 100%; }
-    h1 { font-size: 1.4rem; color: #38bdf8; margin-bottom: 20px; text-align: center; }
-
-    .card { background: #0f172a; border: 1px solid #1e293b; padding: 15px; border-radius: 14px; margin-bottom: 20px; width: 100%; overflow: hidden; }
-    .card h2 { font-size: 1rem; color: #fff; margin-bottom: 12px; }
-
-    input { width: 100%; padding: 12px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 10px; font-size: 0.95rem; }
-    .btn { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
-    .btn-green { background: #22c55e; color: #000; }
-    .btn-red { background: #ef4444; color: #fff; }
-    .btn-yellow { background: #eab308; color: #000; }
-
-    .item { background: #161e2e; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; }
-    @media (min-width: 500px) {
-      .item { flex-direction: row; justify-content: space-between; align-items: center; }
-    }
-
-    .info-text { max-width: 100%; overflow-wrap: anywhere; }
-    .actions { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
-    @media (min-width: 500px) { .actions { width: auto; } }
-
-    .btn-sm { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem; flex: 1; text-align: center; }
-
-    /* Modal Dark Estilizado */
-    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; }
-    .modal-overlay.active { display:flex; }
-    .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:360px; text-align:center; }
-    .modal-box h3 { color:#38bdf8; margin-bottom:10px; }
-    .modal-box p { font-size:0.9rem; color:#cbd5e1; margin-bottom:15px; }
-
-    .btn-opcoes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+    body { background: #0f172a; color: #f8fafc; font-family: Arial, sans-serif; padding: 15px; margin: 0; }
+    h2 { font-size: 1.2rem; text-align: center; color: #38bdf8; }
+    .card { background: #1e293b; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+    .btn { background: #22c55e; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .btn-sm { padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; color: white; }
+    .btn-green { background: #22c55e; }
+    .btn-red { background: #ef4444; }
+    .btn-yellow { background: #eab308; color: #0f172a; }
+    input { width: 100%; padding: 10px; margin-bottom: 10px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; box-sizing: border-box; }
+    .item { background: #0f172a; padding: 10px; margin-bottom: 8px; border-radius: 6px; }
   </style>
 </head>
-w<body>
+<body>
 
-  <div class="container">
-    <h1>🛡️ Painel de Administração</h1>
+  <h2>🛡️ Painel de Administração</h2>
 
-<div style="padding: 10px 0; text-align: right;">
-  <button onclick="carregarDados()" style="background: #38bdf8; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer;">🔄 Atualizar Dados</button>
-</div>
-
-
-    <div class="card" id="login-box">
-      <h2>Acesso Restrito</h2>
-      <input type="password" id="admin-pass" placeholder="Digite a Senha Admin">
-      <button class="btn btn-green" onclick="autenticar()">Entrar</button>
-    </div>
-
-    <div id="admin-content" style="display: none;">
-      <div class="card">
-        <h2>📋 Solicitações Pendentes</h2>
-        <div id="lista-solicitacoes">Carregando...</div>
-      </div>
-
-      <div class="card">
-        <h2>🌐 Todos os Grupos (Gerenciar VIPs)</h2>
-        <div id="lista-todos-grupos">Carregando...</div>
-      </div>
-    </div>
+  <!-- TELA DE LOGIN -->
+  <div id="login-box" class="card">
+    <p>Acesso Restrito</p>
+    <input type="password" id="admin-pass" placeholder="Digite a senha...">
+    <button class="btn" onclick="autenticar()">Entrar</button>
   </div>
 
-  <div class="modal-overlay" id="modal-aviso">
-    <div class="modal-box">
-      <h3 id="modal-titulo">Aviso</h3>
-      <p id="modal-msg"></p>
-      <button onclick="fecharModal('modal-aviso')" class="btn btn-green">OK</button>
+  <!-- CONTEÚDO DO ADMIN -->
+  <div id="admin-content" style="display: none;">
+    
+    <!-- BOTÃO DE ATUALIZAR QUE VOCÊ PEDIU -->
+    <div style="margin-bottom: 15px; text-align: right;">
+      <button onclick="carregarDados()" style="background: #38bdf8; color: #0f172a; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer;">🔄 Atualizar Dados</button>
     </div>
-  </div>
 
-  <div class="modal-overlay" id="modal-vip">
-    <div class="modal-box">
-      <h3>⚡ Escolha o tempo de VIP</h3>
-      <p id="modal-vip-nome"></p>
-      <div class="btn-opcoes">
-        <button class="btn btn-yellow" onclick="confirmarVip(10)">10 Dias</button>
-        <button class="btn btn-yellow" onclick="confirmarVip(30)">30 Dias</button>
-        <button class="btn btn-yellow" onclick="confirmarVip(60)">60 Dias</button>
-      </div>
-      <button onclick="fecharModal('modal-vip')" class="btn btn-red">Cancelar</button>
+    <div class="card">
+      <h3>📋 Solicitações Pendentes</h3>
+      <div id="lista-solicitacoes">Carregando...</div>
     </div>
-  </div>
 
-  <div class="modal-overlay" id="modal-confirm">
-    <div class="modal-box">
-      <h3 style="color:#ef4444;">Excluir Grupo</h3>
-      <p>Tem certeza de que deseja deletar este grupo do sistema?</p>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-red" onclick="executarDeletar()">Sim, Deletar</button>
-        <button class="btn btn-green" onclick="fecharModal('modal-confirm')">Cancelar</button>
-      </div>
+    <div class="card">
+      <h3>🌐 Todos os Grupos (Gerenciar VIPs)</h3>
+      <div id="lista-todos-grupos">Carregando...</div>
     </div>
   </div>
 
   <script>
-
     let grupoIdSelecionado = null;
-
-    function mostrarAviso(titulo, msg) {
-      document.getElementById('modal-titulo').innerText = titulo;
-      document.getElementById('modal-msg').innerText = msg;
-      document.getElementById('modal-aviso').classList.add('active');
-    }
-
-    function fecharModal(id) {
-      document.getElementById(id).classList.remove('active');
-    }
 
     async function autenticar() {
       const senhaInput = document.getElementById('admin-pass').value.trim();
@@ -134,18 +70,11 @@ w<body>
     }
 
     async function carregarSolicitacoes() {
-      let container = document.getElementById('lista-solicitacoes');
-      if (!container) {
-        alert('ERRO CRITICO: O ID lista-solicitacoes não existe no HTML!');
-        return;
-      }
-      
-      container.innerHTML = '<p style="color:#38bdf8; font-size:0.85rem;">Carregando solicitações...</p>';
-
+      const container = document.getElementById('lista-solicitacoes');
+      container.innerHTML = '<p style="color:#38bdf8;">Buscando solicitações...</p>';
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
-        if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
-
+        if (!res.ok) throw new Error('Status ' + res.status);
         const sol = await res.json();
 
         if (!Array.isArray(sol) || sol.length === 0) {
@@ -154,12 +83,10 @@ w<body>
         }
 
         container.innerHTML = sol.map(s => `
-          <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
-            <div class="info-text">
-              <strong>${s.nome || 'Sem nome'}</strong><br>
-              <small style="color:#38bdf8;">${s.link || ''}</small>
-            </div>
-            <div class="actions" style="margin-top:5px;">
+          <div class="item">
+            <strong>${s.nome || 'Sem nome'}</strong><br>
+            <small style="color:#38bdf8;">${s.link || ''}</small>
+            <div style="margin-top:8px;">
               <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
               <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
             </div>
@@ -171,18 +98,11 @@ w<body>
     }
 
     async function carregarGrupos() {
-      let container = document.getElementById('lista-todos-grupos');
-      if (!container) {
-        alert('ERRO CRITICO: O ID lista-todos-grupos não existe no HTML!');
-        return;
-      }
-
-      container.innerHTML = '<p style="color:#38bdf8; font-size:0.85rem;">Carregando grupos...</p>';
-
+      const container = document.getElementById('lista-todos-grupos');
+      container.innerHTML = '<p style="color:#38bdf8;">Buscando grupos...</p>';
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/grupos');
-        if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
-
+        if (!res.ok) throw new Error('Status ' + res.status);
         const grupos = await res.json();
 
         if (!Array.isArray(grupos) || grupos.length === 0) {
@@ -191,17 +111,15 @@ w<body>
         }
 
         container.innerHTML = grupos.map(g => `
-          <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
-            <div class="info-text">
-              <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
-              <small style="color:#94a3b8;">${g.link || ''}</small>
-            </div>
-            <div class="actions" style="margin-top:5px;">
+          <div class="item">
+            <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
+            <small style="color:#94a3b8;">${g.link || ''}</small>
+            <div style="margin-top:8px;">
               ${g.isVip ?
                 `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
-                `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${g.nome}')">Dar VIP</button>`
+                `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>`
               }
-              <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
+              <button class="btn-sm btn-red" onclick="deletarGrupo('${g.id}')">🗑️ Deletar</button>
             </div>
           </div>
         `).join('');
@@ -211,100 +129,44 @@ w<body>
     }
 
     async function decidir(id, aceito) {
-      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-      try {
-        const res = await fetch('/api/admin/decidir-solicitacao', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ senha: senhaAdmin, id, aceito })
-        });
-        const data = await res.json();
-        if (data.success) {
-          carregarSolicitacoes();
-          carregarGrupos();
-        } else {
-          alert(data.error || 'Erro ao processar solicitação.');
-        }
-      } catch (err) {
-        alert('Erro de comunicação com o servidor.');
-      }
+      const senha = localStorage.getItem('adminPassword');
+      const res = await fetch('https://gruposnj.onrender.com/api/admin/decidir-solicitacao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha, id, aceito })
+      });
+      carregarDados();
     }
 
-    function abrirModalVip(id, nome) {
-      grupoIdSelecionado = id;
-      const dias = prompt('Quantos dias de VIP deseja dar?', '30');
-      if (dias) confirmarVip(parseInt(dias));
+    async function ativarVip(grupoId) {
+      const senha = localStorage.getItem('adminPassword');
+      await fetch('https://gruposnj.onrender.com/api/admin/ativar-vip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha, grupoId, dias: 30 })
+      });
+      carregarDados();
     }
 
-    async function confirmarVip(dias) {
-      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-      try {
-        const res = await fetch('/api/admin/ativar-vip', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ senha: senhaAdmin, grupoId: grupoIdSelecionado, dias })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('VIP ativado com sucesso!');
-          carregarGrupos();
-        } else {
-          alert(data.error || 'Erro ao ativar VIP.');
-        }
-      } catch (err) {
-        alert('Erro ao conectar com o servidor.');
-      }
+    async function removerVip(grupoId) {
+      const senha = localStorage.getItem('adminPassword');
+      await fetch('https://gruposnj.onrender.com/api/admin/remover-vip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha, grupoId })
+      });
+      carregarDados();
     }
 
-    async function removerVip(id) {
-      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-      try {
-        const res = await fetch('/api/admin/remover-vip', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ senha: senhaAdmin, grupoId: id })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('VIP removido!');
-          carregarGrupos();
-        } else {
-          alert(data.error || 'Erro ao remover VIP.');
-        }
-      } catch (err) {
-        alert('Erro ao conectar com o servidor.');
-      }
-    }
-
-    function abrirModalDeletar(id) {
-      grupoIdSelecionado = id;
-      if (confirm('Tem certeza que deseja deletar este grupo?')) {
-        executarDeletar();
-      }
-    }
-
-    async function executarDeletar() {
-      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-      try {
-        const res = await fetch(`/api/grupos/${grupoIdSelecionado}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ senha: senhaAdmin })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('Grupo removido!');
-          carregarGrupos();
-        } else {
-          alert(data.error || 'Erro ao deletar grupo.');
-        }
-      } catch (err) {
-        alert('Erro ao conectar com o servidor.');
-      }
-    }
-
-    function escapeHtml(str) {
-      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    async function deletarGrupo(id) {
+      if(!confirm('Tem certeza que quer deletar?')) return;
+      const senha = localStorage.getItem('adminPassword');
+      await fetch(`https://gruposnj.onrender.com/api/grupos/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha })
+      });
+      carregarDados();
     }
   </script>
 </body>
