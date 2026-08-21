@@ -134,7 +134,7 @@ w<body>
         return;
       }
       try {
-        const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
+       const res = await fetch('/api/admin/solicitacoes');
         if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
         
         const sol = await res.json();
@@ -168,7 +168,7 @@ w<body>
         return;
       }
       try {
-        const res = await fetch('https://gruposnj.onrender.com/api/grupos');
+       const res = await fetch('/api/grupos');
         if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
 
         const grupos = await res.json();
