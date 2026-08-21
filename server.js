@@ -421,7 +421,6 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ error: 'Senha incorreta' });
 });
 
-// Rota para puxar as solicitações pendentes
 app.get('/api/admin/solicitacoes', (req, res) => {
   try {
     const fs = require('fs');
@@ -434,6 +433,20 @@ app.get('/api/admin/solicitacoes', (req, res) => {
     res.json([]);
   }
 });
+
+app.get('/api/grupos', (req, res) => {
+  try {
+    const fs = require('fs');
+    if (!fs.existsSync('grupos.json')) {
+      fs.writeFileSync('grupos.json', '[]');
+    }
+    const data = JSON.parse(fs.readFileSync('grupos.json', 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.json([]);
+  }
+});
+
 
 // Rota para puxar todos os grupos cadastrados
 app.get('/api/grupos', (req, res) => {
