@@ -134,9 +134,9 @@ w<body>
         return;
       }
       try {
-       const res = await fetch('/api/admin/solicitacoes');
+        const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
         if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
-        
+
         const sol = await res.json();
 
         if (!Array.isArray(sol) || sol.length === 0) {
@@ -161,6 +161,7 @@ w<body>
       }
     }
 
+
     async function carregarGrupos() {
       let container = document.getElementById('lista-todos-grupos');
       if (!container) {
@@ -168,7 +169,7 @@ w<body>
         return;
       }
       try {
-       const res = await fetch('/api/grupos');
+        const res = await fetch('https://gruposnj.onrender.com/api/grupos');
         if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
 
         const grupos = await res.json();
@@ -197,6 +198,7 @@ w<body>
         container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
       }
     }
+
 
 
     async function decidir(id, aceito) {
