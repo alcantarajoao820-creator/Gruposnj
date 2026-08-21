@@ -434,20 +434,6 @@ app.get('/api/admin/solicitacoes', (req, res) => {
   }
 });
 
-app.get('/api/grupos', (req, res) => {
-  try {
-    const fs = require('fs');
-    if (!fs.existsSync('grupos.json')) {
-      fs.writeFileSync('grupos.json', '[]');
-    }
-    const data = JSON.parse(fs.readFileSync('grupos.json', 'utf8'));
-    res.json(data);
-  } catch (err) {
-    res.json([]);
-  }
-});
-
-
 // Rota para puxar todos os grupos cadastrados
 app.get('/api/grupos', (req, res) => {
   try {
