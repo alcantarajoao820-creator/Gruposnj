@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicar Grupo - GruposNJ</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
+    body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 20px 15px; display: flex; align-items: center; justify-content: center; }
+
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 25px; width: 100%; max-width: 450px; }
+    h2 { color: #38bdf8; font-size: 1.4rem; margin-bottom: 20px; text-align: center; }
+
+    label { font-size: 0.85rem; color: #94a3b8; display: block; margin-bottom: 6px; }
+    input, select, textarea { width: 100%; padding: 12px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 15px; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Estilo para o contador de caracteres */
+    .char-counter { font-size: 0.75rem; color: #94a3b8; text-align: right; margin-top: -10px; margin-bottom: 15px; display: block; }
+    .char-counter.limit { color: #ef4444; font-weight: bold; }
+    .char-counter.success { color: #22c55e; font-weight: bold; }
+
+    .terms-box { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+    .terms-box input[type="checkbox"] { width: auto; margin: 0; cursor: pointer; }
+    .terms-box label { margin: 0; font-size: 0.8rem; color: #cbd5e1; cursor: pointer; }
+    .terms-box a { color: #38bdf8; text-decoration: underline; }
+
+    .preview-box { display: flex; align-items: center; gap: 10px; background: #161e2e; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; }
+    .preview-box img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; background: #22c55e; color: #000; cursor: pointer; font-size: 1rem; }
+    .btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; margin-top: 10px; display: block; text-align: center; text-decoration: none; padding: 12px; border-radius: 8px; }
+
+    /* Modal Dark Customizado */
+    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; }
+    .modal-overlay.active { display:flex; }
+    .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:340px; text-align:center; }
+    .modal-box h3 { color:#38bdf8; margin-bottom:10px; }
+    .modal-box p { font-size:0.9rem; color:#cbd5e1; margin-bottom:15px; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+  <div class="card">
+    <h2>🚀 Publicar Novo Grupo</h2>
+
+    <form id="form-publicar">
+      <label>Link do Grupo (WhatsApp/Telegram)</label>
+      <input type="url" id="link" placeholder="https://chat.whatsapp.com/..." required onblur="buscarDadosLink()">
+
+      <!-- Pré-visualização Automática do Link -->
+      <div class="preview-box" id="preview-container">
+        <img id="preview-img" src="" alt="Foto do grupo">
+        <span id="preview-title" style="font-size:0.85rem; color:#38bdf8; font-weight:bold;"></span>
+      </div>
+
+      <label>Nome do Grupo</label>
+      <input type="text" id="nome" placeholder="Ex: Boteco dos Stickers" required>
+
+      <label>Categoria</label>
+      <select id="categoria">
+        <option value="Amizade">Amizade</option>
+        <option value="Figurinhas">Figurinhas / Stickers</option>
+        <option value="Jogos">Jogos / Roblox</option>
+        <option value="Vendas">Vendas / Divulgação</option>
+        <option value="Outros">Outros</option>
+      </select>
+
+      <label>URL da Imagem / Ícone (Auto-preenchida pelo link)</label>
+      <input type="url" id="imagem" placeholder="https://...">
+
+      <label>Descrição</label>
+      <textarea id="descricao" maxlength="150" placeholder="Sobre o que é o seu grupo? (Exatamente 150 caracteres)"></textarea>
+      <span class="char-counter limit" id="contador-caracteres">Faltam 150 caracteres (Total: 0/150)</span>
+
+      <!-- Campo de Aceite dos Termos de Uso -->
+      <div class="terms-box">
+        <input type="checkbox" id="aceito-termos" required>
+        <label for="aceito-termos">Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a></label>
+      </div>
+
+      <button type="submit" class="btn">Enviar para Análise</button>
+      <a href="/painel.html" class="btn-cancel">Cancelar</a>
+    </form>
+  </div>
+
+  <!-- Modal Aviso Dark -->
+  <div class="modal-overlay" id="modal-aviso">
+    <div class="modal-box">
+      <h3 id="modal-titulo">Aviso</h3>
+      <p id="modal-msg"></p>
+      <button onclick="fecharModal()" class="btn">OK</button>
+    </div>
+  </div>
+
+  <script>
+    // Configurações do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+      authDomain: "gruposnj-41858.firebaseapp.com",
+      projectId: "gruposnj-41858",
+      storageBucket: "gruposnj-41858.firebasestorage.app",
+      messagingSenderId: "249583894572",
+      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    let userEmail = '';
+
+    // Função: Verificar Sessão do Usuário
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = '/login.html';
+      } else {
+        userEmail = user.email;
+      }
+    });
+
+    // Função: Exibir Modal de Aviso
+    function mostrarAviso(titulo, msg, redirecionar = false) {
+      document.getElementById('modal-titulo').innerText = titulo;
+      document.getElementById('modal-msg').innerText = msg;
+      const modal = document.getElementById('modal-aviso');
+      modal.classList.add('active');
+      modal.dataset.redirecionar = redirecionar;
+    }
+
+    // Função: Fechar Modal
+    function fecharModal() {
+      const modal = document.getElementById('modal-aviso');
+      modal.classList.remove('active');
+      if (modal.dataset.redirecionar === 'true') {
+        window.location.href = '/painel.html';
+      }
+    }
+
+    // Função: Autopreencher Dados do Link (Scraping)
+    async function buscarDadosLink() {
+      const link = document.getElementById('link').value.trim();
+      if (!link) return;
+
+      try {
+        const res = await fetch('/api/preview-link?url=' + encodeURIComponent(link));
+        const data = await res.json();
+
+        if (data.image) {
+          document.getElementById('imagem').value = data.image;
+          document.getElementById('preview-img').src = data.image;
+          document.getElementById('preview-title').innerText = data.title || 'Imagem Encontrada';
+          document.getElementById('preview-container').style.display = 'flex';
+        }
+
+        if (data.title && !document.getElementById('nome').value) {
+          document.getElementById('nome').value = data.title;
+        }
+      } catch (e) {
+        // Falha silenciosa se não conseguir extrair metadados
+      }
+    }
+
+    // Trava e Contador Exato de 150 Caracteres
+    const descricaoInput = document.getElementById('descricao');
+    const contadorSpan = document.getElementById('contador-caracteres');
+    const limiteExato = 150;
+
+    descricaoInput.addEventListener('input', () => {
+      const digitados = descricaoInput.value.length;
+      const faltam = limiteExato - digitados;
+
+      if (digitados < limiteExato) {
+        contadorSpan.innerText = `Faltam ${faltam} caracteres (Total: ${digitados}/150)`;
+        contadorSpan.className = 'char-counter limit';
+      } else if (digitados === limiteExato) {
+        contadorSpan.innerText = `Perfeito! Exatamente 150 caracteres.`;
+        contadorSpan.className = 'char-counter success';
+      } else {
+        descricaoInput.value = descricaoInput.value.substring(0, limiteExato);
+      }
+    });
+
+    // Função: Enviar Formulário de Cadastro com Validação Exata
+    document.getElementById('form-publicar').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const textoDescricao = descricaoInput.value;
+
+      if (textoDescricao.length !== 150) {
+        mostrarAviso('Atenção', 'A descrição precisa ter exatamente 150 caracteres!');
+        return;
+      }
+
+      const dados = {
+        nome: document.getElementById('nome').value,
+        link: document.getElementById('link').value,
+        categoria: document.getElementById('categoria').value,
+        imagem: document.getElementById('imagem').value,
+        descricao: textoDescricao,
+        email: userEmail,
+        aceitouTermos: document.getElementById('aceito-termos').checked
+      };
+
+      try {
+        const res = await fetch('/api/solicitar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          mostrarAviso('Sucesso!', 'Seu grupo foi enviado e está aguardando aprovação.', true);
+        } else {
+          mostrarAviso('Aviso', result.error || 'Falha ao enviar o grupo.');
+        }
+      } catch (err) {
+        mostrarAviso('Erro de Conexão', 'Não foi possível conectar ao servidor.');
+      }
+    });
+  </script>
+</body>
+</html>

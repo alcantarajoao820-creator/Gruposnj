@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GruposNJ - Diretório de Grupos do WhatsApp</title>
+  
+  <!-- FontAwesome para Ícones Profissionais -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background: #070a12; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+    
+    .container { width: 100%; max-width: 1050px; margin: 0 auto; padding: 15px 12px; }
+
+    /* Navbar Pro Compacta */
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #1e293b; margin-bottom: 20px; }
+    .brand { font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .brand span { color: #22c55e; }
+    
+    .nav-btns { display: flex; gap: 6px; align-items: center; }
+    .btn-nav { padding: 6px 10px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .btn-green { background: #16a34a; color: #fff; }
+    .btn-green:hover { background: #15803d; }
+    .btn-blue { background: #1e293b; color: #38bdf8; border: 1px solid #334155; }
+    .btn-blue:hover { background: #334155; }
+
+    /* Hero Section */
+    .hero { text-align: center; margin-bottom: 25px; }
+    .hero h1 { font-size: 1.75rem; color: #fff; margin-bottom: 6px; font-weight: 800; letter-spacing: -0.5px; }
+    .hero p { color: #94a3b8; font-size: 0.85rem; max-width: 500px; margin: 0 auto 15px auto; }
+
+    /* Barra de Pesquisa e Filtros */
+    .search-box { position: relative; max-width: 500px; margin: 0 auto 15px auto; }
+    .search-box input { width: 100%; padding: 10px 14px 10px 38px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 0.85rem; outline: none; transition: 0.2s; }
+    .search-box input:focus { border-color: #22c55e; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
+    .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.85rem; }
+
+    .categories { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px; scrollbar-width: none; }
+    .categories::-webkit-scrollbar { display: none; }
+    .cat-chip { background: #0f172a; border: 1px solid #1e293b; color: #94a3b8; padding: 5px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+    .cat-chip:hover, .cat-chip.active { background: #22c55e; color: #000; border-color: #22c55e; }
+
+    /* Cards Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; position: relative; transition: transform 0.2s, border-color 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
+    .card:hover { transform: translateY(-2px); border-color: #334155; }
+    .card.vip { border: 1px solid #eab308; background: linear-gradient(180deg, rgba(234, 179, 8, 0.05) 0%, #0f172a 100%); }
+    
+    .vip-badge { position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px; }
+
+    .card-info { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+    .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; border: 1px solid #334155; }
+    .card-title { font-size: 0.9rem; color: #fff; font-weight: 700; line-height: 1.2; }
+    .card-members { font-size: 0.7rem; color: #22c55e; font-weight: 600; margin-top: 2px; }
+
+    .card-desc { font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 32px; }
+
+    .btn-card { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; font-size: 0.85rem; transition: 0.2s; }
+    .btn-entrar { background: #22c55e; color: #052e16; }
+    .btn-entrar:hover { background: #16a34a; color: #fff; }
+
+    /* Footer Profissional */
+    footer { background: #0b0f19; border-top: 1px solid #1e293b; margin-top: 40px; padding: 20px 15px; text-align: center; font-size: 0.75rem; color: #64748b; }
+    footer a { color: #94a3b8; text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: #22c55e; }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Navbar -->
+    <header class="navbar">
+      <a href="/" class="brand"><i class="fa-brands fa-whatsapp" style="color: #22c55e;"></i> Grupos<span>NJ</span></a>
+      <div class="nav-btns">
+        <button onclick="irParaDivulgar()" class="btn-nav btn-green"><i class="fa-solid fa-plus"></i> Divulgar Grupo</button>
+        <a href="/login.html" class="btn-nav btn-blue"><i class="fa-regular fa-user"></i> Conta</a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Encontre os Melhores Grupos</h1>
+      <p>Comunidades ativas no WhatsApp para você fazer networking, amizades e bons negócios.</p>
+
+      <!-- Pesquisa -->
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" onkeyup="filtrarGrupos()" placeholder="Pesquisar grupos por nome...">
+      </div>
+
+      <!-- Filtros por Categoria -->
+      <div class="categories">
+        <button class="cat-chip active" onclick="filtrarCategoria('todos', this)">🔥 Todos</button>
+        <button class="cat-chip" onclick="filtrarCategoria('Figurinhas', this)">🧩 Figurinhas</button>
+        <button class="cat-chip" onclick="filtrarCategoria('Amizade', this)">💬 Amizade</button>
+        <button class="cat-chip" onclick="filtrarCategoria('Jogos', this)">🎮 Jogos</button>
+        <button class="cat-chip" onclick="filtrarCategoria('Vendas', this)">💰 Vendas</button>
+      </div>
+    </section>
+
+    <!-- Grid de Cards -->
+    <main class="grid" id="lista-grupos">
+      <p style="text-align: center; grid-column: 1/-1; color: #94a3b8;">Carregando comunidades...</p>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p style="margin-bottom: 8px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
+    <p>
+      <a href="/termos.html">Termos de Uso</a> • 
+      <a href="https://wa.me/5500000000000" target="_blank">Suporte</a>
+    </p>
+  </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+      authDomain: "gruposnj-41858.firebaseapp.com",
+      projectId: "gruposnj-41858",
+      storageBucket: "gruposnj-41858.firebasestorage.app",
+      messagingSenderId: "249583894572",
+      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let gruposGerais = [];
+    let categoriaAtual = 'todos';
+
+    function irParaDivulgar() {
+      auth.onAuthStateChanged((user) => {
+        window.location.href = user ? '/painel.html' : '/login.html';
+      });
+    }
+
+    async function carregarGrupos() {
+      const container = document.getElementById('lista-grupos');
+      try {
+        const res = await fetch('/api/grupos');
+        gruposGerais = await res.json();
+        renderizarGrupos(gruposGerais);
+      } catch (err) {
+        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #ef4444;">Erro ao carregar lista de grupos.</p>';
+      }
+    }
+
+    function renderizarGrupos(lista) {
+      const container = document.getElementById('lista-grupos');
+      if (lista.length === 0) {
+        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8;">Nenhum grupo encontrado.</p>';
+        return;
+      }
+
+      container.innerHTML = lista.map(g => `
+        <div class="card ${g.isVip ? 'vip' : ''}">
+          ${g.isVip ? '<span class="vip-badge"><i class="fa-solid fa-bolt"></i> VIP</span>' : ''}
+          <div>
+            <div class="card-info">
+              <img src="${escapeHtml(g.imagem)}" class="card-img" onerror="this.src='https://via.placeholder.com/100?text=Grupo'">
+              <div>
+                <div class="card-title">${escapeHtml(g.nome)}</div>
+                <div class="card-members"><i class="fa-solid fa-users"></i> ${escapeHtml(g.membros || '100+')} membros</div>
+              </div>
+            </div>
+            <div class="card-desc">${escapeHtml(g.descricao || 'Sem descrição cadastrada.')}</div>
+          </div>
+          <a href="/grupo/${g.id}" class="btn-card btn-entrar">Ver Detalhes / Entrar</a>
+        </div>
+      `).join('');
+    }
+
+    function filtrarGrupos() {
+      const termo = document.getElementById('search-input').value.toLowerCase();
+      const filtrados = gruposGerais.filter(g => {
+        const bateNome = g.nome.toLowerCase().includes(termo);
+        const bateCategoria = categoriaAtual === 'todos' || g.categoria === categoriaAtual;
+        return bateNome && bateCategoria;
+      });
+      renderizarGrupos(filtrados);
+    }
+
+    function filtrarCategoria(cat, elemento) {
+      document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
+      elemento.classList.add('active');
+      categoriaAtual = cat;
+      filtrarGrupos();
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    carregarGrupos();
+  </script>
+</body>
+</html>

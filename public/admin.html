@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin - GruposNJ</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
+    body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 15px 10px; }
+    .container { max-width: 700px; margin: 0 auto; width: 100%; }
+    h1 { font-size: 1.4rem; color: #38bdf8; margin-bottom: 20px; text-align: center; }
+    
+    .card { background: #0f172a; border: 1px solid #1e293b; padding: 15px; border-radius: 14px; margin-bottom: 20px; width: 100%; overflow: hidden; }
+    .card h2 { font-size: 1rem; color: #fff; margin-bottom: 12px; }
+
+    input { width: 100%; padding: 12px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; }
+    .btn { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+    .btn-green { background: #22c55e; color: #000; }
+    .btn-red { background: #ef4444; color: #fff; }
+    .btn-yellow { background: #eab308; color: #000; }
+
+    .item { background: #161e2e; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; width: 100%; word-break: break-all; }
+    @media (min-width: 500px) {
+      .item { flex-direction: row; justify-content: space-between; align-items: center; }
+    }
+
+    .info-text { max-width: 100%; overflow-wrap: anywhere; }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
+    @media (min-width: 500px) { .actions { width: auto; } }
+    
+    .btn-sm { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem; flex: 1; text-align: center; }
+
+    /* Modal Dark Estilizado */
+    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:9999; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display:flex; }
+    .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:360px; text-align:center; }
+    .modal-box h3 { color:#38bdf8; margin-bottom:10px; }
+    .modal-box p { font-size:0.9rem; color:#cbd5e1; margin-bottom:15px; }
+    
+    .btn-opcoes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🛡️ Painel de Administração</h1>
+
+    <div class="card" id="login-box">
+      <h2>Acesso Restrito</h2>
+      <input type="password" id="admin-pass" placeholder="Digite a Senha Admin">
+      <button class="btn btn-green" onclick="autenticar()">Entrar</button>
+    </div>
+
+    <div id="admin-content" style="display: none;">
+      <div class="card">
+        <h2>📋 Solicitações Pendentes</h2>
+        <div id="lista-solicitacoes">Carregando...</div>
+      </div>
+
+      <div class="card">
+        <h2>🌐 Todos os Grupos (Gerenciar VIPs)</h2>
+        <div id="lista-todos-grupos">Carregando...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-aviso">
+    <div class="modal-box">
+      <h3 id="modal-titulo">Aviso</h3>
+      <p id="modal-msg"></p>
+      <button onclick="fecharModal('modal-aviso')" class="btn btn-green">OK</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-vip">
+    <div class="modal-box">
+      <h3>⚡ Escolha o tempo de VIP</h3>
+      <p id="modal-vip-nome"></p>
+      <div class="btn-opcoes">
+        <button class="btn btn-yellow" onclick="confirmarVip(10)">10 Dias</button>
+        <button class="btn btn-yellow" onclick="confirmarVip(30)">30 Dias</button>
+        <button class="btn btn-yellow" onclick="confirmarVip(60)">60 Dias</button>
+      </div>
+      <button onclick="fecharModal('modal-vip')" class="btn btn-red">Cancelar</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="modal-box">
+      <h3 style="color:#ef4444;">Excluir Grupo</h3>
+      <p>Tem certeza de que deseja deletar este grupo do sistema?</p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-red" onclick="executarDeletar()">Sim, Deletar</button>
+        <button class="btn btn-green" onclick="fecharModal('modal-confirm')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let senhaAdmin = '';
+    let grupoIdSelecionado = null;
+
+    function mostrarAviso(titulo, msg) {
+      document.getElementById('modal-titulo').innerText = titulo;
+      document.getElementById('modal-msg').innerText = msg;
+      document.getElementById('modal-aviso').classList.add('active');
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    async function autenticar() {
+      const senhaAdmin = document.getElementById('admin-pass').value.trim();
+      
+      // Defina aqui a senha de acesso ao painel de administração
+      const senhaCorreta = "Joao153153*"; // Troque pela senha que você quiser usar
+
+      if (senhaAdmin === senhaCorreta) {
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+        carregarDados();
+      } else {
+        mostrarAviso('Erro', 'Senha incorreta!');
+      }
+    }
+
+    function carregarDados() {
+      carregarSolicitacoes();
+      carregarGrupos();
+    }
+
+
+    async function carregarSolicitacoes() {
+      const container = document.getElementById('lista-solicitacoes');
+      try {
+        const res = await fetch('/api/admin/solicitacoes');
+        const sol = await res.json();
+
+        if (!Array.isArray(sol) || sol.length === 0) {
+          return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
+        }
+
+        container.innerHTML = sol.map(s => `
+          <div class="item">
+            <div class="info-text">
+              <strong>${escapeHtml(s.nome)}</strong><br>
+              <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
+            </div>
+            <div class="actions">
+              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
+              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
+            </div>
+          </div>
+        `).join('');
+      } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
+      }
+    }
+
+    // Inicializa a referência do Firestore
+    const db = firebase.firestore();
+
+    async function carregarSolicitacoes() {
+      const container = document.getElementById('lista-solicitacoes');
+      try {
+        const snapshot = await db.collection('solicitacoes').get();
+        const sol = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        if (!Array.isArray(sol) || sol.length === 0) {
+          return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
+        }
+
+        container.innerHTML = sol.map(s => `
+          <div class="item">
+            <div class="info-text">
+              <strong>${escapeHtml(s.nome)}</strong><br>
+              <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
+            </div>
+            <div class="actions">
+              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
+              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
+            </div>
+          </div>
+        `).join('');
+      } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
+      }
+    }
+
+    async function carregarGrupos() {
+      const container = document.getElementById('lista-todos-grupos');
+      try {
+        const snapshot = await db.collection('grupos').get();
+        const grupos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        if (!Array.isArray(grupos) || grupos.length === 0) {
+          return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
+        }
+
+        container.innerHTML = grupos.map(g => `
+          <div class="item">
+            <div class="info-text">
+              <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
+              <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
+            </div>
+            <div class="actions">
+              ${g.isVip ?
+                `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
+                `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
+              }
+              <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
+            </div>
+          </div>
+        `).join('');
+      } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos.</p>';
+      }
+    }
+
+    async function decidir(id, aceito) {
+      try {
+        if (aceito) {
+          // Pega os dados da solicitação para mover para a coleção de grupos
+          const docRef = db.collection('solicitacoes').doc(id);
+          const doc = await docRef.get();
+          if (doc.exists) {
+            const dados = doc.data();
+            // Adiciona na coleção de grupos
+            await db.collection('grupos').add({
+              nome: dados.nome,
+              link: dados.link,
+              isVip: false,
+              criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            // Remove das solicitações
+            await docRef.delete();
+          }
+        } else {
+          // Se recusado, apenas deleta da coleção de solicitações
+          await db.collection('solicitacoes').doc(id).delete();
+        }
+        carregarDados();
+      } catch (err) {
+        mostrarAviso('Erro', 'Não foi possível processar a solicitação.');
+      }
+    }
+
+    function abrirModalVip(id, nome) {
+      grupoIdSelecionado = id;
+      document.getElementById('modal-vip-nome').innerText = 'Grupo: ' + nome;
+      document.getElementById('modal-vip').classList.add('active');
+    }
+
+    async function confirmarVip(dias) {
+      fecharModal('modal-vip');
+      try {
+        await db.collection('grupos').doc(grupoIdSelecionado).update({
+          isVip: true,
+          vipDias: dias
+        });
+        mostrarAviso('Sucesso', 'VIP ativado por ' + dias + ' dias!');
+        carregarGrupos();
+      } catch (err) {
+        mostrarAviso('Erro', 'Não foi possível ativar o VIP.');
+      }
+    }
+
+    async function removerVip(id) {
+      try {
+        await db.collection('grupos').doc(id).update({
+          isVip: false,
+          vipDias: 0
+        });
+        mostrarAviso('Sucesso', 'VIP removido!');
+        carregarGrupos();
+      } catch (err) {
+        mostrarAviso('Erro', 'Não foi possível remover o VIP.');
+      }
+    }
+
+    function abrirModalDeletar(id) {
+      grupoIdSelecionado = id;
+      document.getElementById('modal-confirm').classList.add('active');
+    }
+
+    async function executarDeletar() {
+      fecharModal('modal-confirm');
+      try {
+        await db.collection('grupos').doc(grupoIdSelecionado).delete();
+        mostrarAviso('Sucesso', 'Grupo removido!');
+        carregarGrupos();
+      } catch (err) {
+        mostrarAviso('Erro', 'Não foi possível deletar o grupo.');
+      }
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+  </script>
+</body>
+</html>

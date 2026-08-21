@@ -1,0 +1,21 @@
+{
+  "name": "grupos-nj",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "cheerio": "^1.2.0",
+    "express": "^4.22.2",
+    "mercadopago": "^3.4.0",
+    "nodemailer": "^9.0.5"
+  },
+  "description": "",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

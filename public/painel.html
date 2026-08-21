@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Painel - GruposNJ</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
+    body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 20px 15px; }
+    
+    .container { max-width: 500px; margin: 0 auto; }
+    
+    /* Header e Perfil */
+    .user-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .user-name { font-size: 1.2rem; font-weight: bold; color: #fff; }
+    .user-email { font-size: 0.8rem; color: #64748b; }
+
+    .btn-sair { background: #ef4444; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    
+    .card { background: #0f172a; border: 1px solid #1e293b; padding: 20px; border-radius: 14px; margin-bottom: 20px; }
+    .card h3 { font-size: 1rem; color: #38bdf8; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
+    input { width: 100%; padding: 12px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; }
+    .btn-main { width: 100%; padding: 12px; background: #22c55e; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block; }
+    .btn-blue { background: #3b82f6; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; }
+    
+    /* Listagem de Grupos */
+    .grupo-item { background: #161e2e; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .grupo-header { display: flex; justify-content: space-between; align-items: center; }
+    .grupo-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-sm { padding: 6px 10px; border: none; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; }
+    .btn-edit { background: #38bdf8; color: #000; }
+    .btn-vip { background: #eab308; color: #000; }
+    .btn-del { background: #ef4444; color: #fff; }
+
+    .link-voltar { display: block; text-align: center; color: #94a3b8; text-decoration: none; font-size: 0.85rem; margin-top: 15px; }
+    .link-termos { display: block; text-align: center; color: #64748b; text-decoration: underline; font-size: 0.8rem; margin-top: 10px; }
+
+    /* Modais Customizados */
+    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index: 9999; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display:flex; }
+    .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:360px; text-align:center; }
+  </style>
+  <!-- Scripts Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Cabeçalho do Usuário -->
+    <div class="user-header">
+      <div>
+        <div class="user-name" id="display-name">Carregando...</div>
+        <div class="user-email" id="display-email">...</div>
+      </div>
+      <button class="btn-sair" onclick="sair()">Sair</button>
+    </div>
+
+    <!-- Seção Meu Perfil -->
+    <div class="card">
+      <h3>👤 Meu Perfil</h3>
+
+      <!-- Área da Foto de Perfil -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="position: relative; width: 90px; height: 90px; margin: 0 auto 12px;">
+          <img id="foto-perfil-preview" src="https://via.placeholder.com/90" alt="Foto de Perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8;" />
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center;">
+          <label for="input-escolher-foto" style="background: #3b82f6; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 500; display: inline-block;">
+            📁 Escolher Foto
+          </label>
+          <input type="file" id="input-escolher-foto" accept="image/*" style="display: none;" onchange="carregarFotoPerfil(event)" />
+
+          <button onclick="removerFotoPerfil()" style="background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+            🗑️ Remover
+          </button>
+        </div>
+      </div>
+
+      <!-- Configuração de Nome -->
+      <label style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 6px;">Nome de Exibição</label>
+      <input type="text" id="input-nome" placeholder="Seu Nome" style="width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px; font-size: 0.9rem;">
+      <button class="btn-blue" onclick="salvarNome()">Salvar Nome</button>
+    </div>
+
+
+    <!-- Seção Meus Grupos -->
+    <div class="card">
+      <h3>📱 Meus Grupos Publicados</h3>
+      <div id="lista-meus-grupos" style="margin-bottom: 15px; font-size: 0.85rem; color: #94a3b8;">
+        Buscando seus grupos...
+      </div>
+
+      <a href="/publicar.html" class="btn-main">+ Divulgar Novo Grupo</a>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <a href="/" class="link-voltar">← Voltar para a Página Inicial</a>
+    <a href="/termos.html" target="_blank" class="link-termos">📜 Termos e Condições de Uso</a>
+  </div>
+
+  <!-- Modal Aviso Dark -->
+  <div class="modal-overlay" id="modal-aviso">
+    <div class="modal-box">
+      <h3 id="modal-titulo" style="color:#38bdf8; margin-bottom:10px;">Aviso</h3>
+      <p id="modal-msg" style="font-size:0.9rem; color:#cbd5e1; margin-bottom:15px;"></p>
+      <button onclick="fecharModal('modal-aviso')" class="btn-main">OK</button>
+    </div>
+  </div>
+
+<!-- Modal Promover VIP -->
+<div class="modal-overlay" id="modal-promover" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+  <div class="modal-box" style="max-width: 400px; width: 90%; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; text-align: center;">
+    <h3 style="color:#eab308; margin-bottom:8px; font-size: 1.2rem; display:flex; align-items:center; justify-content:center; gap:6px;">
+      <i class="fa-solid fa-crown"></i> Promover Grupo (VIP)
+    </h3>
+    <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:15px;">
+      Escolha o plano para destacar seu grupo no topo com ativação via Pix!
+    </p>
+
+  <!-- Seleção de Planos -->
+<div id="vip-step-planos">
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
+    
+    <!-- 10 Dias por R$ 20,00 -->
+    <button onclick="selecionarPlano(10, 20.00, this)" class="btn-plano active" style="padding: 10px 4px; border-radius: 8px; border: 2px solid #eab308; background: #0f172a; cursor: pointer;">
+      <div style="font-size: 0.75rem; color: #94a3b8;">10 Dias</div>
+      <div style="font-size: 0.85rem; font-weight: 700; color: #22c55e;">R$ 20,00</div>
+    </button>
+    
+    <!-- 30 Dias por R$ 60,00 -->
+    <button onclick="selecionarPlano(30, 60.00, this)" class="btn-plano" style="padding: 10px 4px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; cursor: pointer;">
+      <div style="font-size: 0.75rem; color: #94a3b8;">30 Dias</div>
+      <div style="font-size: 0.85rem; font-weight: 700; color: #22c55e;">R$ 60,00</div>
+    </button>
+    
+    <!-- 60 Dias por R$ 120,00 -->
+    <button onclick="selecionarPlano(60, 120.00, this)" class="btn-plano" style="padding: 10px 4px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; cursor: pointer;">
+      <div style="font-size: 0.75rem; color: #94a3b8;">60 Dias</div>
+      <div style="font-size: 0.85rem; font-weight: 700; color: #22c55e;">R$ 120,00</div>
+    </button>
+    
+  </div>
+
+  <button onclick="gerarCobrancaPix()" id="btn-gerar-pix" style="width:100%; padding: 11px; background: #22c55e; color: #052e16; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">
+    Gerar Pix para Pagamento
+  </button>
+</div>
+
+    <!-- Área do QR Code / Copia e Cola -->
+    <div id="vip-step-pagamento" style="display: none; text-align: center;">
+      <div style="background: #fff; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 10px;">
+        <img id="qr-code-img" src="" alt="QR Code Pix" style="width: 150px; height: 150px; display: block;">
+      </div>
+      <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 6px;">Ou copie o código Pix abaixo:</p>
+      
+      <div style="display: flex; gap: 6px; margin-bottom: 12px;">
+        <input type="text" id="pix-copia-cola" readonly style="width: 100%; background: #070a12; border: 1px solid #334155; color: #cbd5e1; padding: 8px; border-radius: 6px; font-size: 0.75rem;">
+        <button onclick="copiarPix()" style="padding: 8px 12px; background: #38bdf8; color: #0f172a; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-size: 0.75rem;">Copiar</button>
+      </div>
+
+      <p style="font-size: 0.78rem; color: #eab308; margin-bottom: 12px;">
+        <i class="fa-solid fa-spinner fa-spin"></i> Aguardando confirmação do Pix...
+      </p>
+    </div>
+
+    <button onclick="fecharModalPromover()" style="width:100%; padding: 9px; background: #334155; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">Fechar</button>
+  </div>
+</div>
+
+
+  <!-- Modal Alterar Link -->
+  <div class="modal-overlay" id="modal-editar-link">
+    <div class="modal-box">
+      <h3 style="color:#38bdf8; margin-bottom:10px;">Alterar Link do Grupo</h3>
+      <input type="url" id="novo-link-input" placeholder="Cole o novo link aqui">
+      <button onclick="confirmarAlterarLink()" class="btn-main" style="margin-bottom:8px;">Salvar Novo Link</button>
+      <button onclick="fecharModal('modal-editar-link')" class="btn-sair" style="width:100%;">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal Confirmar Exclusão -->
+  <div class="modal-overlay" id="modal-deletar">
+    <div class="modal-box">
+      <h3 style="color:#ef4444; margin-bottom:10px;">Excluir Grupo</h3>
+      <p style="font-size:0.9rem; color:#cbd5e1; margin-bottom:15px;">Tem certeza que deseja remover este grupo do site?</p>
+      <button onclick="confirmarDeletarGrupo()" class="btn-sair" style="width:100%; margin-bottom:8px;">Sim, Remover</button>
+      <button onclick="fecharModal('modal-deletar')" class="btn-main" style="background:#334155; color:#fff;">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    // Inicialização do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+      authDomain: "gruposnj-41858.firebaseapp.com",
+      projectId: "gruposnj-41858",
+      storageBucket: "gruposnj-41858.firebasestorage.app",
+      messagingSenderId: "249583894572",
+      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let usuarioAtual = null;
+    let grupoIdSelecionado = null;
+
+    // Função: Verificar Autenticação do Usuário
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = '/login.html';
+      } else {
+        usuarioAtual = user;
+        document.getElementById('display-name').innerText = user.displayName || 'Usuário';
+        document.getElementById('display-email').innerText = user.email;
+        document.getElementById('input-nome').value = user.displayName || '';
+        carregarMeusGrupos(user.email);
+      }
+    });
+
+    // Função: Exibir Modal de Aviso
+    function mostrarAviso(titulo, msg) {
+      document.getElementById('modal-titulo').innerText = titulo;
+      document.getElementById('modal-msg').innerText = msg;
+      document.getElementById('modal-aviso').classList.add('active');
+    }
+
+    // Função: Fechar Modal
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // Função: Salvar Novo Nome no Perfil
+    async function salvarNome() {
+      const novoNome = document.getElementById('input-nome').value.trim();
+      if (!novoNome) return mostrarAviso('Aviso', 'Digite um nome válido.');
+
+      try {
+        await usuarioAtual.updateProfile({ displayName: novoNome });
+        document.getElementById('display-name').innerText = novoNome;
+        mostrarAviso('Sucesso', 'Nome alterado com sucesso!');
+      } catch (e) {
+        mostrarAviso('Erro', 'Não foi possível alterar o nome.');
+      }
+    }
+
+    // Função: Enviar E-mail de Redefinição de Senha
+    async function redefinirSenha() {
+      try {
+        await auth.sendPasswordResetEmail(usuarioAtual.email);
+        mostrarAviso('E-mail Enviado', 'Enviamos um link para redefinição de senha para: ' + usuarioAtual.email);
+      } catch (e) {
+        mostrarAviso('Erro', 'Erro ao enviar e-mail de redefinição.');
+      }
+    }
+
+    // Função: Carregar Lista de Grupos do Usuário
+    async function carregarMeusGrupos(email) {
+      const container = document.getElementById('lista-meus-grupos');
+      try {
+        const res = await fetch('/api/meus-grupos?email=' + encodeURIComponent(email));
+        const grupos = await res.json();
+
+        if (grupos.length === 0) {
+          container.innerHTML = '<p>Você não possui grupos ativos divulgados.</p>';
+          return;
+        }
+
+        container.innerHTML = grupos.map(g => `
+          <div class="grupo-item" style="display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="${g.imagem || 'https://via.placeholder.com/50'}" style="width: 45px; height: 45px; border-radius: 6px; object-fit: cover;" alt="Capa">
+              <div>
+                <strong style="color:#fff; display: block;">${escapeHtml(g.nome)}</strong>
+                ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP ATIVO]</span>' : ''}
+              </div>
+            </div>
+            <small style="color:#38bdf8; word-break:break-all;">${escapeHtml(g.link)}</small>
+            <div class="grupo-actions" style="display: flex; gap: 5px; margin-top: 5px;">
+              <button onclick="abrirModalPromover('${g.id}')" class="btn-promover" style="background:#eab308; color:#000; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:0.75rem;">⭐ Promover</button>
+              <button class="btn-sm btn-edit" onclick="abrirEditarLink('${g.id}', '${escapeHtml(g.link)}')" style="padding:6px 10px; border-radius:4px; font-size:0.75rem;">✏️ Alterar Link</button>
+              <button class="btn-sm btn-del" onclick="abrirDeletarGrupo('${g.id}')" style="padding:6px 10px; border-radius:4px; font-size:0.75rem;">🗑️ Remover</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar seus grupos.</p>';
+      }
+    }
+
+
+    // Função: Abrir Modal Promover
+    function abrirPromoverModal(id) {
+      grupoIdSelecionado = id;
+      document.getElementById('modal-promover').classList.add('active');
+    }
+
+    // Função: Abrir Modal de Edição de Link
+    function abrirEditarLink(id, linkAtual) {
+      grupoIdSelecionado = id;
+      const input = document.getElementById('novo-link-input');
+      const modal = document.getElementById('modal-editar-link');
+      
+      if (input) input.value = linkAtual || '';
+      
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+      }
+    }
+
+    // Função: Fechar Modal (Certifique-se de usar esta em todo o seu projeto para fechar)
+    function fecharModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+      }
+      
+      const input = document.getElementById('novo-link-input');
+      if (input) input.value = '';
+    }
+
+    // Função: Confirmar Alteração do Link do Grupo
+    async function confirmarAlterarLink() {
+      const novoLink = document.getElementById('novo-link-input').value.trim();
+      if (!novoLink) return mostrarAviso('Aviso', 'Cole um link válido.');
+
+      fecharModal('modal-editar-link');
+
+      try {
+        const res = await fetch('/api/meus-grupos/link', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            grupoId: grupoIdSelecionado,
+            email: usuarioAtual.email,
+            novoLink: novoLink
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          mostrarAviso('Sucesso', 'Link atualizado com sucesso!');
+          carregarMeusGrupos(usuarioAtual.email);
+        } else {
+          mostrarAviso('Erro', data.error || 'Falha ao alterar o link.');
+        }
+      } catch(e) {
+        mostrarAviso('Erro', 'Não foi possível conectar ao servidor.');
+      }
+    }
+
+    // Função: Abrir Modal de Remoção de Grupo
+    function abrirDeletarGrupo(id) {
+      grupoIdSelecionado = id;
+      document.getElementById('modal-deletar').classList.add('active');
+    }
+
+    // Função: Confirmar Exclusão do Grupo
+    async function confirmarDeletarGrupo() {
+      fecharModal('modal-deletar');
+
+      try {
+        const res = await fetch('/api/meus-grupos/' + grupoIdSelecionado, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: usuarioAtual.email })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          mostrarAviso('Sucesso', 'Grupo removido com sucesso!');
+          carregarMeusGrupos(usuarioAtual.email);
+        } else {
+          mostrarAviso('Erro', data.error || 'Não foi possível remover o grupo.');
+        }
+      } catch(e) {
+        mostrarAviso('Erro', 'Não foi possível conectar ao servidor.');
+      }
+    }
+
+    // Função: Encerrar Sessão (Logout)
+    function sair() {
+      auth.signOut().then(() => window.location.href = '/login.html');
+    }
+
+    // Função Auxiliar: Escapar HTML contra Injeções
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+let grupoSelecionadoId = null;
+let planoSelecionado = { dias: 7, valor: 5.00 };
+let checagemInterval = null;
+
+// Função para ABRIR o modal
+function abrirModalPromover(grupoId) {
+  grupoSelecionadoId = grupoId;
+  document.getElementById('vip-step-planos').style.display = 'block';
+  document.getElementById('vip-step-pagamento').style.display = 'none';
+  
+  const modal = document.getElementById('modal-promover');
+  modal.style.display = 'flex';
+}
+
+// Função para FECHAR o modal
+function fecharModalPromover() {
+  const modal = document.getElementById('modal-promover');
+  modal.style.display = 'none';
+  if (checagemInterval) clearInterval(checagemInterval);
+}
+
+// Seleção visual dos botões de dias/valores
+function selecionarPlano(dias, valor, el) {
+  planoSelecionado = { dias, valor };
+  document.querySelectorAll('.btn-plano').forEach(b => {
+    b.style.border = '1px solid #334155';
+  });
+  el.style.border = '2px solid #eab308';
+}
+
+// Requisição para a API de Pix
+async function gerarCobrancaPix() {
+  const btn = document.getElementById('btn-gerar-pix');
+  btn.disabled = true;
+  btn.innerText = 'Gerando Pix...';
+
+  try {
+    const res = await fetch('/api/pix/gerar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        grupoId: grupoSelecionadoId,
+        dias: planoSelecionado.dias,
+        valor: planoSelecionado.valor
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById('qr-code-img').src = data.qrCodeBase64;
+      document.getElementById('pix-copia-cola').value = data.pixCopiaECola;
+
+      document.getElementById('vip-step-planos').style.display = 'none';
+      document.getElementById('vip-step-pagamento').style.display = 'block';
+
+      // Checa a cada 5 segundos se o Pix foi pago
+      monitorarPagamento(data.paymentId);
+    } else {
+      alert('Erro ao gerar cobrança Pix.');
+    }
+  } catch (err) {
+    alert('Erro de comunicação com o servidor.');
+  } finally {
+    btn.disabled = false;
+    btn.innerText = 'Gerar Pix para Pagamento';
+  }
+}
+
+function copiarPix() {
+  const input = document.getElementById('pix-copia-cola');
+  input.select();
+  navigator.clipboard.writeText(input.value);
+  alert('Código Pix copiado!');
+}
+
+function monitorarPagamento(paymentId) {
+  if (checagemInterval) clearInterval(checagemInterval);
+
+  checagemInterval = setInterval(async () => {
+    try {
+      const res = await fetch(`/api/pix/status/${paymentId}`);
+      const data = await res.json();
+
+      if (data.status === 'approved' || data.status === 'pago') {
+        clearInterval(checagemInterval);
+        alert('🎉 Pagamento confirmado! Seu grupo já é VIP.');
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, 5000);
+}
+
+
+function fecharModal(id) {
+  document.getElementById(id).style.display = 'none';
+  if (checagemInterval) clearInterval(checagemInterval);
+}
+
+    // Função executada quando o usuário escolhe a foto da galeria
+    function carregarFotoPerfil(event) {
+      const arquivo = event.target.files[0];
+      if (!arquivo) return;
+
+      if (!arquivo.type.startsWith('image/')) {
+        mostrarAvisoModal('Erro', 'Por favor, selecione um arquivo de imagem válido.');
+        return;
+      }
+
+      const leitor = new FileReader();
+      leitor.onload = function(e) {
+        const base64Imagem = e.target.result;
+
+        // Atualiza a imagem na hora no painel
+        document.getElementById('foto-perfil-preview').src = base64Imagem;
+
+        // Salva localmente (ou você pode enviar para o seu servidor via fetch se preferir)
+        localStorage.setItem('fotoPerfilMembro', base64Imagem);
+        
+        mostrarAvisoModal('Sucesso', 'Foto de perfil atualizada com sucesso!');
+      };
+
+      leitor.readAsDataURL(arquivo);
+    }
+
+    // Função para remover a foto de perfil
+    function removerFotoPerfil() {
+      localStorage.removeItem('fotoPerfilMembro');
+
+      // Reseta para o placeholder padrão
+      document.getElementById('foto-perfil-preview').src = 'https://via.placeholder.com/90';
+      
+      const input = document.getElementById('input-escolher-foto');
+      if (input) input.value = '';
+
+      mostrarAvisoModal('Removido', 'A foto de perfil foi removida.');
+    }
+
+    // Carregar a foto salva automaticamente assim que a página abrir
+    window.addEventListener('DOMContentLoaded', () => {
+      const fotoSalva = localStorage.getItem('fotoPerfilMembro');
+      if (fotoSalva) {
+        const imgPreview = document.getElementById('foto-perfil-preview');
+        if (imgPreview) imgPreview.src = fotoSalva;
+      }
+    });
+
+  </script>
+<!-- Rodapé GruposNj -->
+<footer style="text-align: center; padding: 25px 0; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 13px;">
+  <p style="margin: 0;">© GruposNj — Todos os direitos reservados</p>
+</footer>
+
+</body>
+</html>

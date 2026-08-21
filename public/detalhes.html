@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Grupo - GruposNJ</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+
+    body {
+      background: #070a12;
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding: 30px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #070a12 70%);
+    }
+
+    .card-detalhes {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 20px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Brilho Superior Decorativo */
+    .card-detalhes::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+    }
+
+    /* Foto do Grupo com Anel de Status */
+    .avatar-wrapper { position: relative; width: 130px; height: 130px; margin: 0 auto 20px auto; }
+    .img-grupo {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+
+    .badge-vip-tag {
+      position: absolute;
+      bottom: 0; right: 0;
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 2px solid #0f172a;
+      display: none;
+      box-shadow: 0 4px 10px rgba(234, 179, 8, 0.4);
+    }
+
+    .titulo-grupo { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+
+    .meta-info { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .categoria-badge { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
+    .membros-badge { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
+    .acessos-badge { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
+
+    .descricao {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      text-align: left;
+      background: rgba(22, 30, 46, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    /* Sistema de Avaliação por Estrelas Aprimorado */
+    .avaliacao-box {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 25px;
+    }
+    .stars { display: flex; justify-content: center; gap: 8px; font-size: 1.6rem; cursor: pointer; }
+    .star { color: #475569; transition: transform 0.2s, color 0.2s; }
+    .star:hover { transform: scale(1.2); }
+    .star.selected { color: #eab308; text-shadow: 0 0 12px rgba(234, 179, 8, 0.5); }
+    .star-txt { font-size: 0.78rem; color: #94a3b8; margin-top: 6px; font-weight: 500; }
+
+    /* Botão Entrar Premium */
+    .btn-entrar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+      transition: all 0.2s ease;
+      margin-bottom: 15px;
+    }
+    .btn-entrar:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(34, 197, 94, 0.4); }
+    .btn-entrar:active { transform: scale(0.98); }
+
+    /* Botão de Denúncia Discreto */
+    .btn-denunciar {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto 20px auto;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    .btn-denunciar:hover { color: #dc2626; }
+
+    /* Caixas de Aviso Legal Mais Limpas */
+    .aviso-legal {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-align: left;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .aviso-legal strong { color: #f87171; }
+
+    .link-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .link-voltar:hover { color: #38bdf8; }
+
+    /* Modal Dark Customizado para Denúncia */
+    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index: 1000; }
+    .modal-overlay.active { display:flex; }
+    .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:340px; text-align:center; }
+    .modal-box h3 { color:#38bdf8; margin-bottom:10px; font-size: 1.1rem; }
+    .modal-box p { font-size:0.85rem; color:#cbd5e1; margin-bottom:15px; }
+    .modal-box textarea { width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; resize: vertical; }
+    .modal-btns { display: flex; gap: 8px; }
+    .modal-btns button { flex: 1; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 0.85rem; }
+    .btn-modal-enviar { background: #ef4444; color: #fff; }
+    .btn-modal-cancelar { background: #334155; color: #cbd5e1; }
+
+    .autor-badge { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
+
+  </style>
+</head>
+<body>
+
+  <div class="card-detalhes">
+    <!-- Avatar com Badge VIP Condicional -->
+    <div class="avatar-wrapper">
+      <img id="foto-grupo" src="https://via.placeholder.com/130" alt="Foto do Grupo" class="img-grupo">
+      <div id="badge-vip" class="badge-vip-tag">⭐ VIP</div>
+    </div>
+
+    <h1 id="nome-grupo" class="titulo-grupo">Carregando...</h1>
+
+     <div class="meta-info">
+      <span id="categoria-grupo" class="categoria-badge">Geral</span>
+      <span id="membros-grupo" class="membros-badge">👥 100+ Membros</span>
+      <span id="acessos-grupo" class="acessos-badge">👁️ 0 Acessos</span>
+      <span id="autor-grupo" class="autor-badge">👤 Publicado por: Carregando...</span>
+    </div>
+    <div class="descricao" id="desc-grupo">Carregando detalhes do grupo...</div>
+
+    <!-- Avaliação Interativa -->
+    <div class="avaliacao-box">
+      <div class="stars" id="stars-container">
+        <span class="star" onclick="avaliar(1)">★</span>
+        <span class="star" onclick="avaliar(2)">★</span>
+        <span class="star" onclick="avaliar(3)">★</span>
+        <span class="star" onclick="avaliar(4)">★</span>
+        <span class="star" onclick="avaliar(5)">★</span>
+      </div>
+      <div class="star-txt" id="star-label">Clique nas estrelas para avaliar este grupo</div>
+    </div>
+
+    <!-- Botão de Acesso Direto com clique rastreado -->
+    <a href="#" id="btn-entrar-link" onclick="registrarAcessoEEntrar(event)" class="btn-entrar">
+      <span>🚀</span> ENTRAR NO GRUPO AGORA
+    </a>
+
+    <!-- Botão de Denúncia -->
+    <button onclick="abrirModalDenuncia()" class="btn-denunciar">🚨 Denunciar este grupo</button>
+
+    <!-- Aviso Legal de Responsabilidade -->
+    <div class="aviso-legal">
+      ⚠️ <strong>Aviso Importante:</strong> O <strong>GruposNJ</strong> atua exclusivamente como agregador de links. Não possuímos vínculo e não nos responsabilizamos pelo conteúdo dos grupos.
+    </div>
+
+    <a href="/" class="link-voltar">← Voltar para Todos os Grupos</a>
+  </div>
+
+  <!-- Modal de Denúncia -->
+  <div class="modal-overlay" id="modal-denuncia">
+    <div class="modal-box">
+      <h3>🚨 Denunciar Grupo</h3>
+      <p>Explique brevemente o motivo da denúncia:</p>
+      <textarea id="motivo-denuncia" placeholder="Ex: Conteúdo impróprio, spam, golpe..." rows="3"></textarea>
+      
+      <!-- Novo campo para o e-mail de quem denuncia -->
+      <input type="email" id="email-denunciante" placeholder="Seu e-mail de contato (obrigatório)" style="width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem;" />
+
+      <div class="modal-btns">
+        <button onclick="enviarDenuncia()" class="btn-modal-enviar">Enviar</button>
+        <button onclick="fecharModalDenuncia()" class="btn-modal-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal de Aviso Geral -->
+  <div class="modal-overlay" id="modal-aviso">
+    <div class="modal-box">
+      <h3 id="modal-titulo">Aviso</h3>
+      <p id="modal-msg"></p>
+      <button onclick="fecharModalAviso()" style="background: #22c55e; color:#000; width:100%; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">OK</button>
+    </div>
+  </div>
+
+  <script>
+    let grupoId = '';
+
+async function carregarDetalhes(atualizacaoSilenciosa = false) {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (!grupoId) {
+    grupoId = window.location.pathname.split('/').pop() || urlParams.get('id');
+  }
+
+  try {
+    const res = await fetch('/api/grupos/' + grupoId);
+    if (!res.ok) throw new Error();
+
+    const grupo = await res.json();
+
+    // Se for a primeira carga, preenche todos os campos estáticos também
+    if (!atualizacaoSilenciosa) {
+      document.getElementById('nome-grupo').innerText = grupo.nome;
+      document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
+      document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
+
+      // Linha do autor
+      const nomeAutor = grupo.autor || 'Membro / Comunidade';
+      document.getElementById('autor-grupo').innerText = `👤 Publicado por: ${nomeAutor}`;
+
+      document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
+      document.getElementById('foto-grupo').src = grupo.imagem || '';
+      document.getElementById('btn-entrar-link').href = grupo.link;
+    }
+
+    if (grupo.isVip) {
+      document.getElementById('badge-vip').style.display = 'block';
+    }
+
+    const avaliacaosava = localStorage.getItem('rating_' + grupoId);
+    if (avaliacaosava) {
+      marcarEstrelas(parseInt(avaliacaosava));
+    }
+
+    // Atualiza o contador de acessos em tempo real a cada ciclo
+    const totalAcessos = grupo.acessos || 0;
+    document.getElementById('acessos-grupo').innerText = `👁️ ${totalAcessos} Acessos`;
+
+  } catch (e) {
+    if (!atualizacaoSilenciosa) {
+      document.getElementById('nome-grupo').innerText = 'Grupo Não Encontrado';
+      document.getElementById('desc-grupo').innerText = 'O grupo solicitado pode ter sido removido ou o link está incorreto.';
+      document.getElementById('btn-entrar-link').style.display = 'none';
+      document.querySelector('.meta-info').style.display = 'none';
+      document.querySelector('.avaliacao-box').style.display = 'none';
+    }
+  }
+}
+
+
+    function avaliar(nota) {
+      localStorage.setItem('rating_' + grupoId, nota);
+      marcarEstrelas(nota);
+    }
+
+    function marcarEstrelas(nota) {
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((s, idx) => {
+        if (idx < nota) {
+          s.classList.add('selected');
+        } else {
+          s.classList.remove('selected');
+        }
+      });
+      document.getElementById('star-label').innerText = `Sua avaliação: ${nota} de 5 estrelas registrada!`;
+    }
+
+       // Funções do Modal de Denúncia
+    function abrirModalDenuncia() {
+      document.getElementById('motivo-denuncia').value = '';
+      const inputEmail = document.getElementById('email-denunciante');
+      if (inputEmail) inputEmail.value = '';
+      document.getElementById('modal-denuncia').classList.add('active');
+    }
+
+    function fecharModalDenuncia() {
+      document.getElementById('modal-denuncia').classList.remove('active');
+    }
+
+    function mostrarAvisoModal(titulo, msg) {
+      document.getElementById('modal-titulo').innerText = titulo;
+      document.getElementById('modal-msg').innerText = msg;
+      document.getElementById('modal-aviso').classList.add('active');
+    }
+
+    function fecharModalAviso() {
+      document.getElementById('modal-aviso').classList.remove('active');
+    }
+
+    // Função de Envio que você já tem
+    async function enviarDenuncia() {
+      const motivo = document.getElementById('motivo-denuncia').value.trim();
+      const emailEl = document.getElementById('email-denunciante');
+      const usuarioEmail = emailEl ? emailEl.value.trim() : '';
+
+      // Validação visual estilizada em vez do alert() feio
+      if (!motivo) {
+        mostrarAvisoModal('Atenção', 'Por favor, digite o motivo da denúncia.');
+        return;
+      }
+
+      if (!usuarioEmail) {
+        mostrarAvisoModal('Atenção', 'Por favor, digite o seu e-mail para contato.');
+        return;
+      }
+
+      // Validação básica de formato de e-mail
+      const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!regexEmail.test(usuarioEmail)) {
+        mostrarAvisoModal('E-mail Inválido', 'Por favor, insira um endereço de e-mail válido.');
+        return;
+      }
+
+      fecharModalDenuncia();
+
+      try {
+        const res = await fetch('/api/denunciar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            grupoId: grupoId,
+            motivo: motivo,
+            usuarioEmail: usuarioEmail
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          mostrarAvisoModal('Denúncia Enviada', 'Recebemos sua denúncia e ela será analisada pela nossa moderação.');
+        } else {
+          mostrarAvisoModal('Aviso', data.error || 'Erro ao registrar denúncia.');
+        }
+      } catch (err) {
+        mostrarAvisoModal('Erro', 'Não foi possível enviar a denúncia. Tente novamente mais tarde.');
+      }
+    }
+
+    async function registrarAcessoEEntrar(event) {
+      event.preventDefault(); // Evita abrir o link imediatamente
+      const linkDestino = document.getElementById('btn-entrar-link').href;
+
+      try {
+        // Avisa o servidor para somar +1 acesso
+        await fetch(`/api/grupos/${grupoId}/acessar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (e) {
+        console.error('Erro ao registrar acesso', e);
+      }
+
+      // Abre o link do grupo em uma nova aba
+      window.open(linkDestino, '_blank');
+    }
+
+    // Carrega os dados na abertura da página
+    carregarDetalhes(false);
+
+    // Configura o timer para atualizar os acessos automaticamente a cada 5 segundos
+    setInterval(() => {
+      carregarDetalhes(true);
+    }, 5000);
+
+  </script>
+</body>
+</html>
