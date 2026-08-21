@@ -135,25 +135,29 @@
 
         if (!Array.isArray(sol) || sol.length === 0) {
           container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
-          return;
+        } else {
+          container.innerHTML = sol.map(s => `
+            <div class="item">
+              <div class="info-text">
+                <strong>${escapeHtml(s.nome)}</strong><br>
+                <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
+              </div>
+              <div class="actions">
+                <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
+                <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
+              </div>
+            </div>
+          `).join('');
         }
 
-        container.innerHTML = sol.map(s => `
-          <div class="item">
-            <div class="info-text">
-              <strong>${escapeHtml(s.nome)}</strong><br>
-              <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
-            </div>
-            <div class="actions">
-              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
-              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
-            </div>
-          </div>
-        `).join('');
-           } catch(e) {
+        // CHAMA O GRUPOS AQUI NO FINAL PARA CARREGAR OS DOIS JUNTOS!
+        carregarGrupos();
+
+      } catch(e) {
         container.innerHTML = '<p style="color:#ef4444;">Erro: ' + e.message + '</p>';
       }
     }
+
 
     async function carregarGrupos() {
       const container = document.getElementById('lista-todos-grupos');
@@ -181,10 +185,9 @@
             </div>
           </div>
         `).join('');
-         } catch(e) {
+      } catch(e) {
         container.innerHTML = '<p style="color:#ef4444;">Erro: ' + e.message + '</p>';
       }
-
     }
 
 
