@@ -130,7 +130,7 @@
     async function carregarSolicitacoes() {
       const container = document.getElementById('lista-solicitacoes');
       try {
-        const res = await fetch(`${window.location.origin}/api/admin/solicitacoes`);
+        const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
         const sol = await res.json();
 
         if (!Array.isArray(sol) || sol.length === 0) {
@@ -158,7 +158,7 @@
     async function carregarGrupos() {
       const container = document.getElementById('lista-todos-grupos');
       try {
-        const res = await fetch(`${window.location.origin}/api/grupos`);
+        const res = await fetch('https://gruposnj.onrender.com/api/grupos');
         const grupos = await res.json();
 
         if (!Array.isArray(grupos) || grupos.length === 0) {
