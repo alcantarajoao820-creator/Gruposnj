@@ -421,6 +421,35 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ error: 'Senha incorreta' });
 });
 
+// Rota para puxar as solicitações pendentes
+app.get('/api/admin/solicitacoes', (req, res) => {
+  try {
+    const fs = require('fs');
+    if (!fs.existsSync('solicitacoes.json')) {
+      fs.writeFileSync('solicitacoes.json', '[]');
+    }
+    const data = JSON.parse(fs.readFileSync('solicitacoes.json', 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.json([]);
+  }
+});
+
+// Rota para puxar todos os grupos cadastrados
+app.get('/api/grupos', (req, res) => {
+  try {
+    const fs = require('fs');
+    if (!fs.existsSync('grupos.json')) {
+      fs.writeFileSync('grupos.json', '[]');
+    }
+    const data = JSON.parse(fs.readFileSync('grupos.json', 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.json([]);
+  }
+});
+
+
 app.post('/api/admin/decidir-solicitacao', (req, res) => {
   const { senha, id, aceito } = req.body;
   if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
