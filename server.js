@@ -52,6 +52,10 @@ function getAdminPassword() {
   return config.adminPassword;
 }
 
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 // ==========================================
 // ROTAS DO MERCADO PAGO (PIX AUTO-PROMOÇÃO)
 // ==========================================
