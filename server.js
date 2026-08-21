@@ -421,10 +421,6 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ error: 'Senha incorreta' });
 });
 
-app.get('/api/admin/solicitacoes', (req, res) => {
-  res.json(lerJson(SOLICITACOES_FILE, []));
-});
-
 app.post('/api/admin/decidir-solicitacao', (req, res) => {
   const { senha, id, aceito } = req.body;
   if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
@@ -459,15 +455,16 @@ app.post('/api/admin/decidir-solicitacao', (req, res) => {
       imagem: item.imagem || 'https://via.placeholder.com/100',
       membros: '100+',
       email: item.email || '',
-      autor: nomeAutor, // <--- Agora a variável existe e vai funcionar perfeitamente!
+      autor: nomeAutor,
       isVip: false
     });
-    
+
     salvarJson(DATA_FILE, grupos);
   }
 
   res.json({ success: true });
 });
+
 
 app.post('/api/admin/ativar-vip', (req, res) => {
   const { senha, grupoId, dias } = req.body;
