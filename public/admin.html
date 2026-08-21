@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
   <title>Painel Admin - GruposNJ</title>
   <style>
     * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
     body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 15px 10px; }
     .container { max-width: 700px; margin: 0 auto; width: 100%; }
     h1 { font-size: 1.4rem; color: #38bdf8; margin-bottom: 20px; text-align: center; }
-    
+
     .card { background: #0f172a; border: 1px solid #1e293b; padding: 15px; border-radius: 14px; margin-bottom: 20px; width: 100%; overflow: hidden; }
     .card h2 { font-size: 1rem; color: #fff; margin-bottom: 12px; }
 
-    input { width: 100%; padding: 12px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; }
+    input { width: 100%; padding: 12px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 10px; font-size: 0.95rem; }
     .btn { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
     .btn-green { background: #22c55e; color: #000; }
     .btn-red { background: #ef4444; color: #fff; }
     .btn-yellow { background: #eab308; color: #000; }
 
-    .item { background: #161e2e; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; width: 100%; word-break: break-all; }
+    .item { background: #161e2e; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; }
     @media (min-width: 500px) {
       .item { flex-direction: row; justify-content: space-between; align-items: center; }
     }
@@ -25,16 +26,16 @@
     .info-text { max-width: 100%; overflow-wrap: anywhere; }
     .actions { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
     @media (min-width: 500px) { .actions { width: auto; } }
-    
+
     .btn-sm { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem; flex: 1; text-align: center; }
 
     /* Modal Dark Estilizado */
-    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:9999; backdrop-filter: blur(4px); }
+    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; }
     .modal-overlay.active { display:flex; }
     .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:360px; text-align:center; }
     .modal-box h3 { color:#38bdf8; margin-bottom:10px; }
     .modal-box p { font-size:0.9rem; color:#cbd5e1; margin-bottom:15px; }
-    
+
     .btn-opcoes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
   </style>
 </head>
@@ -95,7 +96,6 @@
   </div>
 
   <script>
-    let senhaAdmin = '';
     let grupoIdSelecionado = null;
 
     function mostrarAviso(titulo, msg) {
@@ -109,12 +109,11 @@
     }
 
     async function autenticar() {
-      const senhaAdmin = document.getElementById('admin-pass').value.trim();
-      
-      // Defina aqui a senha de acesso ao painel de administração
-      const senhaCorreta = "Joao153153*"; // Troque pela senha que você quiser usar
+      const senhaInput = document.getElementById('admin-pass').value.trim();
+      const senhaCorreta = "Joao153153*";
 
-      if (senhaAdmin === senhaCorreta) {
+      if (senhaInput === senhaCorreta) {
+        localStorage.setItem('adminPassword', senhaInput);
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('admin-content').style.display = 'block';
         carregarDados();
@@ -128,170 +127,161 @@
       carregarGrupos();
     }
 
+    async function carregarSolicitacoes() {
+      const container = document.getElementById('lista-solicitacoes');
+      try {
+        const res = await fetch('/api/admin/solicitacoes');
+        const sol = await res.json();
 
-   // Função para carregar as solicitações pendentes via API do Node
-async function carregarSolicitacoes() {
-  const container = document.getElementById('lista-solicitacoes');
-  try {
-    const res = await fetch('/api/admin/solicitacoes');
-    const sol = await res.json();
+        if (!Array.isArray(sol) || sol.length === 0) {
+          container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
+          return;
+        }
 
-    if (!Array.isArray(sol) || sol.length === 0) {
-      return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
+        container.innerHTML = sol.map(s => `
+          <div class="item">
+            <div class="info-text">
+              <strong>${escapeHtml(s.nome)}</strong><br>
+              <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
+            </div>
+            <div class="actions">
+              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
+              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
+            </div>
+          </div>
+        `).join('');
+      } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
+      }
     }
 
-    container.innerHTML = sol.map(s => `
-      <div class="item">
-        <div class="info-text">
-          <strong>${escapeHtml(s.nome)}</strong><br>
-          <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
-        </div>
-        <div class="actions">
-          <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
-          <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
-    container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
-  }
-}
+    async function carregarGrupos() {
+      const container = document.getElementById('lista-todos-grupos');
+      try {
+        const res = await fetch('/api/grupos');
+        const grupos = await res.json();
 
-// Função para carregar todos os grupos cadastrados via API do Node
-async function carregarGrupos() {
-  const container = document.getElementById('lista-todos-grupos');
-  try {
-    const res = await fetch('/api/grupos');
-    const grupos = await res.json();
+        if (!Array.isArray(grupos) || grupos.length === 0) {
+          container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
+          return;
+        }
 
-    if (!Array.isArray(grupos) || grupos.length === 0) {
-      return container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
+        container.innerHTML = grupos.map(g => `
+          <div class="item">
+            <div class="info-text">
+              <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
+              <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
+            </div>
+            <div class="actions">
+              ${g.isVip ?
+                `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
+                `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
+              }
+              <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
+            </div>
+          </div>
+        `).join('');
+      } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos.</p>';
+      }
     }
 
-    container.innerHTML = grupos.map(g => `
-      <div class="item">
-        <div class="info-text">
-          <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
-          <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
-        </div>
-        <div class="actions">
-          ${g.isVip ?
-            `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
-            `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
-          }
-          <button class="btn-sm btn-red" onclick="abrirModalDeletar('${g.id}')">🗑️ Deletar</button>
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
-    container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos.</p>';
-  }
-}
-
-async function decidir(id, aceito) {
-  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-  try {
-    const res = await fetch('/api/admin/decidir-solicitacao', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha: senhaAdmin, id, aceito })
-    });
-    const data = await res.json();
-    if (data.success) {
-      carregarSolicitacoes();
-      carregarGrupos();
-    } else {
-      alert(data.error || 'Erro ao processar solicitação.');
+    async function decidir(id, aceito) {
+      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+      try {
+        const res = await fetch('/api/admin/decidir-solicitacao', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senha: senhaAdmin, id, aceito })
+        });
+        const data = await res.json();
+        if (data.success) {
+          carregarSolicitacoes();
+          carregarGrupos();
+        } else {
+          alert(data.error || 'Erro ao processar solicitação.');
+        }
+      } catch (err) {
+        alert('Erro de comunicação com o servidor.');
+      }
     }
-  } catch (err) {
-    alert('Erro de comunicação com o servidor.');
-  }
-}
 
-let grupoIdSelecionado = null;
-
-function abrirModalVip(id, nome) {
-  grupoIdSelecionado = id;
-  const dias = prompt('Quantos dias de VIP deseja dar?', '30');
-  if (dias) confirmarVip(parseInt(dias));
-}
-
-async function confirmarVip(dias) {
-  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-  try {
-    const res = await fetch('/api/admin/ativar-vip', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha: senhaAdmin, grupoId: grupoIdSelecionado, dias })
-    });
-    const data = await res.json();
-    if (data.success) {
-      alert('VIP ativado com sucesso!');
-      carregarGrupos();
-    } else {
-      alert(data.error || 'Erro ao ativar VIP.');
+    function abrirModalVip(id, nome) {
+      grupoIdSelecionado = id;
+      const dias = prompt('Quantos dias de VIP deseja dar?', '30');
+      if (dias) confirmarVip(parseInt(dias));
     }
-  } catch (err) {
-    alert('Erro ao conectar com o servidor.');
-  }
-}
 
-async function removerVip(id) {
-  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-  try {
-    const res = await fetch('/api/admin/remover-vip', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha: senhaAdmin, grupoId: id })
-    });
-    const data = await res.json();
-    if (data.success) {
-      alert('VIP removido!');
-      carregarGrupos();
-    } else {
-      alert(data.error || 'Erro ao remover VIP.');
+    async function confirmarVip(dias) {
+      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+      try {
+        const res = await fetch('/api/admin/ativar-vip', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senha: senhaAdmin, grupoId: grupoIdSelecionado, dias })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('VIP ativado com sucesso!');
+          carregarGrupos();
+        } else {
+          alert(data.error || 'Erro ao ativar VIP.');
+        }
+      } catch (err) {
+        alert('Erro ao conectar com o servidor.');
+      }
     }
-  } catch (err) {
-    alert('Erro ao conectar com o servidor.');
-  }
-}
 
-function abrirModalDeletar(id) {
-  grupoIdSelecionado = id;
-  if (confirm('Tem certeza que deseja deletar este grupo?')) {
-    executarDeletar();
-  }
-}
-
-async function executarDeletar() {
-  const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
-  try {
-    const res = await fetch(`/api/grupos/${grupoIdSelecionado}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha: senhaAdmin })
-    });
-    const data = await res.json();
-    if (data.success) {
-      alert('Grupo removido!');
-      carregarGrupos();
-    } else {
-      alert(data.error || 'Erro ao deletar grupo.');
+    async function removerVip(id) {
+      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+      try {
+        const res = await fetch('/api/admin/remover-vip', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senha: senhaAdmin, grupoId: id })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('VIP removido!');
+          carregarGrupos();
+        } else {
+          alert(data.error || 'Erro ao remover VIP.');
+        }
+      } catch (err) {
+        alert('Erro ao conectar com o servidor.');
+      }
     }
-  } catch (err) {
-    alert('Erro ao conectar com o servidor.');
-  }
-}
 
-function escapeHtml(str) {
-  return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
+    function abrirModalDeletar(id) {
+      grupoIdSelecionado = id;
+      if (confirm('Tem certeza que deseja deletar este grupo?')) {
+        executarDeletar();
+      }
+    }
 
-// Inicializa carregando os dados ao abrir a página
-carregarSolicitacoes();
-carregarGrupos();
+    async function executarDeletar() {
+      const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
+      try {
+        const res = await fetch(`/api/grupos/${grupoIdSelecionado}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senha: senhaAdmin })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Grupo removido!');
+          carregarGrupos();
+        } else {
+          alert(data.error || 'Erro ao deletar grupo.');
+        }
+      } catch (err) {
+        alert('Erro ao conectar com o servidor.');
+      }
+    }
 
-
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
   </script>
 </body>
 </html>
