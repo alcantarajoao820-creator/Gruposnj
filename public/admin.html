@@ -39,7 +39,7 @@
     .btn-opcoes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
   </style>
 </head>
-<body>
+w<body>
 
   <div class="container">
     <h1>🛡️ Painel de Administração</h1>
@@ -127,42 +127,50 @@
       carregarGrupos();
     }
 
-    async function carregarSolicitacoes() {
+     async function carregarSolicitacoes() {
       const container = document.getElementById('lista-solicitacoes');
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
+        
+        // Se o servidor do Render estiver "dormindo", avisa na tela
+        if (!res.ok) {
+          throw new Error('Servidor respondeu com status ' + res.status);
+        }
+
         const sol = await res.json();
 
         if (!Array.isArray(sol) || sol.length === 0) {
           container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
         } else {
           container.innerHTML = sol.map(s => `
-            <div class="item">
+            <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
               <div class="info-text">
                 <strong>${escapeHtml(s.nome)}</strong><br>
                 <small style="color:#38bdf8;">${escapeHtml(s.link)}</small>
               </div>
-              <div class="actions">
+              <div class="actions" style="margin-top:5px;">
                 <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
                 <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
               </div>
             </div>
           `).join('');
         }
-
-        // CHAMA O GRUPOS AQUI NO FINAL PARA CARREGAR OS DOIS JUNTOS!
-        carregarGrupos();
-
       } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro: ' + e.message + '</p>';
+        // ISSO VAI APARECER DIRETO NA TELA DO CELULAR SE DER ERRO!
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações: ' + e.message + '</p>';
+        alert('Erro nas solicitações: ' + e.message);
       }
     }
-
 
     async function carregarGrupos() {
       const container = document.getElementById('lista-todos-grupos');
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/grupos');
+        
+        if (!res.ok) {
+          throw new Error('Servidor respondeu com status ' + res.status);
+        }
+
         const grupos = await res.json();
 
         if (!Array.isArray(grupos) || grupos.length === 0) {
@@ -171,12 +179,12 @@
         }
 
         container.innerHTML = grupos.map(g => `
-          <div class="item">
+          <div class="item" style="background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
             <div class="info-text">
               <strong>${escapeHtml(g.nome)}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
               <small style="color:#94a3b8;">${escapeHtml(g.link)}</small>
             </div>
-            <div class="actions">
+            <div class="actions" style="margin-top:5px;">
               ${g.isVip ?
                 `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
                 `<button class="btn-sm btn-yellow" onclick="abrirModalVip('${g.id}', '${escapeHtml(g.nome)}')">Dar VIP</button>`
@@ -186,7 +194,9 @@
           </div>
         `).join('');
       } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro: ' + e.message + '</p>';
+        // ISSO VAI APARECER DIRETO NA TELA DO CELULAR SE DER ERRO!
+        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
+        alert('Erro nos grupos: ' + e.message);
       }
     }
 
