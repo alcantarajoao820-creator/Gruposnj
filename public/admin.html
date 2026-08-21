@@ -5,169 +5,514 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Admin - GruposNJ</title>
   <style>
-    body { background: #0f172a; color: #f8fafc; font-family: Arial, sans-serif; padding: 15px; margin: 0; }
-    h2 { font-size: 1.2rem; text-align: center; color: #38bdf8; }
-    .card { background: #1e293b; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-    .btn { background: #22c55e; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .btn-sm { padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; color: white; }
-    .btn-green { background: #22c55e; }
-    .btn-red { background: #ef4444; }
-    .btn-yellow { background: #eab308; color: #0f172a; }
-    input { width: 100%; padding: 10px; margin-bottom: 10px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; box-sizing: border-box; }
-    .item { background: #0f172a; padding: 10px; margin-bottom: 8px; border-radius: 6px; }
+    /* CABEÇALHO E DASHBOARD PREMIUM */
+    .admin-header {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 22px 15px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+    .admin-main-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 3px 0;
+      letter-spacing: 0.5px;
+    }
+    .admin-main-subtitle {
+      font-size: 0.75rem;
+      color: #38bdf8;
+      margin: 0 0 14px 0;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-sync {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+#lista-todos-grupos, #lista-todos-grupos * {
+  word-break: break-all !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+#lista-todos-grupos > div {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #334155;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+#lista-todos-grupos a {
+  display: block;
+  color: #38bdf8;
+  word-break: break-all;
+  font-size: 0.8rem;
+  margin: 6px 0;
+  text-decoration: underline;
+}
+#lista-todos-grupos div span, 
+#lista-todos-grupos div {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* Força o link do WhatsApp a ir para a linha de baixo se houver URL */
+#lista-todos-grupos div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+/* AJUSTES FINAIS DOS GRUPOS */
+#lista-todos-grupos > div {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  padding: 14px !important;
+  border-radius: 10px !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+}
+
+/* Deixa o link azul e legível */
+#lista-todos-grupos a {
+  color: #38bdf8 !important;
+  font-size: 0.8rem !important;
+  word-break: break-all !important;
+  text-decoration: underline !important;
+}
+
+/* Coloca os botões lado a lado e bonitos */
+#lista-todos-grupos button {
+  border: none !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  cursor: pointer !important;
+  margin-right: 6px !important;
+  margin-top: 4px !important;
+}
+
+/* Estiliza o botão de Deletar em Vermelho */
+#lista-todos-grupos button:nth-child(2),
+#lista-todos-grupos button:contains("Deletar") {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* Estiliza o botão de VIP em Amarelo/Laranja */
+#lista-todos-grupos button:nth-child(1) {
+  background-color: #f59e0b !important;
+  color: #0f172a !important;
+}
+/* ESTILIZAÇÃO DO CARD DE SOLICITAÇÕES PENDENTES */
+#lista-solicitacoes > div {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  padding: 14px !important;
+  border-radius: 10px !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Link limpo e quebrado na solicitação */
+#lista-solicitacoes a {
+  color: #38bdf8 !important;
+  font-size: 0.8rem !important;
+  word-break: break-all !important;
+  text-decoration: underline !important;
+}
+
+/* Botões da Solicitação (Aceitar e Recusar) */
+#lista-solicitacoes button {
+  border: none !important;
+  padding: 8px 14px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  cursor: pointer !important;
+  margin-right: 6px !important;
+  margin-top: 4px !important;
+}
+
+/* Botão Aceitar (Verde) */
+#lista-solicitacoes button:nth-child(1),
+#lista-solicitacoes button:contains("Aceitar") {
+  background-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+/* Botão Recusar (Vermelho) */
+#lista-solicitacoes button:nth-child(2),
+#lista-solicitacoes button:contains("Recusar") {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+/* Deixa o texto principal de todas as listas bem claro e legível */
+#lista-solicitacoes, #lista-solicitacoes *,
+#lista-todos-grupos, #lista-todos-grupos * {
+  color: #f8fafc !important;
+}
+
+/* Mantém o link do WhatsApp azulzinho e destacado */
+#lista-solicitacoes a, #lista-todos-grupos a {
+  color: #38bdf8 !important;
+}
+
+/* Força cor e estilo nos botões de Aceitar/Recusar */
+#lista-solicitacoes button {
+  border: none !important;
+  padding: 8px 14px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  cursor: pointer !important;
+}
+
+/* Botão de Aceitar (Verde) */
+#lista-solicitacoes button:first-child {
+  background-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+/* Botão de Recusar (Vermelho) */
+#lista-solicitacoes button:last-child {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
   </style>
 </head>
 <body>
 
-  <h2>🛡️ Painel de Administração</h2>
-
   <!-- TELA DE LOGIN -->
-  <div id="login-box" class="card">
-    <p>Acesso Restrito</p>
-    <input type="password" id="admin-pass" placeholder="Digite a senha...">
-    <button class="btn" onclick="autenticar()">Entrar</button>
-  </div>
-
-  <!-- CONTEÚDO DO ADMIN -->
-  <div id="admin-content" style="display: none;">
-    
-    <!-- BOTÃO DE ATUALIZAR QUE VOCÊ PEDIU -->
-    <div style="margin-bottom: 15px; text-align: right;">
-      <button onclick="carregarDados()" style="background: #38bdf8; color: #0f172a; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer;">🔄 Atualizar Dados</button>
+  <div id="login-box" class="card" style="max-width: 400px; margin: 60px auto; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div class="admin-badge" style="font-size: 2.2rem; margin-bottom: 5px;">🛡️</div>
+      <h2 class="admin-main-title" style="color: #f8fafc; font-size: 1.2rem; margin: 0;">Painel Administrativo</h2>
+      <p class="admin-main-subtitle" style="color: #38bdf8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin: 5px 0 0 0;">GruposNJ Core</p>
     </div>
 
-    <div class="card">
-      <h3>📋 Solicitações Pendentes</h3>
+    <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px; font-weight: 500;">🔒 Autenticação de Segurança</p>
+    <input type="password" id="admin-pass" placeholder="Digite a senha master..." style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; outline: none;">
+    <button class="btn" onclick="autenticar()" style="width: 100%; padding: 12px; background: #38bdf8; color: #0f172a; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">Acessar Sistema</button>
+  </div>
+
+  <!-- CONTEÚDO DO ADMIN (Fica oculto inicialmente) -->
+  <div id="admin-content" style="display: none; max-width: 600px; margin: 20px auto; padding: 0 10px;">
+
+    <!-- CABEÇALHO PREMIUM DO PAINEL LOGADO -->
+    <div class="admin-header" style="background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <div class="admin-badge" style="font-size: 1.5rem; margin-bottom: 2px;">🛡️</div>
+        <h1 class="admin-main-title" style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; margin: 0;">Painel Administrativo</h1>
+        <p class="admin-main-subtitle" style="font-size: 0.7rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; margin: 2px 0 0 0;">GruposNJ Core</p>
+      </div>
+      <button class="btn-sync" onclick="carregarDados()">
+        🔄 Sincronizar Dados
+      </button>
+    </div>
+
+    <!-- SEÇÃO DE DENÚNCIAS -->
+    <div class="admin-section" style="margin-bottom: 20px; background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155;">
+      <h3 style="color: #ef4444; margin-top: 0; margin-bottom: 15px;">🚨 Denúncias Recebidas</h3>
+      <div style="margin-bottom: 15px;">
+        <input type="text" id="input-busca-denuncia" placeholder="Pesquisar por nome ou ID do grupo..." oninput="filtrarDenuncias()" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 6px; box-sizing: border-box; outline: none;">
+      </div>
+      <div id="lista-denuncias" style="display: flex; flex-direction: column; gap: 10px;">
+        <p style="color: #94a3b8;">Carregando denúncias...</p>
+      </div>
+    </div>
+
+    <!-- SEÇÃO DE SOLICITAÇÕES -->
+    <div class="card" style="background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155;">
+      <h3 style="color: #f8fafc; margin-top: 0; margin-bottom: 15px;">📋 Solicitações Pendentes</h3>
       <div id="lista-solicitacoes">Carregando...</div>
     </div>
 
-    <div class="card">
-      <h3>🌐 Todos os Grupos (Gerenciar VIPs)</h3>
-      <div id="lista-todos-grupos">Carregando...</div>
+    <!-- SEÇÃO DE GRUPOS / VIPs -->
+    <div class="card" style="background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; color: #f8fafc;">
+      <h3 style="color: #38bdf8; margin-top: 0; margin-bottom: 15px; line-height: 1.3;">🌐 Todos os Grupos <br><span style="font-size: 0.85rem; color: #94a3b8;">(Gerenciar VIPs)</span></h3>
+      
+      <div style="margin-bottom: 15px;">
+        <input type="text" id="input-busca-grupo" placeholder="Pesquisar grupo por nome ou ID..." oninput="filtrarGrupos()" style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; color: #ffffff; border-radius: 8px; outline: none; box-sizing: border-box; font-size: 0.9rem;">
+      </div>
+      
+      <div id="lista-todos-grupos" style="color: #e2e8f0; font-size: 0.9rem;">Carregando...</div>
     </div>
+
   </div>
-
-  <script>
-    let grupoIdSelecionado = null;
-
-    async function autenticar() {
-      const senhaInput = document.getElementById('admin-pass').value.trim();
-      const senhaCorreta = "Joao153153*";
-
-      if (senhaInput === senhaCorreta) {
-        localStorage.setItem('adminPassword', senhaInput);
-        document.getElementById('login-box').style.display = 'none';
-        document.getElementById('admin-content').style.display = 'block';
-        carregarDados();
-      } else {
-        alert('Senha incorreta!');
-      }
-    }
-
-    function carregarDados() {
-      carregarSolicitacoes();
-      carregarGrupos();
-    }
-
-    async function carregarSolicitacoes() {
-      const container = document.getElementById('lista-solicitacoes');
-      container.innerHTML = '<p style="color:#38bdf8;">Buscando solicitações...</p>';
-      try {
-        const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
-        if (!res.ok) throw new Error('Status ' + res.status);
-        const sol = await res.json();
-
-        if (!Array.isArray(sol) || sol.length === 0) {
-          container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
-          return;
-        }
-
-        container.innerHTML = sol.map(s => `
-          <div class="item">
-            <strong>${s.nome || 'Sem nome'}</strong><br>
-            <small style="color:#38bdf8;">${s.link || ''}</small>
-            <div style="margin-top:8px;">
-              <button class="btn-sm btn-green" onclick="decidir('${s.id}', true)">Aceitar</button>
-              <button class="btn-sm btn-red" onclick="decidir('${s.id}', false)">Recusar</button>
-            </div>
-          </div>
-        `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações: ' + e.message + '</p>';
-      }
-    }
-
-    async function carregarGrupos() {
-      const container = document.getElementById('lista-todos-grupos');
-      container.innerHTML = '<p style="color:#38bdf8;">Buscando grupos...</p>';
-      try {
-        const res = await fetch('https://gruposnj.onrender.com/api/grupos');
-        if (!res.ok) throw new Error('Status ' + res.status);
-        const grupos = await res.json();
-
-        if (!Array.isArray(grupos) || grupos.length === 0) {
-          container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
-          return;
-        }
-
-        container.innerHTML = grupos.map(g => `
-          <div class="item">
-            <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}<br>
-            <small style="color:#94a3b8;">${g.link || ''}</small>
-            <div style="margin-top:8px;">
-              ${g.isVip ?
-                `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
-                `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>`
-              }
-              <button class="btn-sm btn-red" onclick="deletarGrupo('${g.id}')">🗑️ Deletar</button>
-            </div>
-          </div>
-        `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
-      }
-    }
-
-    async function decidir(id, aceito) {
-      const senha = localStorage.getItem('adminPassword');
-      const res = await fetch('https://gruposnj.onrender.com/api/admin/decidir-solicitacao', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha, id, aceito })
-      });
-      carregarDados();
-    }
-
-    async function ativarVip(grupoId) {
-      const senha = localStorage.getItem('adminPassword');
-      await fetch('https://gruposnj.onrender.com/api/admin/ativar-vip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha, grupoId, dias: 30 })
-      });
-      carregarDados();
-    }
-
-    async function removerVip(grupoId) {
-      const senha = localStorage.getItem('adminPassword');
-      await fetch('https://gruposnj.onrender.com/api/admin/remover-vip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha, grupoId })
-      });
-      carregarDados();
-    }
-
-    async function deletarGrupo(id) {
-      if(!confirm('Tem certeza que quer deletar?')) return;
-      const senha = localStorage.getItem('adminPassword');
-      await fetch(`https://gruposnj.onrender.com/api/grupos/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha })
-      });
-      carregarDados();
-    }
-  </script>
 </body>
 </html>
+<script>
+  let todasAsDenuncias = [];
+
+  async function carregarDenunciasAdmin() {
+    const container = document.getElementById('lista-denuncias');
+    if (!container) return;
+
+    try {
+      const res = await fetch('/api/denuncias');
+      const data = await res.json();
+
+      if (!data.success || !data.denuncias || data.denuncias.length === 0) {
+        container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia registrada até o momento.</p>';
+        todasAsDenuncias = [];
+        return;
+      }
+
+      todasAsDenuncias = data.denuncias;
+      exibirDenuncias(todasAsDenuncias);
+
+    } catch (err) {
+      console.error('Erro ao carregar denúncias:', err);
+      container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de denúncias.</p>';
+    }
+  }
+
+  function exibirDenuncias(lista) {
+    const container = document.getElementById('lista-denuncias');
+    container.innerHTML = '';
+
+    if (lista.length === 0) {
+      container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia encontrada com esse termo.</p>';
+      return;
+    }
+
+    lista.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.cssText = 'background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 10px;';
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong>
+          <span style="font-size: 11px; color: #94a3b8;">${new Date(d.data).toLocaleString()}</span>
+        </div>
+        <p style="margin: 5px 0; color: #f1f5f9;"><strong>Motivo:</strong> ${d.motivo}</p>
+        <p style="margin: 5px 0 12px 0; font-size: 13px; color: #cbd5e1;"><strong>Contato:</strong> ${d.usuarioEmail}</p>
+        <button onclick="apagarDenuncia('${d.id}')" style="background: #dc2626; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+          🗑️ Apagar Denúncia
+        </button>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function filtrarDenuncias() {
+    const termo = document.getElementById('input-busca-denuncia').value.toLowerCase().trim();
+
+    const filtradas = todasAsDenuncias.filter(d => {
+      const nome = (d.nomeGrupo || '').toLowerCase();
+      const id = String(d.grupoId || '').toLowerCase();
+      return nome.includes(termo) || id.includes(termo);
+    });
+
+    exibirDenuncias(filtradas);
+  }
+
+  async function apagarDenuncia(id) {
+    if (!confirm('Tem certeza que deseja apagar esta denúncia?')) return;
+
+    try {
+      const res = await fetch(`/api/denuncias/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const data = await res.json();
+
+      if (data.success) {
+        carregarDenunciasAdmin();
+      } else {
+        alert(data.error || 'Erro ao apagar denúncia.');
+      }
+    } catch (err) {
+      console.error('Erro ao excluir:', err);
+      alert('Erro de conexão ao tentar apagar a denúncia.');
+    }
+  }
+
+  async function autenticar() {
+    const senhaInput = document.getElementById('admin-pass').value.trim();
+    const senhaCorreta = "Joao153153*";
+
+    if (senhaInput === senhaCorreta) {
+      localStorage.setItem('adminPassword', senhaInput);
+      document.getElementById('login-box').style.display = 'none';
+      document.getElementById('admin-content').style.display = 'block';
+      carregarDados();
+    } else {
+      alert('Senha incorreta!');
+    }
+  }
+
+  function carregarDados() {
+    carregarDenunciasAdmin();
+    carregarSolicitacoes();
+    carregarGrupos();
+  }
+
+  async function carregarSolicitacoes() {
+    const container = document.getElementById('lista-solicitacoes');
+    container.innerHTML = '<p style="color:#38bdf8;">Buscando solicitações...</p>';
+    try {
+      const res = await fetch('/api/admin/solicitacoes');
+      if (!res.ok) throw new Error('Status ' + res.status);
+      const sol = await res.json();
+
+      if (!Array.isArray(sol) || sol.length === 0) {
+        container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
+        return;
+      }
+
+      container.innerHTML = sol.map(g => `
+        <div class="item">
+          <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}
+          <span class="item-link">${g.link || ''}</span>
+          <div class="item-actions">
+            <button class="btn-sm btn-green" onclick="decidir('${g.id}', true)">Aceitar</button>
+            <button class="btn-sm btn-red" onclick="decidir('${g.id}', false)">Recusar</button>
+          </div>
+        </div>
+      `).join('');
+
+    } catch(e) {
+      container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações: ' + e.message + '</p>';
+    }
+  }
+
+  let todosOsGrupos = []; // Variável global que guarda os grupos
+
+  async function carregarGrupos() {
+    const container = document.getElementById('lista-todos-grupos');
+    container.innerHTML = '<p style="color:#38bdf8;">Buscando grupos...</p>';
+    try {
+      const res = await fetch('/api/grupos');
+      if (!res.ok) throw new Error('Status ' + res.status);
+      const grupos = await res.json();
+
+      if (!Array.isArray(grupos) || grupos.length === 0) {
+        container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
+        todosOsGrupos = [];
+        return;
+      }
+
+      todosOsGrupos = grupos; // SALVA OS DADOS AQUI PARA A BUSCA FUNCIONAR
+      exibirGrupos(todosOsGrupos); // Desenha a lista na tela
+
+    } catch(e) {
+      container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
+    }
+  }
+
+  // Função separada apenas para desenhar os grupos
+  function exibirGrupos(grupos) {
+    const container = document.getElementById('lista-todos-grupos');
+
+    if (grupos.length === 0) {
+      container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo encontrado com esse termo.</p>';
+      return;
+    }
+
+    container.innerHTML = grupos.map(g => `
+      <div class="item">
+        <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}
+        <span class="item-link">${g.link || ''}</span>
+        <div class="item-actions">
+          ${g.isVip ?
+            `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
+            `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>`
+          }
+          <button class="btn-sm btn-red" onclick="deletarGrupo('${g.id}')">🗑️ Deletar</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // O motor da busca em tempo real
+  function filtrarGrupos() {
+    const termo = document.getElementById('input-busca-grupo').value.toLowerCase().trim();
+    console.log("Termo digitado:", termo);
+    console.log("Total de grupos salvos:", todosOsGrupos.length);
+
+    const filtrados = todosOsGrupos.filter(g => {
+      const nome = (g.nome || '').toLowerCase();
+      const id = String(g.id || '').toLowerCase();
+      return nome.includes(termo) || id.includes(termo);
+    });
+
+    console.log("Grupos filtrados encontrados:", filtrados.length);
+    exibirGrupos(filtrados);
+  }
+
+  async function decidir(id, aceito) {
+    const senha = localStorage.getItem('adminPassword');
+    await fetch('/api/admin/decidir-solicitacao', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha, id, aceito })
+    });
+    carregarDados();
+  }
+
+  async function ativarVip(grupoId) {
+    const senha = localStorage.getItem('adminPassword');
+    await fetch('/api/admin/ativar-vip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha, grupoId, dias: 30 })
+    });
+    carregarDados();
+  }
+
+  async function removerVip(grupoId) {
+    const senha = localStorage.getItem('adminPassword');
+    await fetch('/api/admin/remover-vip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha, grupoId })
+    });
+    carregarDados();
+  }
+
+  async function deletarGrupo(id) {
+    if(!confirm('Tem certeza que quer deletar?')) return;
+    const senha = localStorage.getItem('adminPassword');
+    await fetch(`/api/grupos/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha })
+    });
+    carregarDados();
+  }
+</script>
+</body>
+</html>
+

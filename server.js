@@ -26,6 +26,7 @@ const DATA_FILE = path.join(__dirname, 'grupos.json');
 const SOLICITACOES_FILE = path.join(__dirname, 'solicitacoes.json');
 const CONFIG_FILE = path.join(__dirname, 'config.json');
 const USERS_FILE = path.join(__dirname, 'usuarios.json');
+const DENUNCIAS_FILE = path.join(__dirname, 'denuncias.json');
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -289,17 +290,11 @@ app.post('/api/solicitar', (req, res) => {
   res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
 });
 
-const nodemailer = require('nodemailer');
+// ==========================================
+// ROTAS DE DENÚNCIAS
+// ==========================================
 
-// Configuração do Nodemailer com o seu e-mail e a senha de app gerada
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'suporte.gruposnj@gmail.com',
-    pass: 'orsxijhslywsbhke' // Pode colocar com ou sem espaços
-  }
-});
-
+// Rota para registrar denúncia (Garante que o ID seja sempre gerado)
 app.post('/api/denunciar', async (req, res) => {
   try {
     const { grupoId, motivo, usuarioEmail } = req.body;
@@ -310,53 +305,80 @@ app.post('/api/denunciar', async (req, res) => {
 
     let nomeGrupo = `ID: ${grupoId}`;
 
-    // Tenta ler o arquivo onde ficam salvos os grupos (ajuste o nome do arquivo se necessário, ex: grupos.json, database.json)
     try {
-      const caminhoArquivo = path.join(__dirname, 'grupos.json'); // Altere se o arquivo tiver outro nome/caminho
-      if (fs.existsSync(caminhoArquivo)) {
-        const dadosJson = JSON.parse(fs.readFileSync(caminhoArquivo, 'utf8'));
-        
-        // Procura o grupo pelo ID (pode ser array direto ou um objeto que guarda a lista)
-        const listaGrupos = Array.isArray(dadosJson) ? dadosJson : (dadosJson.grupos || []);
-        const grupoEncontrado = listaGrupos.find(g => String(g.id) === String(grupoId));
-        
+      if (fs.existsSync(DATA_FILE)) {
+        const grupos = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+        const grupoEncontrado = grupos.find(g => String(g.id) === String(grupoId));
         if (grupoEncontrado && grupoEncontrado.nome) {
           nomeGrupo = grupoEncontrado.nome;
         }
       }
-    } catch (err) {
-      console.log('Erro ao ler o nome do grupo do arquivo:', err);
-    }
+    } catch (err) {}
 
-    // Configuração do e-mail
-    const mailOptions = {
-      from: 'suporte.gruposnj@gmail.com',
-      to: 'suporte.gruposnj@gmail.com',
-      subject: `🚨 Nova Denúncia: ${nomeGrupo}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; background: #0f172a; color: #f1f5f9; border-radius: 8px;">
-          <h2 style="color: #ef4444; margin-top: 0;">🚨 Nova Denúncia Registrada</h2>
-          <p><strong>Nome do Grupo:</strong> <span style="color: #38bdf8;">${nomeGrupo}</span></p>
-          <p><strong>ID do Grupo:</strong> ${grupoId}</p>
-          <p><strong>E-mail de contato:</strong> ${usuarioEmail}</p>
-          <p><strong>Motivo relatado:</strong></p>
-          <div style="background: #1e293b; padding: 15px; border-left: 4px solid #ef4444; border-radius: 4px; color: #cbd5e1;">
-            ${motivo}
-          </div>
-          <p style="font-size: 11px; color: #94a3b8; margin-top: 20px;">Enviado automaticamente pelo sistema GruposNJ.</p>
-        </div>
-      `
+    const denuncias = lerJson(DENUNCIAS_FILE, []);
+    
+    // Geramos um ID único garantido usando timestamp + número aleatório
+    const novaDenuncia = {
+      id: 'den_' + Date.now() + Math.floor(Math.random() * 1000),
+      grupoId: String(grupoId),
+      nomeGrupo: nomeGrupo,
+      motivo: motivo,
+      usuarioEmail: usuarioEmail,
+      data: new Date().toISOString()
     };
 
-    await transporter.sendMail(mailOptions);
-    return res.json({ success: true });
+    denuncias.unshift(novaDenuncia);
+    salvarJson(DENUNCIAS_FILE, denuncias);
 
+    return res.json({ success: true });
   } catch (error) {
-    console.error('Erro ao enviar e-mail de denúncia:', error);
+    console.error('Erro ao salvar denúncia:', error);
     return res.status(500).json({ success: false, error: 'Erro interno ao processar a denúncia.' });
   }
 });
 
+// Rota para listar denúncias
+app.get('/api/denuncias', async (req, res) => {
+  try {
+    const denuncias = lerJson(DENUNCIAS_FILE, []);
+    return res.json({ success: true, denuncias });
+  } catch (error) {
+    console.error('Erro ao buscar denúncias:', error);
+    return res.status(500).json({ success: false, error: 'Erro ao carregar denúncias.' });
+  }
+});
+
+app.delete('/api/denuncias/:id', (req, res) => {
+  try {
+    const target = decodeURIComponent(req.params.id).trim();
+    let denuncias = lerJson(DENUNCIAS_FILE, []);
+
+    console.log('--- TENTANDO EXCLUIR ---');
+    console.log('Alvo recebido da URL:', target);
+    console.log('IDs disponíveis no JSON:', denuncias.map(d => ({ id: d.id, grupoId: d.grupoId })));
+
+    const tamanhoInicial = denuncias.length;
+
+    // Filtra mantendo apenas os que NÃO batem nem com o id único nem com o grupoId
+    denuncias = denuncias.filter(d => {
+      const matchId = String(d.id || '').trim() === target;
+      const matchGrupo = String(d.grupoId || '').trim() === target;
+      return !matchId && !matchGrupo; // Se for igual a qualquer um dos dois, remove
+    });
+
+    if (denuncias.length === tamanhoInicial) {
+      console.log('❌ Nenhuma denúncia correspondente encontrada para remover.');
+      return res.status(404).json({ success: false, error: 'Denúncia não encontrada.' });
+    }
+
+    salvarJson(DENUNCIAS_FILE, denuncias);
+    console.log('✅ Denúncia apagada com sucesso! Restaram:', denuncias.length);
+    return res.json({ success: true });
+  } catch (error) {
+    console.error('Erro ao excluir denúncia:', error);
+    return res.status(500).json({ success: false, error: 'Erro interno ao excluir denúncia.' });
+  }
+});
 
 // ==========================================
 // ROTAS DO PAINEL DO USUÁRIO
