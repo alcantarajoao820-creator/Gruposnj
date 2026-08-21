@@ -150,8 +150,8 @@
             </div>
           </div>
         `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações.</p>';
+           } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro: ' + e.message + '</p>';
       }
     }
 
@@ -181,9 +181,10 @@
             </div>
           </div>
         `).join('');
-      } catch(e) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos.</p>';
+         } catch(e) {
+        container.innerHTML = '<p style="color:#ef4444;">Erro: ' + e.message + '</p>';
       }
+
     }
 
 
