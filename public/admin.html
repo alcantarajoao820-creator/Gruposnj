@@ -44,6 +44,11 @@ w<body>
   <div class="container">
     <h1>🛡️ Painel de Administração</h1>
 
+<div style="padding: 10px 0; text-align: right;">
+  <button onclick="carregarDados()" style="background: #38bdf8; color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer;">🔄 Atualizar Dados</button>
+</div>
+
+
     <div class="card" id="login-box">
       <h2>Acesso Restrito</h2>
       <input type="password" id="admin-pass" placeholder="Digite a Senha Admin">
@@ -96,6 +101,7 @@ w<body>
   </div>
 
   <script>
+
     let grupoIdSelecionado = null;
 
     function mostrarAviso(titulo, msg) {
@@ -133,6 +139,9 @@ w<body>
         alert('ERRO CRITICO: O ID lista-solicitacoes não existe no HTML!');
         return;
       }
+      
+      container.innerHTML = '<p style="color:#38bdf8; font-size:0.85rem;">Carregando solicitações...</p>';
+
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/admin/solicitacoes');
         if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
@@ -161,13 +170,15 @@ w<body>
       }
     }
 
-
     async function carregarGrupos() {
       let container = document.getElementById('lista-todos-grupos');
       if (!container) {
         alert('ERRO CRITICO: O ID lista-todos-grupos não existe no HTML!');
         return;
       }
+
+      container.innerHTML = '<p style="color:#38bdf8; font-size:0.85rem;">Carregando grupos...</p>';
+
       try {
         const res = await fetch('https://gruposnj.onrender.com/api/grupos');
         if (!res.ok) throw new Error('Erro HTTP: ' + res.status);
@@ -198,8 +209,6 @@ w<body>
         container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
       }
     }
-
-
 
     async function decidir(id, aceito) {
       const senhaAdmin = localStorage.getItem('adminPassword') || prompt('Digite a senha de admin:');
