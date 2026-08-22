@@ -196,8 +196,19 @@
     </div>
 
     <!-- Navegação Inferior -->
-    <a href="/" class="link-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para a Página Inicial</a>
-    <a href="/termos.html" target="_blank" class="link-termos">Termos e Condições de Uso</a>
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px; align-items: stretch;">
+      
+      <!-- Botão Voltar (Estilo padrão do painel) -->
+      <a href="/" class="btn-voltar" style="background: rgba(34, 197, 94, 0.1); color: var(--accent); padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
+        <i class="fa-solid fa-arrow-left"></i> Voltar para a Página Inicial
+      </a>
+
+      <!-- Link dos Termos (Discreto e centralizado embaixo) -->
+      <a href="/termos.html" target="_blank" style="color: var(--text-muted); text-decoration: none; font-size: 0.82rem; text-align: center; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
+        <i class="fa-solid fa-file-contract"></i> Termos e Condições de Uso
+      </a>
+
+    </div>
   </div>
 
   <!-- Modal Aviso Dark -->

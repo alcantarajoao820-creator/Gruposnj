@@ -3,31 +3,352 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Termos de Uso - GruposNJ</title>
+  <title>Termos e Condições Gerais - GruposNJ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
-    body { background: #070a12; color: #f1f5f9; padding: 30px 15px; }
-    .container { max-width: 600px; margin: 0 auto; background: #0f172a; border: 1px solid #1e293b; padding: 25px; border-radius: 14px; }
-    h1 { color: #38bdf8; font-size: 1.5rem; margin-bottom: 15px; }
-    p, li { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; margin-bottom: 12px; }
-    ul { margin-left: 20px; }
-    a { color: #38bdf8; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; }
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: #0f172a;
+      --border-color: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+    }
+
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-main); padding: 20px 10px; line-height: 1.7; }
+    
+    .container { 
+      max-width: 900px; 
+      margin: 0 auto; 
+      background: var(--bg-card); 
+      border: 1px solid var(--border-color); 
+      padding: 25px 15px; 
+      border-radius: 16px; 
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 20px;
+      text-decoration: none;
+    }
+
+    .header-logo i { color: var(--accent); }
+    .header-logo span { color: var(--accent); }
+
+    h1 { color: #fff; font-size: 1.6rem; margin-bottom: 8px; font-weight: 800; }
+    .subtitle { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+
+    h2 { color: var(--accent); font-size: 1rem; margin-top: 30px; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent); padding-left: 8px; }
+
+    ol { 
+      padding-left: 5px; 
+      list-style-position: inside;
+    }
+    
+    li { 
+      font-size: 0.86rem; 
+      color: var(--text-muted); 
+      margin-bottom: 10px; 
+      text-align: justify; 
+    }
+    
+    li strong { color: var(--text-main); }
+
+    .footer-actions {
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-voltar { 
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--accent);
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none; 
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      white-space: nowrap;
+    }
+
+    .btn-voltar:hover { 
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .update-date { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* Estilização do Rodapé */
+    footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 15px 10px; }
+      h1 { font-size: 1.3rem; }
+      .footer-actions { flex-direction: column; align-items: stretch; text-align: center; }
+      .btn-voltar { justify-content: center; }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Termos e Condições de Uso</h1>
-    <p>Ao enviar um grupo para a plataforma GruposNJ, você concorda explicitamente com as seguintes regras:</p>
-    
-    <ul>
-      <li>É proibida a publicação de conteúdos ilícitos, violentos ou ofensivos.</li>
-      <li>É proibido o envio de links duplicados ou já existentes na plataforma.</li>
-      <li>A administração se reserva o direito de remover qualquer grupo que descumpra as diretrizes.</li>
-      <li>O usuário é o único responsável pelo conteúdo compartilhado através do link fornecido.</li>
-    </ul>
+    <a href="/" class="header-logo">
+      <i class="fa-solid fa-fire"></i> Grupos<span>NJ</span>
+    </a>
 
-    <a href="/publicar.html">← Voltar para Publicação</a>
+    <h1>Termos e Condições Gerais de Uso</h1>
+    <p class="subtitle">Documento oficial regulamentador das diretrizes, obrigações, direitos e isenções aplicáveis a todos os usuários e visitantes da plataforma GruposNJ.</p>
+
+    <!-- SEÇÃO 1: DISPOSIÇÕES PRELIMINARES -->
+    <h2>1. Disposições Preliminares e Âmbito de Aplicação</h2>
+    <ol>
+      <li><strong>Identificação da Plataforma:</strong> O presente instrumento rege o uso do portal eletrônico denominado GruposNJ, acessível via domínio oficial.</li>
+      <li><strong>Natureza dos Serviços:</strong> A plataforma consiste em um diretório virtual autônomo destinado à indexação e divulgação voluntária de links de comunidades.</li>
+      <li><strong>Aceitação Integral:</strong> O acesso e a navegação no portal implicam concordância total e incondicional com as cláusulas aqui descritas.</li>
+      <li><strong>Capacidade Civil:</strong> O usuário atesta possuir plena capacidade civil para celebrar contratos vinculantes perante a legislação brasileira.</li>
+      <li><strong>Menores de Idade:</strong> O uso por menores de idade requer supervisão e autorização expressa dos pais ou responsáveis legais.</li>
+      <li><strong>Início da Vigência:</strong> As regras entram em vigor imediatamente a partir do primeiro acesso do usuário às páginas do site.</li>
+      <li><strong>Independência Tecnológica:</strong> O GruposNJ não possui qualquer vínculo comercial, societário ou de parceria com aplicativos mensageiros.</li>
+      <li><strong>Modificação Unilateral:</strong> A administração reserva-se o direito de alterar este documento a qualquer momento, sem aviso prévio.</li>
+      <li><strong>Publicidade de Mudanças:</strong> Versões atualizadas serão disponibilizadas diretamente nesta mesma página de termos.</li>
+      <li><strong>Responsabilidade pela Leitura:</strong> Cabe ao usuário verificar periodicamente eventuais atualizações nas diretrizes do portal.</li>
+      <li><strong>Idioma de Referência:</strong> Toda e qualquer interpretação jurídica destes termos basear-se-á exclusivamente no idioma Português.</li>
+      <li><strong>Nulidade Parcial:</strong> Caso alguma cláusula seja julgada inaplicável, as demais disposições permanecerão em pleno vigor.</li>
+      <li><strong>Renúncia Tácita:</strong> A ausência de exercício imediato de direitos pela administração não constitui renúncia definitiva.</li>
+      <li><strong>Boas Práticas:</strong> Os serviços devem ser utilizados pautados estritamente na ética, moral e respeito mútuo.</li>
+      <li><strong>Finalidade Estrita:</strong> O portal destina-se unicamente ao encontro lícito de pessoas com interesses em comunidades digitais.</li>
+      <li><strong>Acesso Livre:</strong> A visualização de conteúdos públicos independe de cadastro prévio, mantendo caráter gratuito.</li>
+      <li><strong>Estrutura Lógica:</strong> O layout e a arquitetura de dados do site são protegidos por leis de propriedade industrial.</li>
+      <li><strong>Comunicação Oficial:</strong> Canais de suporte oficial são os únicos meios válidos para tratativas formais com a equipe.</li>
+      <li><strong>Incompatibilidade de Versões:</strong> Usuários com navegadores desatualizados podem sofrer limitações técnicas de compatibilidade.</li>
+      <li><strong>Interrupções Programadas:</strong> Paradas técnicas para manutenção do sistema poderão ocorrer sem direito a indenizações.</li>
+    </ol>
+
+    <!-- SEÇÃO 2: REGRAS DE CADASTRO E PUBLICAÇÃO -->
+    <h2>2. Regras de Cadastro e Submissão de Grupos</h2>
+    <ol start="21">
+      <li><strong>Responsabilidade pelo Envio:</strong> O remetente do link é o único e exclusivo responsável pelas informações prestadas.</li>
+      <li><strong>Exatidão dos Dados:</strong> Títulos, descrições e categorias devem refletir veridicamente o conteúdo do grupo externo.</li>
+      <li><strong>Proibição de Duplicidade:</strong> O cadastramento repetido de um mesmo link (flood/duplicidade) é terminantemente proibido.</li>
+      <li><strong>Limitação de Links:</strong> Cada usuário deve respeitar os limites operacionais de submissão impostos pela interface.</li>
+      <li><strong>Validade dos Convites:</strong> O autor do anúncio compromete-se a manter o link de acesso ativo e funcional.</li>
+      <li><strong>Remoção por Inatividade:</strong> Links mortos ou expirados poderão ser excluídos automaticamente pelo sistema.</li>
+      <li><strong>Direitos de Imagem:</strong> O uso de logotipos e banners nos anúncios não deve violar direitos autorais de terceiros.</li>
+      <li><strong>Conteúdo Impróprio:</strong> É vetada a publicação de links que redirecionem a materiais pornográficos não autorizados.</li>
+      <li><strong>Apologia a Crimes:</strong> Grupos voltados à prática de atos ilícitos serão banidos sumariamente sem aviso prévio.</li>
+      <li><strong>Discurso de Ódio:</strong> Proibida a divulgação de comunidades que estimulem preconceitos, racismo ou xenofobia.</li>
+      <li><strong>Esquemas de Fraude:</strong> Anúncios relacionados a pirâmides financeiras, estelionato ou golpes serão denunciados às autoridades.</li>
+      <li><strong>Comércio Irregular:</strong> Divulgação de venda de produtos proibidos por lei federal é estritamente proibida.</li>
+      <li><strong>Direito de Moderação:</strong> A equipe de moderação pode editar títulos inadequados para manter o padrão do site.</li>
+      <li><strong>Critério de Aceitação:</strong> O GruposNJ reserva-se o direito de recusar qualquer submissão a seu exclusivo critério.</li>
+      <li><strong>Autoria de Publicação:</strong> O sistema registra metadados básicos para fins de controle e segurança contra abusos.</li>
+      <li><strong>Isenção de Custos de Cadastro:</strong> O envio inicial de links padrões permanece isento de taxas financeiras.</li>
+      <li><strong>Conteúdo Promocional:</strong> Espaços publicitários internos obedecem a contratos comerciais específicos e apartados.</li>
+      <li><strong>Verificação de Identidade:</strong> A administração poderá exigir confirmações adicionais em caso de suspeita de fraude.</li>
+      <li><strong>Proteção contra Bots:</strong> Sistemas automatizados de envio de spam serão bloqueados permanentemente via IP.</li>
+      <li><strong>Exclusão a Pedido:</strong> O criador do grupo pode solicitar a remoção do seu link mediante solicitação de suporte.</li>
+    </ol>
+
+    <!-- SEÇÃO 3: CONDUTA DO VISITANTE -->
+    <h2>3. Conduta, Navegação e Uso da Plataforma</h2>
+    <ol start="41">
+      <li><strong>Respeito Comunitário:</strong> O visitante deve manter postura civilizada ao interagir com ferramentas de avaliação.</li>
+      <li><strong>Proibição de Engenharia Reversa:</strong> É vedada a tentativa de descompilar, decodificar ou extrair o código-fonte do portal.</li>
+      <li><strong>Scraping Abusivo:</strong> A extração massiva de dados automatizada (web scraping) sem autorização é punível por lei.</li>
+      <li><strong>Injeção de Códigos:</strong> Tentativas de injetar scripts maliciosos (XSS, SQL Injection) resultarão em bloqueio de rede.</li>
+      <li><strong>Falsificação de Origem:</strong> O mascaramento de endereços IP para burlar restrições do sistema é proibido.</li>
+      <li><strong>Uso de Proxies Maliciosos:</strong> O acesso por redes anonimizadas com fins de ataque será sumariamente barrado.</li>
+      <li><strong>Avaliações Idôneas:</strong> As notas dadas aos grupos devem representar avaliações de experiências genuínas.</li>
+      <li><strong>Manipulação de Rankings:</strong> Uso de artifícios artificiais para inflar posições de grupos é estritamente coibido.</li>
+      <li><strong>Spam em Formulários:</strong> O envio de mensagens repetitivas nos canais de contato constitui infração grave.</li>
+      <li><strong>Segurança Pessoal:</strong> Recomenda-se cautela ao expor dados particulares em comunidades de terceiros.</li>
+      <li><strong>Links de Terceiros:</strong> O usuário assume total risco ao clicar em redirecionamentos externos providos por anúncios.</li>
+      <li><strong>Navegadores Homologados:</strong> Recomenda-se o uso de navegadores modernos e atualizados para melhor experiência.</li>
+      <li><strong>Bloqueadores de Anúncios:</strong> O uso de extensões de bloqueio é permitido, embora possa alterar recursos visuais.</li>
+      <li><strong>Erros de Sistema:</strong> Bugs encontrados devem ser reportados à administração em vez de explorados maliciosamente.</li>
+      <li><strong>Propriedade de Sessão:</strong> O usuário é guardião exclusivo de seus dados de navegação local (localStorage).</li>
+      <li><strong>Limpeza de Cache:</strong> Alterações de layout ou correções podem exigir a limpeza de cache do navegador.</li>
+      <li><strong>Acessibilidade:</strong> Esforços contínuos são empregados para manter a compatibilidade com leitores de tela.</li>
+      <li><strong>Consumo de Dados:</strong> O usuário reconhece que o carregamento de imagens consome franquia de sua internet móvel.</li>
+      <li><strong>Velocidade de Conexão:</strong> O desempenho do portal depende da qualidade da rede de internet do próprio visitante.</li>
+      <li><strong>Responsabilidade por Equipamentos:</strong> A plataforma não se responsabiliza por falhas de hardware no dispositivo do usuário.</li>
+    </ol>
+
+    <!-- SEÇÃO 4: ISENÇÃO DE RESPONSABILIDADE -->
+    <h2>4. Isenção de Responsabilidade Civil e Criminal</h2>
+    <ol start="61">
+      <li><strong>Natureza de Vitrine:</strong> O GruposNJ atua exclusivamente como intermediário estático de listagem de links externos.</li>
+      <li><strong>Ausência de Moderação Interna:</strong> Não controlamos conversas, mídias ou trocas ocorridas dentro dos grupos de chat.</li>
+      <li><strong>Transações Financeiras:</strong> Quaisquer negócios firmados em grupos externos correm por conta e risco exclusivos das partes.</li>
+      <li><strong>Prejuízos Materiais:</strong> A administração exime-se de cobrir perdas financeiras geradas por estelionatários externos.</li>
+      <li><strong>Segurança de Arquivos:</strong> Não nos responsabilizamos por vírus, malwares ou arquivos baixados em links de terceiros.</li>
+      <li><strong>Veracidade de Perfis:</strong> A identidade dos administradores dos grupos externos não é validada pelo GruposNJ.</li>
+      <li><strong>Mudanças de Políticas Externas:</strong> Alterações nas regras de aplicativos terceiros que quebrem links não são de nossa culpa.</li>
+      <li><strong>Erros de Digitação:</strong> Links incorretos informados por terceiros isentam o portal de responsabilidades de redirecionamento.</li>
+      <li><strong>Indenizações por Danos:</strong> Nenhum tipo de dano moral ou material será indenizado pela mantenedora do site.</li>
+      <li><strong>Força Maior:</strong> Falhas decorrentes de quedas de infraestrutura global de internet não geram obrigações de reparação.</li>
+      <li><strong>Ataques Cibernéticos:</strong> Invasões de hackers de terceiros aos servidores externos escapam ao nosso controle técnico.</li>
+      <li><strong>Indisponibilidade de APIs:</strong> Instabilidades em serviços integrados de terceiros não configuram falha de prestação nossa.</li>
+      <li><strong>Conteúdo Ofensivo Externo:</strong> Caso encontre conteúdo impróprio em um link, utilize a ferramenta de denúncia interna.</li>
+      <li><strong>Ações Judiciais de Terceiros:</strong> Litígios oriundos de conversas em grupos externos devem ser resolvidos diretamente entre os envolvidos.</li>
+      <li><strong>Falta de Suporte a Apps:</strong> Não prestamos orientações sobre o funcionamento de aplicativos de mensagens externos.</li>
+      <li><strong>Erros de Informação:</strong> Descrições enviadas por usuários podem conter imprecisões pelas quais não respondemos.</li>
+      <li><strong>Perda de Oportunidades:</strong> Negócios perdidos por instabilidade temporária do site não geram direito a ressarcimento.</li>
+      <li><strong>Interrupção Definitiva:</strong> A plataforma poderá encerrar suas atividades a qualquer momento sem aviso prévio.</li>
+      <li><strong>Links Removidos:</strong> A exclusão de um link impróprio é direito absoluto da moderação, sem direito a contestações.</li>
+      <li><strong>Incolumidade dos Servidores:</strong> Esforços máximos são feitos para segurança, sem garantia absoluta contra eventos fortuitos.</li>
+    </ol>
+
+    <!-- SEÇÃO 5: PROPRIEDADE INTELECTUAL -->
+    <h2>5. Propriedade Intelectual e Direitos Autorais</h2>
+    <ol start="81">
+      <li><strong>Marca Registrada:</strong> O nome GruposNJ e seu logotipo associado constituem propriedade intelectual protegida.</li>
+      <li><strong>Identidade Visual:</strong> Cores, ícones, paletas e elementos gráficos exclusivos pertencem à plataforma.</li>
+      <li><strong>Código-Fonte:</strong> A estruturação de scripts, HTML, CSS e lógica em Node.js é rigorosamente protegida por leis de software.</li>
+      <li><strong>Reprodução Comercial:</strong> É proibida a cópia do layout do site para fins comerciais concorrentes sem autorização.</li>
+      <li><strong>Uso Educacional/Informativo:</strong> Citações parciais do portal são permitidas desde que acompanhadas da devida fonte.</li>
+      <li><strong>Banco de Dados:</strong> A compilação dos links cadastrados constitui base de dados protegida por direitos conexos.</li>
+      <li><strong>Violação de Direitos:</strong> Titulares de direitos autorais violados por anúncios devem reportar imediatamente via suporte.</li>
+      <li><strong>Contestação de Conteúdo:</strong> Denúncias de plágio serão analisadas e os materiais retirados se comprovada a infração.</li>
+      <li><strong>Isenção sobre Conteúdo de Usuários:</strong> Textos descritivos enviados por usuários permanecem sob responsabilidade de seus autores.</li>
+      <li><strong>Concessão de Licença:</strong> Ao publicar um link, o usuário cede licença gratuita de exibição pública à plataforma.</li>
+      <li><strong>Uso Publicitário da Marca:</strong> Terceiros não podem vincular o nome GruposNJ a campanhas sem autorização prévia.</li>
+      <li><strong>Direitos de Domínio:</strong> O endereço eletrônico oficial é de titularidade exclusiva da administração do portal.</li>
+      <li><strong>Patentes e Registros:</strong> Recursos tecnológicos próprios integrados ao site estão resguardados por legislações aplicáveis.</li>
+      <li><strong>Integridade do Sistema:</strong> Modificações não autorizadas na interface exibida ao usuário constituem violação legal.</li>
+      <li><strong>Logotipos de Terceiros:</strong> Ícones de redes sociais exibidos pertencem estritamente aos seus respectivos donos legais.</li>
+      <li><strong>Uso de Fontes:</strong> Tipografias aplicadas seguem licenças de distribuição pública devidamente regularizadas.</li>
+      <li><strong>Arquivos de Mídia:</strong> Imagens ilustrativas de capa inseridas nos grupos seguem diretrizes de uso tolerado por indexação.</li>
+      <li><strong>Vedação de Cópia Integral:</strong> O espelhamento completo (mirror) deste site em outros domínios é terminantemente proibido.</li>
+      <li><strong>Ação Legal:</strong> Infrações à propriedade intelectual ensejarão medidas cíveis e criminais cabíveis.</li>
+      <li><strong>Preservação de Direitos:</strong> Todos os direitos não expressamente cedidos neste termo encontram-se reservados.</li>
+    </ol>
+
+    <!-- SEÇÃO 6: PRIVACIDADE E DADOS (LGPD) -->
+    <h2>6. Privacidade, Proteção de Dados e LGPD</h2>
+    <ol start="101">
+      <li><strong>Conformidade Legal:</strong> O tratamento de dados pessoais obedece estritamente à Lei Geral de Proteção de Dados (LGPD).</li>
+      <li><strong>Minimização de Coleta:</strong> Coletamos apenas dados estritamente necessários para viabilizar os recursos técnicos do portal.</li>
+      <li><strong>Dados de Sessão:</strong> Identificadores de autenticação (como UIDs de Firebase) são utilizados unicamente para controle de contas.</li>
+      <li><strong>Armazenamento Local:</strong> O uso de localStorage destina-se a preferências visuais e salvamento local de interações.</li>
+      <li><strong>Ausência de Venda de Dados:</strong> Informações de usuários jamais serão comercializadas, alugadas ou cedidas a terceiros.</li>
+      <li><strong>Cookies Técnicos:</strong> Empregamos cookies estritamente necessários para o funcionamento e segurança da sessão web.</li>
+      <li><strong>Segurança da Informação:</strong> Medidas tecnológicas de criptografia protegem o tráfego de dados entre cliente e servidor.</li>
+      <li><strong>Acesso Restrito:</strong> Dados administrativos internos possuem acesso restrito à equipe técnica autorizada.</li>
+      <li><strong>Retenção de Registros:</strong> Logs de acesso e requisições são armazenados pelo período legal exigido para segurança.</li>
+      <li><strong>Direitos do Titular:</strong> O usuário pode solicitar esclarecimentos sobre o tratamento de seus dados cadastrais.</li>
+      <li><strong>Exclusão de Conta:</strong> Pedidos de exclusão definitiva de dados vinculados a contas devem ser encaminhados ao suporte.</li>
+      <li><strong>Servidores Terceirizados:</strong> Hospedagem e banco de dados operam em infraestruturas de nuvem de alta confiabilidade.</li>
+      <li><strong>Segurança de Autenticação:</strong> Sistemas de login integrados garantem salvaguarda de credenciais de acesso.</li>
+      <li><strong>Privacidade de Menores:</strong> Não coletamos intencionalmente dados de crianças sem amparo legal dos responsáveis.</li>
+      <li><strong>Alterações na Política:</strong> Modificações nas diretrizes de privacidade serão refletidas diretamente nestes termos.</li>
+      <li><strong>Canal de Privacidade:</strong> Dúvidas relativas à privacidade devem ser direcionadas ao e-mail de atendimento oficial.</li>
+      <li><strong>Divulgação Obrigatória:</strong> Dados poderão ser revelados caso exigidos por ordem judicial expressa de autoridades.</li>
+      <li><strong>Mitigação de Riscos:</strong> Protocolos de resposta rápida são acionados em qualquer incidente de segurança.</li>
+      <li><strong>Transparência:</strong> O compromisso com a clareza no tratamento de dados rege todas as diretrizes do portal.</li>
+      <li><strong>Consentimento Prévio:</strong> O uso continuado da plataforma valida o consentimento inequívoco com estas práticas.</li>
+    </ol>
+
+    <!-- SEÇÃO 7: SANÇÕES E BLOQUEIOS -->
+    <h2>7. Sanções, Penalidades e Rescisão de Acesso</h2>
+    <ol start="121">
+      <li><strong>Poder Disciplinar:</strong> A administração possui autonomia para aplicar sanções diante de violações contratuais.</li>
+      <li><strong>Advertência Prévia:</strong> Infrações leves podem ser tratadas com avisos formais para adequação do usuário.</li>
+      <li><strong>Remoção de Conteúdo:</strong> Anúncios irregulares serão deletados imediatamente do índice de busca.</li>
+      <li><strong>Bloqueio Temporário:</strong> Contas ou IPs infratores poderão sofrer suspensão temporária de privilégios.</li>
+      <li><strong>Banimento Definitivo:</strong> Reincidências graves acarretam o banimento perpétuo da plataforma.</li>
+      <li><strong>Perda de Vantagens:</strong> Usuários banidos perdem direito a quaisquer históricos ou favoritos salvos vinculados.</li>
+      <li><strong>Isenção de Justificativa:</strong> Em casos de risco de segurança, bloqueios poderão ocorrer sem aviso prévio.</li>
+      <li><strong>Responsabilização Legal:</strong> Condutas criminosas identificadas serão reportadas às autoridades policiais competentes.</li>
+      <li><strong>Forfeição de Direitos:</strong> O infrator não terá direito a indemnizações por perda de acesso decorrente de punição.</li>
+      <li><strong>Lista Negra de IPs:</strong> Endereços de rede maliciosos serão inseridos permanentemente em barreiras de firewall.</li>
+      <li><strong>Apelação de Sanções:</strong> O usuário punido poderá recorrer da penalidade exclusivamente via canal de suporte.</li>
+      <li><strong>Análise de Recursos:</strong> A revisão de bloqueios caberá unicamente ao comitê de moderação do GruposNJ.</li>
+      <li><strong>Rescisão Imotivada:</strong> A plataforma pode descontinuar o atendimento a qualquer perfil sem incorrer em multas.</li>
+      <li><strong>Proteção da Comunidade:</strong> Medidas enérgicas visam unicamente preservar a segurança da base de usuários honestos.</li>
+      <li><strong>Efeito Retroativo de Punições:</strong> Todos os links associados a um usuário banido serão varridos do sistema.</li>
+      <li><strong>Proibição de Novos Cadastros:</strong> CPFs ou IPs banidos ficam impedidos de registrar novos perfis na plataforma.</li>
+      <li><strong>Monitoramento Contínuo:</strong> Algoritmos e moderadores vigiam o fluxo de postagens 24 horas por dia.</li>
+      <li><strong>Cooperação Policial:</strong> Dados cadastrais disponíveis serão entregues mediante requisição legal fundamentada.</li>
+      <li><strong>Independência de Sanções:</strong> Medidas administrativas não excluem a propositura de ações cíveis ou criminais.</li>
+      <li><strong>Encerramento de Ciclo:</strong> O descumprimento de qualquer linha destes termos encerra o vínculo contratual de uso.</li>
+    </ol>
+
+    <!-- SEÇÃO 8: DISPOSIÇÕES FINAIS E LEGISLAÇÃO -->
+    <h2>8. Disposições Finais, Foro e Legislação Aplicável</h2>
+    <ol start="141">
+      <li><strong>Legislação Regente:</strong> Todos os termos aqui expostos subordinam-se integralmente à legislação da República Federativa do Brasil.</li>
+      <li><strong>Foro de Eleição:</strong> Fica eleito o foro da comarca da sede administrativa da plataforma para dirimir quaisquer controvérsias.</li>
+      <li><strong>Renúncia de Outros Foros:</strong> As partes renunciam expressamente a qualquer outro foro, por mais privilegiado que possa ser.</li>
+      <li><strong>Acordo Integral:</strong> Este instrumento representa o entendimento completo e definitivo entre o usuário e o GruposNJ.</li>
+      <li><strong>Inexistência de Vínculo Trabalhista:</strong> O uso do site não gera vínculo empregatício, societário ou associativo de nenhuma espécie.</li>
+      <li><strong>Cessão de Posição Contratual:</strong> A administração poderá ceder os direitos desta plataforma a terceiros sem prévia anuência.</li>
+      <li><strong>Tolerância Administrativa:</strong> A abstenção de penalizar alguma conduta específica não anula o direito de cobrá-la futuramente.</li>
+      <li><strong>Cunho Eletrônico:</strong> Este contrato eletrônico possui validade jurídica plena equivalente a instrumentos físicos assinados.</li>
+      <li><strong>Arquivamento de Versões:</strong> Histórico de versões anteriores destes termos poderá ser consultado mediante solicitação formal.</li>
+      <li><strong>Validade de Notificações:</strong> Comunicados enviados via e-mail ou avisos no site consideram-se válidos e entregues.</li>
+      <li><strong>Interpretação Restritiva:</strong> Cláusulas de isenção de responsabilidade devem ser interpretadas em favor da mantenedora do site.</li>
+      <li><strong>Atividades Lícitas:</strong> O site repudia qualquer tentativa de desvio de sua finalidade original para fins ilícitos.</li>
+      <li><strong>Sustentabilidade Operacional:</strong> A manutenção do portal depende da colaboração cívica de todos os participantes.</li>
+      <li><strong>Parceiros Comerciais:</strong> Eventuais patrocinadores do site possuem termos contratuais próprios e apartados.</li>
+      <li><strong>Canal de Ouvidoria:</strong> Sugestões de melhorias normativas podem ser encaminhadas através da central de atendimento.</li>
+      <li><strong>Atualização Tecnológica:</strong> Cláusulas adaptam-se automaticamente a inovações de arquitetura de software implementadas.</li>
+      <li><strong>Vigência por Prazo Indeterminado:</strong> Os presentes termos vigoram por prazo indeterminado a contar do primeiro acesso.</li>
+      <li><strong>Preservação da Ordem Pública:</strong> O site colabora ativamente para a manutenção da ordem e segurança no ambiente digital.</li>
+      <li><strong>Encerramento das Atividades Normativas:</strong> Casos omissos nestes 200 termos serão resolvidos unicamente pela diretoria do portal.</li>
+      <li><strong>Agradecimento Final:</strong> O GruposNJ deseja a todos os usuários uma excelente experiência de navegação e conexões saudáveis.</li>
+    </ol>
+
+    <div class="footer-actions">
+      <a href="/" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar ao Início</a>
+      <span class="update-date">Atualizado e Vigente em 2026</span>
+    </div>
+
+    <!-- Rodapé Oficial -->
+    <footer>
+      <p style="margin-bottom: 6px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
+      <p>
+        <a href="mailto:suporte.gruposnj@gmail.com">
+          <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
+        </a>
+      </p>
+    </footer>
   </div>
 
 </body>
