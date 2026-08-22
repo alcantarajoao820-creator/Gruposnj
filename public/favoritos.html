@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Favoritos - GruposNJ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background: #070a12; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+
+    .container { width: 100%; max-width: 1050px; margin: 0 auto; padding: 15px 12px; }
+
+    /* Navbar Pro Compacta */
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #1e293b; margin-bottom: 25px; }
+    .brand { font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .brand span { color: #22c55e; }
+
+    .nav-btns { display: flex; gap: 6px; align-items: center; }
+    .btn-nav { padding: 6px 10px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 5px; }
+    .btn-green { background: #16a34a; color: #fff; }
+    .btn-green:hover { background: #15803d; }
+    .btn-blue { background: #1e293b; color: #38bdf8; border: 1px solid #334155; }
+    .btn-blue:hover { background: #334155; }
+
+    /* Hero Section */
+    .hero { text-align: center; margin-bottom: 25px; }
+    .hero h1 { font-size: 1.75rem; color: #fff; margin-bottom: 6px; font-weight: 800; letter-spacing: -0.5px; }
+    .hero p { color: #94a3b8; font-size: 0.85rem; max-width: 500px; margin: 0 auto 15px auto; }
+
+    /* Cards Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; position: relative; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-2px); border-color: #334155; }
+    
+    .card-info { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+    .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; border: 1px solid #334155; }
+    .card-title { font-size: 0.9rem; color: #fff; font-weight: 700; line-height: 1.2; }
+    .card-members { font-size: 0.7rem; color: #22c55e; font-weight: 600; margin-top: 2px; }
+
+    .card-desc { font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.3; }
+
+    .btn-card { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px; border-radius: 6px; border: none; font-size: 0.8rem; font-weight: 600; text-decoration: none; cursor: pointer; }
+    .btn-entrar { background: #22c55e; color: #052e16; }
+    .btn-entrar:hover { background: #16a34a; color: #fff; }
+
+    .sem-favoritos { text-align: center; color: #64748b; padding: 40px 0; font-size: 0.9rem; }
+
+    /* Menu Lateral (Gaveta) */
+    .menu-lateral { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: #0f172a; border-left: 1px solid #1e293b; z-index: 1000; transition: right 0.3s ease; padding: 20px; display: flex; flex-direction: column; }
+    .menu-lateral.ativo { right: 0; }
+    .menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 15px; margin-bottom: 20px; font-weight: bold; color: #38bdf8; font-size: 0.95rem; }
+    .close-menu { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+    .menu-links { display: flex; flex-direction: column; gap: 12px; }
+    .menu-links a { color: #cbd5e1; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 6px; transition: background 0.2s; }
+    .menu-links a:hover { background: #1e293b; color: #fff; }
+    .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 999; }
+    .menu-overlay.ativo { display: block; }
+
+    /* Footer */
+    footer { background: #0b0f19; border-top: 1px solid #1e293b; margin-top: 40px; padding: 20px 15px; text-align: center; font-size: 0.75rem; color: #64748b; }
+    footer a { color: #94a3b8; text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: #22c55e; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Navbar -->
+    <header class="navbar">
+      <a href="/" class="brand"><i class="fa-brands fa-whatsapp" style="color: #22c55e;"></i> Grupos<span>NJ</span></a>
+      <div class="nav-btns">
+        <a href="/divulgar.html" class="btn-nav btn-green"><i class="fa-solid fa-plus"></i> Divulgar</a>
+        <a href="/favoritos.html" class="btn-nav btn-blue" title="Favoritos"><i class="fa-solid fa-heart" style="color:#ef4444;"></i></a>
+        <button class="btn-nav btn-blue" onclick="toggleMenu()" title="Menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Seus Grupos Favoritos</h1>
+      <p>Acesse rapidamente as comunidades que você salvou como favoritas.</p>
+    </section>
+
+    <!-- Lista de Favoritos -->
+    <div id="grid-favoritos" class="grid">
+      <!-- Os grupos favoritados vão aparecer aqui dinamicamente -->
+    </div>
+    
+    <div id="mensagem-vazia" class="sem-favoritos" style="display: none;">
+      Você ainda não favoritou nenhum grupo. Clique no coraçãozinho nos cards da página inicial!
+    </div>
+  </div>
+
+  <!-- Menu Lateral Retátil -->
+  <div class="menu-lateral" id="menuLateral">
+    <div class="menu-header">
+      <span id="saudacao-usuario">Olá, Visitante</span>
+      <button onclick="toggleMenu()" class="close-menu">&times;</button>
+    </div>
+    <div class="menu-links">
+      <a href="/"><i class="fa-solid fa-home"></i> Início</a>
+      <a href="/favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a>
+      <a href="/painel.html"><i class="fa-solid fa-user-gear"></i> Minha Conta / Painel</a>
+      <a href="/login.html"><i class="fa-solid fa-right-to-bracket"></i> Entrar / Cadastrar</a>
+    </div>
+  </div>
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+  <footer>
+    <p>&copy; 2026 GruposNJ - Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+      authDomain: "gruposnj-41858.firebaseapp.com",
+      projectId: "gruposnj-41858",
+      storageBucket: "gruposnj-41858.firebasestorage.app",
+      messagingSenderId: "249583894572",
+      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function toggleMenu() {
+      document.getElementById('menuLateral').classList.toggle('ativo');
+      document.getElementById('menuOverlay').classList.toggle('ativo');
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const nome = user.displayName || user.email.split('@')[0];
+        document.getElementById('saudacao-usuario').innerText = `Olá, ${nome}`;
+      } else {
+        document.getElementById('saudacao-usuario').innerText = 'Olá, Visitante';
+      }
+    });
+
+    // CARREGA OS FAVORITOS DIRETO DA API DO SERVIDOR (JSON)
+    async function carregarFavoritos() {
+      const grid = document.getElementById('grid-favoritos');
+      const msgVazia = document.getElementById('mensagem-vazia');
+
+      try {
+        const resFav = await fetch('/api/favoritos');
+        const idsFavoritos = await resFav.json();
+
+        if (!idsFavoritos || idsFavoritos.length === 0) {
+          msgVazia.style.display = 'block';
+          grid.innerHTML = '';
+          return;
+        }
+
+        msgVazia.style.display = 'none';
+        grid.innerHTML = '';
+
+        for (const id of idsFavoritos) {
+          try {
+            const resGrupo = await fetch('/api/grupos/' + id);
+            if (!resGrupo.ok) continue;
+            const grupo = await resGrupo.json();
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <div class="card-info">
+                <img src="${grupo.imagem || ''}" class="card-img" alt="Grupo">
+                <div>
+                  <div class="card-title">${grupo.nome}</div>
+                  <div class="card-members">👥 ${grupo.membros || '100+ Membros'}</div>
+                </div>
+              </div>
+              <div class="card-desc">${grupo.descricao || 'Sem descrição.'}</div>
+              <a href="/grupo/${id}" class="btn-card btn-entrar">
+                <i class="fa-solid fa-rocket"></i> Ver Grupo
+              </a>
+            `;
+            grid.appendChild(card);
+          } catch (err) {
+            console.error("Erro ao carregar detalhes do grupo:", id);
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao buscar favoritos:", e);
+        msgVazia.style.display = 'block';
+      }
+    }
+
+    carregarFavoritos();
+
+  </script>
+</body>
+</html>

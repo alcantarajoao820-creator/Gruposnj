@@ -290,6 +290,83 @@ app.post('/api/solicitar', (req, res) => {
   res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
 });
 
+// Rota para pegar as estatísticas do site
+app.get('/api/estatisticas', (req, res) => {
+  try {
+    const grupos = lerJson(DATA_FILE, []); // Lê o arquivo grupos.json
+    const usuarios = lerJson(USERS_FILE, []); // Lê o arquivo usuarios.json
+    
+    res.json({
+      totalGrupos: grupos.length,
+      totalUsuarios: usuarios.length
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao carregar estatísticas' });
+  }
+});
+
+const arquivoFavoritos = './favoritos.json';
+
+// Função auxiliar para ler o arquivo de favoritos com segurança
+function lerFavoritosDoDisco() {
+  try {
+    if (!fs.existsSync(arquivoFavoritos)) {
+      // Se o arquivo não existe, cria um vazio
+      fs.writeFileSync(arquivoFavoritos, JSON.stringify({ favoritos: [] }, null, 2));
+      return [];
+    }
+    const conteudo = fs.readFileSync(arquivoFavoritos, 'utf8');
+    const dados = JSON.parse(conteudo);
+    return dados.favoritos || [];
+  } catch (e) {
+    console.error("Erro ao ler favoritos.json:", e);
+    return [];
+  }
+}
+
+// Rota GET /api/favoritos
+app.get('/api/favoritos', (req, res) => {
+  const lista = lerFavoritosDoDisco();
+  console.log("Enviando favoritos para o front:", lista);
+  res.json(lista);
+});
+
+// Rota POST /api/favoritos/alternar
+app.post('/api/favoritos/alternar', express.json(), (req, res) => {
+  try {
+    const { grupoId } = req.body;
+    console.log("Requisição recebida para alternar favorito ID:", grupoId);
+
+    if (!grupoId) return res.status(400).json({ erro: 'ID inválido' });
+
+    // Lê direto do arquivo separado
+    let favoritos = lerFavoritosDoDisco();
+
+    const index = favoritos.indexOf(grupoId);
+    let status = '';
+
+    if (index > -1) {
+      favoritos.splice(index, 1);
+      status = 'removido';
+      console.log(`-> Removido dos favoritos.`);
+    } else {
+      favoritos.push(grupoId);
+      status = 'adicionado';
+      console.log(`-> Adicionado aos favoritos.`);
+    }
+
+    // Salva permanentemente no arquivo favoritos.json
+    fs.writeFileSync(arquivoFavoritos, JSON.stringify({ favoritos: favoritos }, null, 2), 'utf8');
+    console.log("-> Salvo com sucesso no arquivo favoritos.json!");
+
+    res.json({ sucesso: true, status, favoritos: favoritos });
+  } catch (e) {
+    console.error("Erro ao salvar favorito:", e);
+    res.status(500).json({ erro: 'Erro ao salvar favorito' });
+  }
+});
+
+
 // ==========================================
 // ROTAS DE DENÚNCIAS
 // ==========================================
@@ -388,9 +465,22 @@ app.get('/api/meus-grupos', (req, res) => {
   const email = req.query.email;
   if (!email) return res.json([]);
 
-  const grupos = lerJson(DATA_FILE, []);
-  const meusGrupos = grupos.filter(g => g.email === email);
-  res.json(meusGrupos);
+  // Lê os grupos aprovados/ativos e também as solicitações pendentes (em análise)
+  const gruposAtivos = lerJson(DATA_FILE, []);
+  const solicitacoes = lerJson(SOLICITACOES_FILE, []);
+
+  // Filtra os do usuário em ambas as listas
+  const meusAtivos = gruposAtivos.filter(g => g.email === email);
+  
+  // Garante que o objeto venha com uma flag clara de que está em análise
+  const minhasSolicitacoes = solicitacoes
+    .filter(s => s.email === email)
+    .map(s => ({ ...s, status: 'analise', emAnalise: true }));
+
+  // Junta tudo em um único array para o painel exibir
+  const todosOsMeusGrupos = [...meusAtivos, ...minhasSolicitacoes];
+
+  res.json(todosOsMeusGrupos);
 });
 
 app.put('/api/meus-grupos/link', (req, res) => {

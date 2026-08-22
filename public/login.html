@@ -84,6 +84,19 @@
   </div>
 
   <script>
+// Função para registrar o usuário no seu servidor local automaticamente
+async function registrarNoServidorLocal(email) {
+  try {
+    await fetch('/api/usuario/perfil', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, nomeExibicao: email.split('@')[0] })
+    });
+  } catch (e) {
+    console.error("Erro ao sincronizar com servidor local", e);
+  }
+}
+
     const firebaseConfig = {
       apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
       authDomain: "gruposnj-41858.firebaseapp.com",
@@ -101,10 +114,12 @@
 
     let modoModal = 'aviso'; // 'aviso' ou 'recuperar'
 
-    auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
       if (user) {
+        registrarNoServidorLocal(user.email);
         window.location.replace('/painel.html');
-      } else {                                                                                                                                 document.getElementById('loading-screen').style.display = 'none';
+      } else {
+        document.getElementById('loading-screen').style.display = 'none';
         document.getElementById('container-login').style.display = 'block';
       }
     });

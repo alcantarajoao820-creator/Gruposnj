@@ -179,12 +179,18 @@
 </head>
 <body>
 
-  <div class="card-detalhes">
+ <div class="card-detalhes" style="position: relative;">
+<!-- Botão de Favorito -->
+<button onclick="alternarFavorito()" title="Favoritar Grupo" style="position: absolute; top: 15px; right: 15px; background: #1e293b; border: 1px solid #334155; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; font-size: 1.2rem;">
+  <span id="icone-coracao">🤍</span>
+</button>
+
     <!-- Avatar com Badge VIP Condicional -->
     <div class="avatar-wrapper">
       <img id="foto-grupo" src="https://via.placeholder.com/130" alt="Foto do Grupo" class="img-grupo">
       <div id="badge-vip" class="badge-vip-tag">⭐ VIP</div>
     </div>
+
 
     <h1 id="nome-grupo" class="titulo-grupo">Carregando...</h1>
 
@@ -252,9 +258,16 @@
   </div>
 
   <script>
-    let grupoId = '';
+let grupoId = '';
+
+// CAPTURA IMEDIATA ASSIM QUE O SCRIPT É LIDO
+(function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  grupoId = window.location.pathname.split('/').pop() || urlParams.get('id');
+})();
 
 async function carregarDetalhes(atualizacaoSilenciosa = false) {
+  // Garante que o ID está preenchido
   const urlParams = new URLSearchParams(window.location.search);
   if (!grupoId) {
     grupoId = window.location.pathname.split('/').pop() || urlParams.get('id');
@@ -266,19 +279,20 @@ async function carregarDetalhes(atualizacaoSilenciosa = false) {
 
     const grupo = await res.json();
 
-    // Se for a primeira carga, preenche todos os campos estáticos também
     if (!atualizacaoSilenciosa) {
       document.getElementById('nome-grupo').innerText = grupo.nome;
       document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
       document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
 
-      // Linha do autor
       const nomeAutor = grupo.autor || 'Membro / Comunidade';
       document.getElementById('autor-grupo').innerText = `👤 Publicado por: ${nomeAutor}`;
 
       document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
       document.getElementById('foto-grupo').src = grupo.imagem || '';
       document.getElementById('btn-entrar-link').href = grupo.link;
+
+      // ATUALIZAÇÃO DOS FAVORITOS VIA API (SERVIDOR)
+      await atualizarIconeFavoritoNaCarga(grupoId);
     }
 
     if (grupo.isVip) {
@@ -290,7 +304,6 @@ async function carregarDetalhes(atualizacaoSilenciosa = false) {
       marcarEstrelas(parseInt(avaliacaosava));
     }
 
-    // Atualiza o contador de acessos em tempo real a cada ciclo
     const totalAcessos = grupo.acessos || 0;
     document.getElementById('acessos-grupo').innerText = `👁️ ${totalAcessos} Acessos`;
 
@@ -305,6 +318,52 @@ async function carregarDetalhes(atualizacaoSilenciosa = false) {
   }
 }
 
+// BUSCA OS FAVORITOS DIRETO DO SERVIDOR (JSON)
+async function atualizarIconeFavoritoNaCarga(idAtual) {
+  try {
+    const res = await fetch('/api/favoritos');
+    const favoritos = await res.json();
+    const icone = document.getElementById('icone-coracao');
+    if (icone) {
+      icone.innerText = favoritos.includes(idAtual) ? '❤️' : '🤍';
+    }
+  } catch (e) {
+    console.error("Erro ao carregar favoritos do servidor:", e);
+  }
+}
+
+// SALVA OU REMOVE O FAVORITO NO SERVIDOR VIA POST
+async function alternarFavorito() {
+  if (!grupoId) {
+    grupoId = window.location.pathname.split('/').pop() || new URLSearchParams(window.location.search).get('id');
+  }
+
+  if (!grupoId) {
+    console.error("Erro: ID do grupo não encontrado para favoritar!");
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/favoritos/alternar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ grupoId })
+    });
+
+    const resultado = await res.json();
+    const icone = document.getElementById('icone-coracao');
+
+    if (resultado.sucesso && icone) {
+      if (resultado.status === 'adicionado') {
+        icone.innerText = '❤️';
+      } else {
+        icone.innerText = '🤍';
+      }
+    }
+  } catch (e) {
+    console.error("Erro ao salvar favorito no servidor:", e);
+  }
+}
 
     function avaliar(nota) {
       localStorage.setItem('rating_' + grupoId, nota);
@@ -393,11 +452,29 @@ async function carregarDetalhes(atualizacaoSilenciosa = false) {
         mostrarAvisoModal('Erro', 'Não foi possível enviar a denúncia. Tente novamente mais tarde.');
       }
     }
-
     async function registrarAcessoEEntrar(event) {
       event.preventDefault(); // Evita abrir o link imediatamente
       const linkDestino = document.getElementById('btn-entrar-link').href;
 
+      // 1. Verifica se a página atual é de conteúdo adulto de forma segura
+      const textoPagina = document.body.innerText || '';
+      const termosAdultos = ['Adulto', 'Vazados', 'Amadoras', 'Stickers', '🔞', '+18'];
+      const eAdulto = termosAdultos.some(termo => textoPagina.includes(termo));
+
+      // 2. Se for adulto e o usuário ainda não confirmou a idade, abre o modal
+      if (eAdulto) {
+        const jaConfirmou = localStorage.getItem('maioridade_confirmada');
+        if (jaConfirmou !== 'true') {
+          const modal = document.getElementById('modal-adulto');
+          if (modal) {
+            modal.style.setProperty('display', 'flex', 'important');
+          }
+          window.urlDestinoAdulto = linkDestino;
+          return; // Para a execução aqui e não deixa entrar nem conta acesso
+        }
+      }
+
+      // 3. Código original que faz o registro e abre o link se não for bloqueado
       try {
         // Avisa o servidor para somar +1 acesso
         await fetch(`/api/grupos/${grupoId}/acessar`, {
@@ -419,7 +496,6 @@ async function carregarDetalhes(atualizacaoSilenciosa = false) {
     setInterval(() => {
       carregarDetalhes(true);
     }, 5000);
-
   </script>
 </body>
 </html>
