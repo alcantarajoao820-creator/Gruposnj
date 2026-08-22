@@ -138,13 +138,20 @@
       }
     });
 
-    // CARREGA OS FAVORITOS DIRETO DA API DO SERVIDOR (JSON)
-    async function carregarFavoritos() {
+    // CARREGA OS FAVORITOS DO USUÁRIO LOGADO DIRETO DA API
+    async function carregarFavoritos(userAuth = null) {
       const grid = document.getElementById('grid-favoritos');
       const msgVazia = document.getElementById('mensagem-vazia');
 
       try {
-        const resFav = await fetch('/api/favoritos');
+        // Pega o UID com prioridade para o usuário autenticado do evento, depois do currentUser
+        const user = userAuth || (typeof firebase !== 'undefined' && firebase.auth().currentUser ? firebase.auth().currentUser : null);
+        const uid = user ? user.uid : 'anonimo';
+
+        console.log("Buscando favoritos para o UID:", uid);
+
+        // Pede para a API os favoritos filtrados pelo UID da conta
+        const resFav = await fetch(`/api/favoritos?uid=${uid}`);
         const idsFavoritos = await resFav.json();
 
         if (!idsFavoritos || idsFavoritos.length === 0) {
@@ -188,7 +195,21 @@
       }
     }
 
-    carregarFavoritos();
+    // Aguarda o Firebase carregar o estado real do usuário e usa o UID dele corretamente
+    if (typeof firebase !== 'undefined' && firebase.auth()) {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log("Usuário logado detectado:", user.uid);
+        } else {
+          console.log("Nenhum usuário logado, usando modo anônimo.");
+        }
+        carregarFavoritos(user);
+      });
+    } else {
+      carregarFavoritos();
+    }
+
+
 
   </script>
 </body>

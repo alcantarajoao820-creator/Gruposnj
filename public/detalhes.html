@@ -18,8 +18,7 @@
       justify-content: center;
       align-items: center;
       background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #070a12 70%);
-    }
-
+  
     .card-detalhes {
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(12px);
@@ -178,12 +177,17 @@
   </style>
 </head>
 <body>
-
  <div class="card-detalhes" style="position: relative;">
-<!-- Botão de Favorito -->
-<button onclick="alternarFavorito()" title="Favoritar Grupo" style="position: absolute; top: 15px; right: 15px; background: #1e293b; border: 1px solid #334155; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; font-size: 1.2rem;">
-  <span id="icone-coracao">🤍</span>
-</button>
+
+<header class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; width: 100%;">
+  <a href="/" class="brand" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+    <i class="fa-brands fa-whatsapp" style="color: #22c55e; font-size: 1.4rem;"></i> Grupos<span style="color: #22c55e;">NJ</span>
+  </a>
+  <div class="nav-btns" style="display: flex; gap: 6px; align-items: center;">
+      <i class="fa-solid fa-heart" style="color: #ef4444; font-size: 1.1rem;"></i>
+    </a>
+  </div>
+</header>
 
     <!-- Avatar com Badge VIP Condicional -->
     <div class="avatar-wrapper">
@@ -260,110 +264,40 @@
   <script>
 let grupoId = '';
 
-// CAPTURA IMEDIATA ASSIM QUE O SCRIPT É LIDO
 (function() {
   const urlParams = new URLSearchParams(window.location.search);
   grupoId = window.location.pathname.split('/').pop() || urlParams.get('id');
 })();
 
-async function carregarDetalhes(atualizacaoSilenciosa = false) {
-  // Garante que o ID está preenchido
-  const urlParams = new URLSearchParams(window.location.search);
-  if (!grupoId) {
-    grupoId = window.location.pathname.split('/').pop() || urlParams.get('id');
-  }
-
+// Carrega os dados do grupo na tela
+async function carregarDetalhes() {
   try {
     const res = await fetch('/api/grupos/' + grupoId);
     if (!res.ok) throw new Error();
-
     const grupo = await res.json();
 
-    if (!atualizacaoSilenciosa) {
-      document.getElementById('nome-grupo').innerText = grupo.nome;
-      document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
-      document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
+    document.getElementById('nome-grupo').innerText = grupo.nome;
+    document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
+    document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
+    document.getElementById('autor-grupo').innerText = `👤 Publicado por: ${grupo.autor || 'Comunidade'}`;
+    document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
+    document.getElementById('foto-grupo').src = grupo.imagem || '';
+    document.getElementById('btn-entrar-link').href = grupo.link;
 
-      const nomeAutor = grupo.autor || 'Membro / Comunidade';
-      document.getElementById('autor-grupo').innerText = `👤 Publicado por: ${nomeAutor}`;
-
-      document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
-      document.getElementById('foto-grupo').src = grupo.imagem || '';
-      document.getElementById('btn-entrar-link').href = grupo.link;
-
-      // ATUALIZAÇÃO DOS FAVORITOS VIA API (SERVIDOR)
-      await atualizarIconeFavoritoNaCarga(grupoId);
+    // Restaura a avaliação salva no localStorage ao carregar a página
+    const avaliacaoSalva = localStorage.getItem('rating_' + grupoId);
+    if (avaliacaoSalva && typeof marcarEstrelas === 'function') {
+      marcarEstrelas(parseInt(avaliacaoSalva));
     }
-
-    if (grupo.isVip) {
-      document.getElementById('badge-vip').style.display = 'block';
-    }
-
-    const avaliacaosava = localStorage.getItem('rating_' + grupoId);
-    if (avaliacaosava) {
-      marcarEstrelas(parseInt(avaliacaosava));
-    }
-
-    const totalAcessos = grupo.acessos || 0;
-    document.getElementById('acessos-grupo').innerText = `👁️ ${totalAcessos} Acessos`;
-
   } catch (e) {
-    if (!atualizacaoSilenciosa) {
-      document.getElementById('nome-grupo').innerText = 'Grupo Não Encontrado';
-      document.getElementById('desc-grupo').innerText = 'O grupo solicitado pode ter sido removido ou o link está incorreto.';
-      document.getElementById('btn-entrar-link').style.display = 'none';
-      document.querySelector('.meta-info').style.display = 'none';
-      document.querySelector('.avaliacao-box').style.display = 'none';
-    }
+    console.error("Erro ao carregar grupo");
+    document.getElementById('nome-grupo').innerText = 'Grupo Não Encontrado';
+    document.getElementById('desc-grupo').innerText = 'O grupo solicitado pode ter sido removido ou o link está incorreto.';
   }
 }
 
-// BUSCA OS FAVORITOS DIRETO DO SERVIDOR (JSON)
-async function atualizarIconeFavoritoNaCarga(idAtual) {
-  try {
-    const res = await fetch('/api/favoritos');
-    const favoritos = await res.json();
-    const icone = document.getElementById('icone-coracao');
-    if (icone) {
-      icone.innerText = favoritos.includes(idAtual) ? '❤️' : '🤍';
-    }
-  } catch (e) {
-    console.error("Erro ao carregar favoritos do servidor:", e);
-  }
-}
+window.onload = carregarDetalhes;
 
-// SALVA OU REMOVE O FAVORITO NO SERVIDOR VIA POST
-async function alternarFavorito() {
-  if (!grupoId) {
-    grupoId = window.location.pathname.split('/').pop() || new URLSearchParams(window.location.search).get('id');
-  }
-
-  if (!grupoId) {
-    console.error("Erro: ID do grupo não encontrado para favoritar!");
-    return;
-  }
-
-  try {
-    const res = await fetch('/api/favoritos/alternar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ grupoId })
-    });
-
-    const resultado = await res.json();
-    const icone = document.getElementById('icone-coracao');
-
-    if (resultado.sucesso && icone) {
-      if (resultado.status === 'adicionado') {
-        icone.innerText = '❤️';
-      } else {
-        icone.innerText = '🤍';
-      }
-    }
-  } catch (e) {
-    console.error("Erro ao salvar favorito no servidor:", e);
-  }
-}
 
     function avaliar(nota) {
       localStorage.setItem('rating_' + grupoId, nota);

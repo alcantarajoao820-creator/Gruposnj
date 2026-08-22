@@ -305,42 +305,43 @@ app.get('/api/estatisticas', (req, res) => {
   }
 });
 
-const arquivoFavoritos = './favoritos.json';
-
-// Função auxiliar para ler o arquivo de favoritos com segurança
-function lerFavoritosDoDisco() {
+// Função auxiliar para ler os favoritos de um usuário específico (por UID)
+function lerFavoritosDoDisco(uid = 'anonimo') {
   try {
-    if (!fs.existsSync(arquivoFavoritos)) {
-      // Se o arquivo não existe, cria um vazio
-      fs.writeFileSync(arquivoFavoritos, JSON.stringify({ favoritos: [] }, null, 2));
+    // Cria uma pasta separada para favoritos se não existir, ou usa um nome de arquivo por usuário
+    const arquivoUsuario = path.join(__dirname, `favoritos_${uid}.json`);
+    
+    if (!fs.existsSync(arquivoUsuario)) {
+      fs.writeFileSync(arquivoUsuario, JSON.stringify({ favoritos: [] }, null, 2));
       return [];
     }
-    const conteudo = fs.readFileSync(arquivoFavoritos, 'utf8');
+    const conteudo = fs.readFileSync(arquivoUsuario, 'utf8');
     const dados = JSON.parse(conteudo);
     return dados.favoritos || [];
   } catch (e) {
-    console.error("Erro ao ler favoritos.json:", e);
+    console.error(`Erro ao ler favoritos do usuário ${uid}:`, e);
     return [];
   }
 }
 
-// Rota GET /api/favoritos
+// Rota GET /api/favoritos (agora lê pelo ?uid=...)
 app.get('/api/favoritos', (req, res) => {
-  const lista = lerFavoritosDoDisco();
-  console.log("Enviando favoritos para o front:", lista);
+  const uid = req.query.uid || 'anonimo';
+  const lista = lerFavoritosDoDisco(uid);
+  console.log(`Enviando favoritos para o usuário ${uid}:`, lista);
   res.json(lista);
 });
 
-// Rota POST /api/favoritos/alternar
+// Rota POST /api/favoritos/alternar (agora salva no arquivo específico do uid)
 app.post('/api/favoritos/alternar', express.json(), (req, res) => {
   try {
-    const { grupoId } = req.body;
-    console.log("Requisição recebida para alternar favorito ID:", grupoId);
+    const { grupoId, uid = 'anonimo' } = req.body;
+    console.log(`Requisição para alternar favorito ID: ${grupoId} para o usuário: ${uid}`);
 
     if (!grupoId) return res.status(400).json({ erro: 'ID inválido' });
 
-    // Lê direto do arquivo separado
-    let favoritos = lerFavoritosDoDisco();
+    const arquivoUsuario = path.join(__dirname, `favoritos_${uid}.json`);
+    let favoritos = lerFavoritosDoDisco(uid);
 
     const index = favoritos.indexOf(grupoId);
     let status = '';
@@ -348,16 +349,16 @@ app.post('/api/favoritos/alternar', express.json(), (req, res) => {
     if (index > -1) {
       favoritos.splice(index, 1);
       status = 'removido';
-      console.log(`-> Removido dos favoritos.`);
+      console.log(`-> Removido dos favoritos do usuário ${uid}.`);
     } else {
       favoritos.push(grupoId);
       status = 'adicionado';
-      console.log(`-> Adicionado aos favoritos.`);
+      console.log(`-> Adicionado aos favoritos do usuário ${uid}.`);
     }
 
-    // Salva permanentemente no arquivo favoritos.json
-    fs.writeFileSync(arquivoFavoritos, JSON.stringify({ favoritos: favoritos }, null, 2), 'utf8');
-    console.log("-> Salvo com sucesso no arquivo favoritos.json!");
+    // Salva permanentemente no arquivo específico daquele usuário
+    fs.writeFileSync(arquivoUsuario, JSON.stringify({ favoritos: favoritos }, null, 2), 'utf8');
+    console.log(`-> Salvo com sucesso no arquivo do usuário ${uid}!`);
 
     res.json({ sucesso: true, status, favoritos: favoritos });
   } catch (e) {

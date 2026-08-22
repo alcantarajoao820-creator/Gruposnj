@@ -36,6 +36,7 @@
     "email": "manoel153153@gmail.com",
     "autor": "Ninja",
     "isVip": false,
-    "vipAte": null
+    "vipAte": null,
+    "acessos": 1
   }
 ]
