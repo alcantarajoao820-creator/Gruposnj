@@ -354,43 +354,53 @@ app.get('/api/grupos', (req, res) => {
 });
 
 app.post('/api/solicitar', (req, res) => {
-  const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
+  try {
+    const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
 
-  if (!nome || !link) {
-    return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+    if (!nome || !link) {
+      return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+    }
+
+    if (!aceitouTermos) {
+      return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
+    }
+
+    const linkFormatado = link.trim().toLowerCase();
+    const grupos = lerJson(DATA_FILE, []);
+    const solicitacoes = lerJson(SOLICITACOES_FILE, []);
+
+    const existeEmGrupos = grupos.some(g => g.link && g.link.trim().toLowerCase() === linkFormatado);
+    const existeEmSolicitacoes = solicitacoes.some(s => s.link && s.link.trim().toLowerCase() === linkFormatado);
+
+    if (existeEmGrupos || existeEmSolicitacoes) {
+      return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
+    }
+
+    const novaSolicitacao = {
+      id: Date.now(),
+      nome,
+      link: link.trim(),
+      categoria: categoria || 'Geral',
+      descricao: descricao || '',
+      imagem: imagem || 'https://via.placeholder.com/100',
+      email: email || 'Anonimo',
+      data: new Date().toISOString()
+    };
+
+    solicitacoes.push(novaSolicitacao);
+    salvarJson(SOLICITACOES_FILE, solicitacoes);
+    
+    // Tenta mandar pro GitHub, mas se falhar, não quebra a requisição do usuário
+    salvarNoGitHub('solicitacoes.json', solicitacoes).catch(err => {
+      console.error("Erro interno do GitHub:", err);
+    });
+
+    res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
+
+  } catch (erroServidor) {
+    // Se der qualquer erro no código, ele te devolve o erro exato como JSON na tela!
+    res.status(500).json({ error: 'Erro no servidor: ' + erroServidor.message });
   }
-
-  if (!aceitouTermos) {
-    return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
-  }
-
-  const linkFormatado = link.trim().toLowerCase();
-  const grupos = lerJson(DATA_FILE, []);
-  const solicitacoes = lerJson(SOLICITACOES_FILE, []);
-
-  const existeEmGrupos = grupos.some(g => g.link && g.link.trim().toLowerCase() === linkFormatado);
-  const existeEmSolicitacoes = solicitacoes.some(s => s.link && s.link.trim().toLowerCase() === linkFormatado);
-
-  if (existeEmGrupos || existeEmSolicitacoes) {
-    return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
-  }
-
-  const novaSolicitacao = {
-    id: Date.now(),
-    nome,
-    link: link.trim(),
-    categoria: categoria || 'Geral',
-    descricao: descricao || '',
-    imagem: imagem || 'https://via.placeholder.com/100',
-    email: email || 'Anonimo',
-    data: new Date().toISOString()
-  };
-
-  solicitacoes.push(novaSolicitacao);
-  salvarJson(SOLICITACOES_FILE, solicitacoes);
-  salvarNoGitHub('solicitacoes.json', solicitacoes);
-
-  res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
 });
 
 app.get('/api/estatisticas', (req, res) => {
