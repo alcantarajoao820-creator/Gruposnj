@@ -30,6 +30,7 @@ const DENUNCIAS_FILE = path.join(__dirname, 'denuncias.json');
 
 app.use(express.json());
 app.use(express.static('public'));
+app.use(express.static(__dirname));
 
 // ==========================================
 // FUNÇÕES AUXILIARES DE LEITURA E ESCRITA
@@ -164,11 +165,8 @@ app.get('/api/grupos/:id', (req, res) => {
   }
 
   let usuarios = lerJson(USERS_FILE, []);
-  
-  // Tenta achar pelo e-mail exato ou limpo
-  let usuarioPerfil = usuarios.find(u => u.email === grupo.email || u.email.replace(/[@.]/g, '') === String(grupo.email).replace(/[@.]/g, ''));
+  let usuarioPerfil = usuarios.find(u => u.email === grupo.email || u.email?.replace(/[@.]/g, '') === String(grupo.email).replace(/[@.]/g, ''));
 
-  // Se não achou no array de usuários por e-mail, mas você quer forçar o seu nome Ninja caso seja o seu ID/email:
   if (!usuarioPerfil && String(grupo.email).includes('manoel153153')) {
     grupo.autor = 'Ninja';
   } else if (usuarioPerfil && usuarioPerfil.nomeExibicao) {
@@ -180,26 +178,33 @@ app.get('/api/grupos/:id', (req, res) => {
   res.json(grupo);
 });
 
-
-// Salvar ou atualizar o perfil do usuário
 app.post('/api/usuario/perfil', (req, res) => {
-  const { email, nomeExibicao } = req.body;
-  if (!email || !nomeExibicao) {
-    return res.status(400).json({ success: false, message: 'Dados incompletos.' });
-  }
+  const { email, nomeExibicao, redeSocial } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'E-mail obrigatório' });
 
   let usuarios = lerJson(USERS_FILE, []);
-  let usuario = usuarios.find(u => u.email === email);
+  let index = usuarios.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
 
-  if (usuario) {
-    usuario.nomeExibicao = nomeExibicao.trim();
+  // Força sempre a foto padrão única para todo mundo no servidor
+  const fotoPadrao = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop";
+
+  if (index >= 0) {
+    if (nomeExibicao !== undefined) usuarios[index].nomeExibicao = nomeExibicao;
+    if (redeSocial !== undefined) usuarios[index].redeSocial = redeSocial;
+    usuarios[index].foto = fotoPadrao; // Trava a foto padrão aqui também
   } else {
-    usuarios.push({ email, nomeExibicao: nomeExibicao.trim() });
+    usuarios.push({ 
+      email, 
+      nomeExibicao: nomeExibicao || 'Ninja', 
+      foto: fotoPadrao, 
+      redeSocial: redeSocial || '' 
+    });
   }
 
-  salvarJson(USERS_FILE, usuarios);
-  res.json({ success: true, message: 'Perfil salvo com sucesso!' });
+  fs.writeFileSync(USERS_FILE, JSON.stringify(usuarios, null, 2));
+  res.json({ success: true });
 });
+
 
 app.post('/api/grupos/:id/acessar', (req, res) => {
   const id = String(req.params.id);
@@ -236,6 +241,7 @@ app.get('/api/preview-link', async (req, res) => {
 
 app.get('/api/grupos', (req, res) => {
   let grupos = lerJson(DATA_FILE, []);
+  let usuarios = lerJson(USERS_FILE, []);
   const agora = Date.now();
 
   grupos = grupos.map(g => {
@@ -243,6 +249,21 @@ app.get('/api/grupos', (req, res) => {
       g.isVip = false;
       g.vipAte = null;
     }
+
+    // Padroniza o autor de cada grupo puxando o nome de exibição correto do usuário
+    if (g.email) {
+      const usuarioMatch = usuarios.find(u => u.email && u.email.toLowerCase() === g.email.toLowerCase());
+      if (usuarioMatch && usuarioMatch.nomeExibicao) {
+        g.autor = usuarioMatch.nomeExibicao;
+      } else if (g.email.includes('manoel153153')) {
+        g.autor = 'Ninja';
+      } else {
+        g.autor = g.email.split('@')[0];
+      }
+    } else if (!g.autor) {
+      g.autor = 'Membro';
+    }
+
     return g;
   });
 
@@ -367,6 +388,54 @@ app.post('/api/favoritos/alternar', express.json(), (req, res) => {
   }
 });
 
+// Rota para Atualizar Senha
+app.post('/api/atualizar-senha', express.json(), (req, res) => {
+    const { senha } = req.body;
+    // Lógica para salvar a nova senha
+    res.json({ sucesso: true, mensagem: 'Senha alterada com sucesso!' });
+});
+
+// Salva a rede social, foto e nome de exibição de uma vez só
+app.post('/api/usuario/perfil', (req, res) => {
+  const { email, nomeExibicao, foto, redeSocial } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'E-mail obrigatório' });
+
+  let usuarios = lerJson(USERS_FILE, []);
+  let index = usuarios.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+
+  if (index >= 0) {
+    if (nomeExibicao !== undefined) usuarios[index].nomeExibicao = nomeExibicao;
+    if (foto !== undefined) usuarios[index].foto = foto;
+    if (redeSocial !== undefined) usuarios[index].redeSocial = redeSocial;
+  } else {
+    usuarios.push({ email, nomeExibicao: nomeExibicao || 'Ninja', foto: foto || '', redeSocial: redeSocial || '' });
+  }
+
+  fs.writeFileSync(USERS_FILE, JSON.stringify(usuarios, null, 2));
+  res.json({ success: true, message: 'Dados salvos com sucesso!' });
+});
+
+// Retorna os dados do usuário para a página de perfil
+app.get('/api/usuario/perfil', (req, res) => {
+  const { email, nome } = req.query;
+  let usuarios = lerJson(USERS_FILE, []);
+  let usuario = usuarios.find(u =>
+    (email && u.email && u.email.toLowerCase() === String(email).toLowerCase()) ||
+    (nome && u.nomeExibicao && u.nomeExibicao.toLowerCase() === decodeURIComponent(nome).toLowerCase())
+  );
+
+  // Se não encontrar o usuário cadastrado, cria um perfil dinâmico com o nome que veio na URL (sem forçar o Ninja)
+  if (!usuario) {
+    const nomeDecodificado = nome ? decodeURIComponent(nome) : 'Membro';
+    usuario = {
+      nomeExibicao: nomeDecodificado,
+      foto: '',
+      redeSocial: ''
+    };
+  }
+
+  res.json({ success: true, usuario });
+});
 
 // ==========================================
 // ROTAS DE DENÚNCIAS

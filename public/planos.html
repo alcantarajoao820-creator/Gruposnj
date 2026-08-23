@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="icon" type="image/png" href="IconNj.png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planos VIP e Impulsionamento Profissional - GruposNJ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: #0f172a;
+      --border-color: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+      --vip-color: #eab008;
+    }
+
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-main); padding: 20px 10px; line-height: 1.7; }
+    
+    .container { 
+      max-width: 950px; 
+      margin: 0 auto; 
+      background: var(--bg-card); 
+      border: 1px solid var(--border-color); 
+      padding: 30px 20px; 
+      border-radius: 16px; 
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Cabeçalho */
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 25px;
+      text-decoration: none;
+    }
+    .header-logo i { color: var(--accent); }
+    .header-logo span { color: var(--accent); }
+
+    /* Topo da Página */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 35px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 25px;
+    }
+    h1 { color: #fff; font-size: 2rem; margin-bottom: 10px; font-weight: 800; letter-spacing: -0.5px; }
+    .subtitle { color: var(--text-muted); font-size: 1rem; max-width: 650px; margin: 0 auto; }
+
+    /* Vantagens Rápidas */
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+    .highlight-item {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .highlight-item i { color: var(--vip-color); font-size: 1.2rem; margin-bottom: 8px; }
+    .highlight-item h4 { font-size: 0.9rem; color: #fff; margin-bottom: 4px; font-weight: 700; }
+    .highlight-item p { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* Grid de Planos */
+    .vip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 45px;
+    }
+
+    .plan-card {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .plan-card:hover { transform: translateY(-3px); }
+
+    .plan-card.featured {
+      border: 2px solid var(--vip-color);
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      box-shadow: 0 10px 20px rgba(234, 176, 8, 0.1);
+    }
+
+    .badge-popular {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--vip-color);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-title { color: var(--vip-color); font-size: 1.15rem; font-weight: 700; margin-bottom: 5px; }
+    .plan-price { font-size: 1.9rem; font-weight: 800; color: #fff; margin: 15px 0; }
+    .plan-price span { font-size: 0.8rem; color: var(--text-muted); font-weight: normal; }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 25px;
+      padding: 0;
+    }
+    .plan-features li {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-features li i { color: var(--accent); font-size: 0.85rem; }
+
+    .btn-pix {
+      background: var(--accent);
+      color: #052e16;
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-pix:hover { background: var(--accent-hover); color: #fff; transform: scale(1.02); }
+
+    /* Seção de Avaliações / Depoimentos */
+    .reviews-section {
+      margin-top: 40px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 35px;
+    }
+    .reviews-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .reviews-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 25px;
+    }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .review-card {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .review-stars { color: var(--vip-color); font-size: 0.8rem; margin-bottom: 10px; }
+    .review-text { font-size: 0.88rem; color: var(--text-main); margin-bottom: 15px; font-style: italic; line-height: 1.5; }
+    .review-author { font-size: 0.82rem; font-weight: 700; color: var(--vip-color); display: flex; align-items: center; gap: 6px; }
+    .review-author i { font-size: 0.75rem; }
+
+    /* FAQ / Dúvidas Frequentes */
+    .faq-section {
+      margin-top: 45px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 35px;
+    }
+    .faq-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .faq-item {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .faq-item h4 { color: #fff; font-size: 0.95rem; margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .faq-item h4 i { color: var(--accent); }
+    .faq-item p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
+
+    /* Rodapé e Botões de Voltar */
+    .footer-actions {
+      margin-top: 40px;
+      padding-top: 25px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .btn-voltar { 
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--accent);
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none; 
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      transition: background 0.2s;
+    }
+    .btn-voltar:hover { background: var(--accent); color: #fff; }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Cabeçalho -->
+    <a href="/" class="header-logo">
+      <i class="fa-solid fa-fire"></i> Grupos<span>NJ</span>
+    </a>
+
+  <!-- Topo da Página com Efeito Profissional -->
+  <div class="hero-section-vip">
+    <div class="hero-vip-badge">
+      <i class="fa-solid fa-crown"></i> <span>Área Exclusiva de Crescimento</span>
+    </div>
+    <h1 class="hero-title-neon">Impulsione seu Grupo com VIP</h1>
+    <p class="subtitle">Garanta o topo das buscas, receba tráfego 24 horas por dia e multiplique o número de membros ativos na sua comunidade de forma explosiva.</p>
+  </div>
+
+<style>
+/* Container principal com visual futurista e elegante */
+.hero-section-vip {
+  position: relative;
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(234, 176, 8, 0.3);
+  border-radius: 20px;
+  margin: 20px 0 30px 0;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(234, 176, 8, 0.05);
+  overflow: hidden;
+}
+
+/* Pequeno selo superior de destaque */
+.hero-vip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(234, 176, 8, 0.15);
+  color: #eab008;
+  border: 1px solid rgba(234, 176, 8, 0.4);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  box-shadow: 0 0 15px rgba(234, 176, 8, 0.2);
+}
+
+.hero-vip-badge i {
+  font-size: 0.85rem;
+  filter: drop-shadow(0 0 4px rgba(234, 176, 8, 0.8));
+}
+
+/* Título com gradiente dinâmico e brilho neon suave */
+.hero-title-neon {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #ffffff 0%, #facc15 40%, #eab008 70%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shineVipTitle 4s linear infinite;
+  text-shadow: 0 0 25px rgba(234, 176, 8, 0.3);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+/* Subtítulo ajustado e limpo */
+.hero-section-vip .subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+@keyframes shineVipTitle {
+  to {
+    background-position: 200% center;
+  }
+}
+</style>
+
+    <!-- Vantagens Rápidas / Ícones -->
+    <div class="highlights-grid">
+      <div class="highlight-item">
+        <i class="fa-solid fa-bolt"></i>
+        <h4>Ativação Rápida</h4>
+        <p>Seu grupo no topo logo após a confirmação via Pix.</p>
+      </div>
+      <div class="highlight-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h4>100% Seguro</h4>
+        <p>Plataforma confiável com suporte dedicado a criadores.</p>
+      </div>
+      <div class="highlight-item">
+        <i class="fa-solid fa-chart-line"></i>
+        <h4>Mais Visibilidade</h4>
+        <p>Até 5x mais cliques diários em relação aos grupos comuns.</p>
+      </div>
+    </div>
+
+    <!-- Tabela / Cards de Planos -->
+    <div class="vip-grid">
+
+      <!-- Plano 10 Dias -->
+      <div class="plan-card">
+        <div>
+          <h3 class="plan-title">Plano Iniciante</h3>
+          <div class="plan-price">R$ 20 <span>/ 10 dias</span></div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> Grupo fixado no topo das buscas</li>
+            <li><i class="fa-solid fa-check"></i> Selo VIP dourado exclusivo</li>
+            <li><i class="fa-solid fa-check"></i> Alta taxa de cliques diários</li>
+            <li><i class="fa-solid fa-check"></i> Ativação automatizada via Pix</li>
+          </ul>
+        </div>
+        <a href="painel.html" class="btn-pix"><i class="fa-brands fa-pix"></i> Contratar via Pix (R$ 20)</a>
+      </div>
+
+      <!-- Plano 30 Dias (Destaque) -->
+      <div class="plan-card featured">
+        <span class="badge-popular">MAIS POPULAR</span>
+        <div>
+          <h3 class="plan-title">Plano Profissional</h3>
+          <div class="plan-price">R$ 60 <span>/ 30 dias</span></div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> Todas as vantagens do Iniciante</li>
+            <li><i class="fa-solid fa-check"></i> Prioridade máxima na listagem</li>
+            <li><i class="fa-solid fa-check"></i> 1 mês inteiro sem preocupações</li>
+            <li><i class="fa-solid fa-check"></i> Maior retorno sobre o investimento</li>
+          </ul>
+        </div>
+        <a href="painel.html" class="btn-pix"><i class="fa-brands fa-pix"></i> Contratar via Pix (R$ 60)</a>
+      </div>
+
+      <!-- Plano 60 Dias -->
+      <div class="plan-card">
+        <div>
+          <h3 class="plan-title">Plano Master</h3>
+          <div class="plan-price">R$ 120 <span>/ 60 dias</span></div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> 2 meses inteiros de destaque</li>
+            <li><i class="fa-solid fa-check"></i> Máxima visibilidade garantida</li>
+            <li><i class="fa-solid fa-check"></i> Melhor custo-benefício por dia</li>
+            <li><i class="fa-solid fa-check"></i> Suporte prioritário via e-mail</li>
+          </ul>
+        </div>
+        <a href="painel.html" class="btn-pix"><i class="fa-brands fa-pix"></i> Contratar via Pix (R$ 120)</a>
+      </div>
+
+    </div>
+
+    <!-- Seção de Avaliações / Depoimentos Expandida -->
+    <div class="reviews-section">
+      <h2 class="reviews-title">💬 O que dizem os donos de grupos impulsionados</h2>
+      <p class="reviews-subtitle">Veja relatos reais de quem já transformou o engajamento de suas comunidades com o GruposNJ.</p>
+      
+      <div class="reviews-grid">
+        
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="review-text">"Coloquei o plano de 30 dias e meu grupo de figurinhas lotou em menos de uma semana. O fluxo de gente entrando é surreal!"</p>
+          </div>
+          <div class="review-author"><i class="fa-solid fa-circle-check"></i> Marcos Vinicius — Grupo Boteco</div>
+        </div>
+
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="review-text">"Super recomendo! O pagamento via Pix caiu rápido e o selo VIP passou muita confiança para a galera entrar no link sem medo."</p>
+          </div>
+          <div class="review-author"><i class="fa-solid fa-circle-check"></i> Beatriz Lima — Comunidade Gamer</div>
+        </div>
+
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="review-text">"Melhor plataforma de divulgação que já usei. O suporte responde direitinho e o retorno de membros ativos vale cada centavo."</p>
+          </div>
+          <div class="review-author"><i class="fa-solid fa-circle-check"></i> Lucas Gabriel — Parceiro NJ</div>
+        </div>
+
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="review-text">"Meu grupo de resenha estava empacado. Assinei o Plano Profissional e agora todo dia bate limite de novos integrantes. Nota 10!"</p>
+          </div>
+          <div class="review-author"><i class="fa-solid fa-circle-check"></i> Rafael Souza — Grupo Piratas</div>
+        </div>
+
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="review-text">"Praticidade total. Fiz o Pix pelo celular, mandei o link do grupo e pronto, já apareceu com a coroa dourada no topo."</p>
+          </div>
+          <div class="review-author"><i class="fa-solid fa-circle-check"></i> Juliana Mendes — Stickers Oficial</div>
+        </div>
+
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="review-text">"O melhor custo-benefício disparado. Quem quer crescer rápido na internet precisa colocar o grupo no topo daqui."</p>
+          </div>
+          <div class="review-author"><i class="fa-solid fa-circle-check"></i> Carlos Eduardo — Comunidade WhatsApp</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seção de Dúvidas Frequentes (FAQ) -->
+    <div class="faq-section">
+      <h2 class="faq-title">❓ Dúvidas Frequentes</h2>
+      <div class="faq-grid">
+        
+        <div class="faq-item">
+          <h4><i class="fa-solid fa-circle-question"></i> Como o grupo vai para o topo?</h4>
+          <p>Assim que o pagamento via Pix for confirmado e o link cadastrado no painel, seu grupo recebe automaticamente o selo VIP e passa a ocupar as primeiras posições das buscas.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4><i class="fa-solid fa-circle-question"></i> Posso trocar o link do grupo depois?</h4>
+          <p>Sim! Você pode gerenciar seu grupo e atualizar as informações diretamente pelo seu painel de controle a qualquer momento durante o período contratado.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4><i class="fa-solid fa-circle-question"></i> O pagamento via Pix é seguro?</h4>
+          <p>Totalmente seguro e automatizado, garantindo que o seu plano seja ativado de forma ágil sem complicações ou burocracias.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Navegação e Rodapé -->
+    <div class="footer-actions">
+      <a href="/" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para a Página Inicial</a>
+      <a href="/termos.html" target="_blank" style="color: var(--text-muted); text-decoration: none; font-size: 0.82rem; text-align: center; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
+        <i class="fa-solid fa-file-contract"></i> Termos e Condições de Uso
+      </a>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 GruposNJ. Todos os direitos reservados. Suporte: suporte.gruposnj@gmail.com</p>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil do Criador - Grupos NJ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --accent: #3b82f6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { color: var(--text-main); font-size: 1.25rem; font-weight: bold; text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .container { max-width: 600px; margin: 20px auto; padding: 0 15px; width: 100%; flex: 1; }
+    .perfil-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .avatar-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent); background: #334155; display: flex; align-items: center; justify-content: center; }
+    .avatar { width: 100%; height: 100%; object-fit: cover; }
+    .perfil-card h2 { font-size: 1.5rem; margin-bottom: 8px; color: var(--text-main); }
+    .badge-cargo { display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; }
+    .social-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; }
+    .social-btn:hover { opacity: 0.9; }
+    .secao-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .secao-titulo { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .sem-grupos { text-align: center; color: var(--text-muted); padding: 20px; font-size: 0.95rem; }
+    footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: auto; }
+    footer a:hover { color: var(--accent); }
+
+   @keyframes pulseGlow {
+  0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.4); }
+  100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
+}
+
+/* Card da seção com efeito Glassmorphism */
+.secao-card-pro {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 20px;
+  padding: 25px 20px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  margin-top: 25px;
+}
+
+/* Título estilizado da seção */                                                                                                                          .secao-titulo-pro {
+  display: flex;
+  align-items: center;                                                                                                                                      gap: 12px;
+  color: #f8fafc;
+  font-size: 1.15rem;
+  font-weight: 700;                                                                                                                                         margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Ícone com caixa translúcida */
+.titulo-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  color: #60a5fa;
+  font-size: 1rem;
+}
+
+/* Estado de carregamento elegante */
+.sem-grupos-pro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 14px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px dashed rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+}
+                                                                                                                                                          /* Spinner animado moderno */
+.loading-spinner-pro {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spinLoadingPro 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+@keyframes spinLoadingPro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header>
+    <a href="/" class="logo"><i class="fa-brands fa-whatsapp" style="color: #25d366; margin-right: 4px;"></i> Grupos <span style="color: #22c55e;">NJ</span></a>
+    <a href="javascript:history.back()" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+  </header>
+
+  <div class="container">
+    <!-- Card de Perfil -->
+    <div class="perfil-card">
+      <div id="avatar-container" class="avatar-container">
+        <!-- SVG inicial (boneco padrão) -->
+        <svg id="perfil-svg" viewBox="0 0 24 24" width="60" height="60" fill="#94a3b8" style="width: 60%; height: 60%;">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </div>
+      <h2 id="perfil-nome">Carregando...</h2>
+<div class="badge-cargo" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2)); color: #60a5fa; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 0 12px rgba(59, 130, 246, 0.2); animation: pulseGlow 2s infinite ease-in-out;">
+  <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i> 
+  <span>Membro Criador</span>
+</div>
+
+      <div id="container-social" style="display: none; margin-top: 15px;">
+        <a id="perfil-social-link" href="#" target="_blank" class="social-btn">
+          <i class="fa-solid fa-share-nodes"></i> Visitar Rede Social / Contato
+        </a>
+      </div>
+    </div>
+
+  <!-- Grupos Publicados -->
+  <div class="secao-card-pro">
+    <h3 class="secao-titulo-pro">
+      <div class="titulo-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
+      <span>Grupos Publicados</span>
+    </h3>
+    <div id="lista-grupos-criador">
+      <div class="sem-grupos-pro">
+        <div class="loading-spinner-pro"></div>
+        <span>Buscando grupos publicados...</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+  <footer>
+    <p style="margin-bottom: 8px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
+    <p style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <a href="mailto:suporte.gruposnj@gmail.com" style="color: var(--accent); text-decoration: none;">
+        <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
+      </a>
+      <a href="termos.html" style="color: var(--text-muted); text-decoration: none;">
+        <i class="fa-solid fa-file-contract"></i> Termos de Uso
+      </a>
+    </p>
+    <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+      Conteúdo restrito para maiores de idade. Protegido pelo selo
+      <a href="https://rtalabel.org/" target="_blank" style="color: var(--accent); text-decoration: underline;">
+        RTA (Restricted to Adults)
+      </a>.
+    </p>
+  </footer>
+
+  <script>
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const autorUrl = urlParams.get('autor');
+      const nomeCriador = autorUrl ? decodeURIComponent(autorUrl) : "Ninja";
+
+      const elNome = document.getElementById('perfil-nome');
+      if (elNome) elNome.innerText = nomeCriador;
+      
+      // Foto padrão suave e abstrata (Dark minimalista)
+      let fotoFinal = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop";
+
+      try {
+        const res = await fetch(`/api/usuario/perfil?nome=${encodeURIComponent(nomeCriador)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.usuario) {
+            if (data.usuario.nomeExibicao && elNome) {
+              elNome.innerText = data.usuario.nomeExibicao;
+            }
+
+            if (data.usuario.foto && data.usuario.foto.startsWith('http')) {
+              fotoFinal = data.usuario.foto;
+            }
+
+            const btnSocial = document.getElementById('perfil-social-link');
+            const containerSocial = document.getElementById('container-social');
+
+            if (data.usuario.redeSocial && data.usuario.redeSocial.startsWith('http')) {
+              if (btnSocial) btnSocial.href = data.usuario.redeSocial;
+              if (containerSocial) containerSocial.style.display = 'block';
+            } else {
+              if (containerSocial) containerSocial.style.display = 'none';
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao buscar perfil:", e);
+      }
+
+      const containerAvatar = document.getElementById('avatar-container');
+      if (containerAvatar) {
+        containerAvatar.innerHTML = `<img src="${fotoFinal}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">`;
+      }
+
+      await carregarGruposDoPerfil(nomeCriador);
+    });
+
+    async function carregarGruposDoPerfil(nomeCriador) {
+      const container = document.getElementById('lista-grupos-criador');
+      if (!container) return;
+
+      try {
+        const res = await fetch('/api/grupos');
+        if (!res.ok) throw new Error();
+        const grupos = await res.json();
+
+        const busca = nomeCriador.toLowerCase().trim();
+
+        // Filtro inteligente que confere todas as possibilidades de salvamento do autor
+        const gruposDoCriador = grupos.filter(g => {
+          const autorGrupo = (g.autor || "").toString().toLowerCase().trim();
+          const criadorGrupo = (g.criador || "").toString().toLowerCase().trim();
+          const usuarioGrupo = (g.usuario || "").toString().toLowerCase().trim();
+          const emailGrupo = (g.email || "").toString().toLowerCase().trim();
+
+          // Se qualquer um dos campos do grupo bater com o nome ou e-mail do criador
+          return (
+            (autorGrupo && (autorGrupo === busca || autorGrupo.includes(busca) || busca.includes(autorGrupo))) ||
+            (criadorGrupo && (criadorGrupo === busca || criadorGrupo.includes(busca) || busca.includes(criadorGrupo))) ||
+            (usuarioGrupo && (usuarioGrupo === busca || usuarioGrupo.includes(busca) || busca.includes(usuarioGrupo))) ||
+            (emailGrupo && emailGrupo.includes(busca))
+          );
+        });
+
+        if (gruposDoCriador.length === 0) {
+          container.innerHTML = '<div class="sem-grupos">Este criador ainda não possui grupos publicados.</div>';
+          return;
+        }
+
+        container.innerHTML = gruposDoCriador.map(g => {
+          let statusBadge = '<span style="background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;"><i class="fa-solid fa-check"></i> Ativo</span>';
+          
+          if (g.isVip) {
+            statusBadge = '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;"><i class="fa-solid fa-crown"></i> VIP ATIVO</span>';
+          }
+
+          return `
+            <div class="grupo-item" style="display: flex; justify-content: space-between; align-items: center; background: #1a2234; border: 1px solid #283548; padding: 14px 18px; border-radius: 12px; margin-top: 12px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="${g.imagem || 'https://via.placeholder.com/50'}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover;" alt="Grupo">
+                <div>
+                  <strong style="font-size: 1rem; color: #fff;">${escapeHtml(g.nome || 'Grupo sem nome')}</strong>
+                  <div style="margin-top: 4px; display: flex; gap: 8px; align-items: center;">
+                    ${statusBadge}
+                    <span style="font-size: 0.75rem; color: #94a3b8;"><i class="fa-solid fa-tag"></i> ${escapeHtml(g.categoria || 'Geral')}</span>
+                  </div>
+                </div>
+              </div>
+              <a href="${g.link || '#'}" target="_blank" class="btn-entrar" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.3); white-space: nowrap;">
+                <i class="fa-solid fa-right-to-bracket"></i> Entrar
+              </a>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error("Erro ao carregar grupos:", err);
+        container.innerHTML = '<div class="sem-grupos" style="color:#ef4444;">Erro ao carregar os grupos publicados.</div>';
+      }
+    }
+
+  </script>
+
+</body>
+</html>

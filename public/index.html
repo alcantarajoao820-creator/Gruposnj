@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<link rel="icon" type="image/png" href="IconNj.png?v=1">
+  <meta name="RATING" content="RTA-5042-1996-1400-1577-RTA">
   <meta name="google-site-verification" content="bKLtKz4nfHs1ztY2O5z3PUMPPnIhRUTWqVvyr7STpr4" />
   <meta charset="UTF-8">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
@@ -136,84 +138,6 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-/* Estilos do Menu Lateral (Gaveta) */
-.menu-lateral {
-    position: fixed;
-    top: 0;
-    right: -280px;
-    width: 280px;
-    height: 100%;
-    background: #0f172a;
-    border-left: 1px solid #1e293b;
-    z-index: 1000;
-    transition: right 0.3s ease;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.menu-lateral.ativo {
-    right: 0;
-}
-
-.menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #1e293b;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #38bdf8;
-    font-size: 0.95rem;
-}
-
-.close-menu {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.menu-links {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.menu-links a {
-    color: #cbd5e1;
-    text-decoration: none;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 6px;
-    transition: background 0.2s;
-}
-
-.menu-links a:hover {
-    background: #1e293b;
-    color: #fff;
-}
-
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    z-index: 999;
-}
-
-.menu-overlay.ativo {
-    display: block;
-}
-
 
   </style>
 
@@ -227,109 +151,694 @@
     <header class="navbar">
       <a href="/" class="brand"><i class="fa-brands fa-whatsapp" style="color: #22c55e;"></i> Grupos<span>NJ</span></a>
       <div class="nav-btns">
-        <button onclick="irParaDivulgar()" class="btn-nav btn-green"><i class="fa-solid fa-plus"></i> Divulgar</button>
-        <button class="btn-nav btn-blue" onclick="toggleMenu()" title="Menu"><i class="fa-solid fa-bars"></i></button>
-      </div>
-    </header>
+         <button onclick="irParaDivulgar()" class="btn-nav-pro btn-green-pro">
+    <i class="fa-solid fa-plus"></i> 
+    <span>Divulgar</span>
+  </button>
+  <button class="btn-nav-pro btn-blue-pro" onclick="toggleMenu()" title="Menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</div>
+</header>
 
-<!-- Menu Lateral Retátil (Gaveta) -->
-<div class="menu-lateral" id="menuLateral">
-  <div class="menu-header">
-    <span id="saudacao-usuario">Olá, Visitante</span>
-    <button onclick="toggleMenu()" class="close-menu">&times;</button>
+<style>
+/* Estilo base profissional para os botões do header */
+.btn-nav-pro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  outline: none;
+}
+
+/* Variação do botão Divulgar (Verde Neon Executivo) */
+.btn-green-pro {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #052e16;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.btn-green-pro:hover {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.45);
+}
+
+/* Variação do botão de Menu (Azul Glassmorphism) */
+.btn-blue-pro {
+  background: rgba(30, 41, 59, 0.75);
+  color: #60a5fa;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-blue-pro:hover {
+  background: rgba(59, 130, 246, 0.25);
+  color: #fff;
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-nav-pro:active {
+  transform: translateY(0);
+}
+</style>
+
+<!-- Menu Lateral Retátil (Gaveta) Profissional -->
+<div class="menu-lateral-pro" id="menuLateral">
+  <div class="menu-header-pro">
+    <div class="menu-user-info">
+      <div class="menu-avatar-icon"><i class="fa-solid fa-user"></i></div>
+      <span id="saudacao-usuario">Olá, Visitante</span>
+    </div>
+    <button onclick="toggleMenu()" class="close-menu-pro">&times;</button>
   </div>
-  <div class="menu-links">
-    <a href="/"><i class="fa-solid fa-home"></i> Início</a>
-    <a href="/painel.html"><i class="fa-solid fa-user-gear"></i> Minha Conta / Painel</a>
-    <a href="/login.html"><i class="fa-solid fa-right-to-bracket"></i> Entrar / Cadastrar</a>
+  
+  <div class="menu-links-pro">
+    <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início</span></a>
+    <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a>
+    <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a>
+    <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a>
   </div>
 </div>
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<style>
+/* Gaveta do menu lateral com Glassmorphism */
+.menu-lateral-pro {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Escondido por padrão à direita (mude para left: -300px se abrir pela esquerda) */
+  width: 280px;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Classe ativa para abrir o menu via JavaScript */
+.menu-lateral-pro.ativo, .menu-lateral.ativo {
+  right: 0;
+}
+
+/* Cabeçalho do menu */
+.menu-header-pro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  margin-bottom: 20px;
+}
+
+.menu-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f8fafc;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.menu-avatar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Botão de fechar (X) */
+.close-menu-pro {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: color 0.2s;
+}
+
+.close-menu-pro:hover {
+  color: #fff;
+}
+
+/* Lista de links da gaveta */
+.menu-links-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-item-pro {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-item-pro i {
+  color: #64748b;
+  font-size: 1.1rem;
+  transition: color 0.25s;
+}
+
+.menu-item-pro:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.menu-item-pro:hover i {
+  color: #3b82f6;
+}
+
+/* Destaque especial para o link VIP */
+.menu-item-pro.vip-item {
+  background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08));
+  border-color: rgba(234, 176, 8, 0.4);
+  color: #eab008;
+  font-weight: 600;
+}
+
+.menu-item-pro.vip-item i {
+  color: #eab008;
+  filter: drop-shadow(0 0 6px rgba(234, 176, 8, 0.6));
+}
+
+.menu-item-pro.vip-item:hover {
+  background: linear-gradient(135deg, rgba(234, 176, 8, 0.25), rgba(202, 138, 4, 0.18));
+  border-color: #eab008;
+  color: #fff;
+}
+
+/* Overlay de fundo escuro translúcido */
+.menu-overlay-pro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Ativar o overlay via JavaScript (se usar classe .ativo) */
+.menu-overlay-pro.ativo, .menu-overlay.ativo {
+  opacity: 1;
+  visibility: visible;
+}
+</style>
 
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1>Encontre os Melhores Grupos</h1>
+
+  <!-- Hero Section -->
+    <section class="hero">                                                                                                    
+      <h1 class="hero-title-cyber">Encontre os Melhores Grupos de Putaria...</h1>
       <p>Comunidades ativas no WhatsApp para você fazer networking, amizades e bons negócios.</p>
+                                                                                                                              <!-- Pesquisa -->
+    <!-- Pesquisa -->
+    <div class="search-box-pro">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" id="search-input" onkeyup="filtrarGrupos()" placeholder="Pesquisar grupos por nome...">
+    </div>
+</section>
 
-      <!-- Pesquisa -->
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" onkeyup="filtrarGrupos()" placeholder="Pesquisar grupos por nome...">
-      </div>
+<style>
+/* Container principal da barra de pesquisa com acabamento profissional */
+.search-box-pro {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 0 16px;
+  height: 52px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ícone de lupa estilizado */
+.search-box-pro .search-icon {
+  color: #64748b;
+  font-size: 1rem;
+  margin-right: 12px;
+  transition: color 0.3s ease;
+}
+
+/* Campo de input totalmente integrado */
+.search-box-pro input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 400;
+  width: 100%;
+}
+
+.search-box-pro input::placeholder {
+  color: #64748b;
+  transition: color 0.3s ease;
+}
+
+/* Efeito de foco profissional (quando o usuário clica para pesquisar) */
+.search-box-pro:focus-within {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.35), inset 0 0 10px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.search-box-pro:focus-within .search-icon {
+  color: #3b82f6;
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
+}
+
+.search-box-pro:focus-within input::placeholder {
+  color: #94a3b8;
+}
+</style>
+
+<!-- Estilo do nome Encontre... -->
+<style>
+/* Efeito Holográfico Cyberpunk com Reflexo de Luz Animado */
+.hero-title-cyber {
+  position: relative;
+  font-size: 2.3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #ffffff 0%, #3b82f6 30%, #ec4899 70%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shineText 4s linear infinite, floatTitle 3s ease-in-out infinite alternate;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+@keyframes shineText {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes floatTitle {
+  0% {
+    transform: translateY(0);
+    filter: drop-shadow(0 5px 15px rgba(59, 130, 246, 0.4));
+  }
+  100% {
+    transform: translateY(-3px);
+    filter: drop-shadow(0 8px 25px rgba(236, 72, 153, 0.6));
+  }
+}
+</style>
 
  <!-- Filtros por Categoria -->
 <div class="categories">
   <button class="cat-chip active" onclick="filtrarCategoria('todos', this)">🔥 Todos</button>
   <button class="cat-chip" onclick="filtrarCategoria('Figurinhas', this)">🧩 Figurinhas</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Stickers +18', this)">🔥 Stickers +18</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Stickers Engraçados', this)">🤪 Stickers Engraçados</button>
   <button class="cat-chip" onclick="filtrarCategoria('Amizade', this)">💬 Amizade</button>
   <button class="cat-chip" onclick="filtrarCategoria('Jogos', this)">🎮 Jogos</button>
   <button class="cat-chip" onclick="filtrarCategoria('Vendas', this)">💰 Vendas</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Memes', this)">😂 Memes</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Musica', this)">🎵 Música</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Anime', this)">🍥 Anime</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Futebol', this)">⚽ Futebol</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Series', this)">🎬 Séries</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Tecnologia', this)">💻 Tecnologia</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Cripto', this)">💰 Cripto</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Fofoca', this)">🗣️ Fofoca</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Namoro', this)">💖 Namoro</button>
   <button class="cat-chip" onclick="filtrarCategoria('Adulto', this)">🔞 Adulto</button>
-  <button class="cat-chip" onclick="filtrarCategoria('Vazados', this)">🔞 Vazados</button>
-  <button class="cat-chip" onclick="filtrarCategoria('Amadoras', this)">🔞 Amadoras</button>
-  <button class="cat-chip" onclick="filtrarCategoria('Stickers', this)">🔞 Stickers</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Putaria', this)">😈 Putaria</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Vazados', this)">📸 Vazados</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Amadoras', this)">⭐ Amadoras</button>
+  <button class="cat-chip" onclick="filtrarCategoria('Outros', this)">📁 Outros</button>
 </div>
-    </section>
 
-    <!-- Grid de Cards -->
-    <main class="grid" id="lista-grupos">
-      <p style="text-align: center; grid-column: 1/-1; color: #94a3b8;">Carregando comunidades...</p>
-    </main>
+<style>
+/* Estilo base moderno para os botões de categoria */
+.cat-chip {
+  background: rgba(30, 41, 59, 0.6);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  padding: 9px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Garante espaço interno para o container não cortar nada */
+.categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 4px 12px 4px; /* Adicionado padding em cima e embaixo */
+  scrollbar-width: none; /* Esconde barra de rolagem no Firefox */
+}
+.categories::-webkit-scrollbar {
+  display: none; /* Esconde barra de rolagem no Chrome/Safari */
+}
+
+/* Efeito ao passar o mouse ou tocar */
+.cat-chip:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: #fff;
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+/* Estado ativo com neon forte, mas sem estourar o tamanho (sem scale) */
+.cat-chip.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  border-color: #60a5fa;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  transform: translateY(-2px); /* Mantém alinhado sem cortar o topo */
+}
+</style>
+
+
+<!-- Grid de Cards Profissional -->
+<main class="grid" id="lista-grupos">
+  <div class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Carregando comunidades exclusivas...</p>
   </div>
+</main>
+
+<style>
+/* Estilo profissional para a área de carregamento de grupos */
+.loading-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  gap: 16px;
+}
+
+/* Spinner de carregamento animado com neon */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spinLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.loading-state p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  animation: pulseText 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spinLoading {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+</style>
+
+
+    <!-- Paginação (Sempre visível agora) -->
+    <div id="paginacao-container" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px;">
+      <button id="btn-anterior" onclick="mudarPagina(-1)" style="background: #1e293b; color: #fff; border: 1px solid #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+      <span id="info-pagina" style="color: #94a3b8; font-size: 0.9rem;">Página 1 de 1</span>
+      <button id="btn-proximo" onclick="mudarPagina(1)" style="background: #1e293b; color: #fff; border: 1px solid #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Próxima <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
 
 <!-- SEÇÃO DE PLANOS VIP -->
-<div class="card vip-section" style="background: #1e293b; padding: 25px; border-radius: 12px; margin-top: 30px; margin-bottom: 30px; border: 1px solid #eab008;">
+<div class="card vip-section" style="background: #1e293b; padding: 25px; border-radius: 12px; margin-top: 30px; margin-bottom: 30px; border: 1px solid #334155;">
   <h2 style="color: #f8fafc; text-align: center; margin-top: 0; margin-bottom: 8px;">⭐ Impulsione seu Grupo com VIP</h2>
-  <p style="color: #94a3b8; text-align: center; font-size: 0.9rem; margin-bottom: 25px;">Destaque sua comunidade no topo e ganhe muito mais membros ativos!</p>
+  <p style="color: #94a3b8; text-align: center; font-size: 0.9rem; margin-bottom: 25px;">Destaque sua comunidade no topo e ganhe muito mais membros ativos</p>
 
   <div class="vip-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-    
-    <!-- Plano 10 Dias -->
+
+    <!-- Plano 10 Dias (Iniciante) -->
     <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
         <h3 style="color: #eab008; margin-top: 0; margin-bottom: 5px;">Plano Iniciante</h3>
-        <p style="font-size: 1.5rem; font-weight: bold; color: #fff; margin: 10px 0;">R$ 20 <span style="font-size: 0.8rem; color: #94a3b8; font-weight: normal;">/ 10 dias</span></p>
+        <div style="margin: 12px 0;">
+          <span style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; display: block;">De R$ 30</span>
+          <div style="display: flex; align-items: baseline; gap: 6px;">
+            <span style="font-size: 1.5rem; font-weight: bold; color: #fff;">R$ 20</span>
+            <span style="font-size: 0.8rem; color: #94a3b8;">/ 10 dias</span>
+          </div>
+        </div>
         <ul style="color: #cbd5e1; font-size: 0.85rem; padding-left: 18px; line-height: 1.6; margin-bottom: 20px;">
           <li>Grupo no topo das buscas</li>
           <li>Selo VIP dourado exclusivo</li>
           <li>Maior taxa de cliques</li>
         </ul>
       </div>
-      <a href="painel.html" style="background: #22c55e; color: #052e16; text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 0.9rem;">Impulsionar (10 Dias)</a>
+      <a href="painel.html" class="btn-acao-pro">
+        <i class="fa-solid fa-rocket"></i>
+        <span>Impulsionar Grupo</span>
+      </a>
     </div>
 
-    <!-- Plano 30 Dias (Destaque) -->
-    <div style="background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); border: 2px solid #eab008; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+    <!-- Plano 30 Dias (Destaque / Profissional) -->
+    <div style="position: relative; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); border: 2px solid #eab008; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
       <span style="position: absolute; top: -12px; right: 20px; background: #eab008; color: #000; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 4px;">MAIS POPULAR</span>
       <div>
         <h3 style="color: #eab008; margin-top: 0; margin-bottom: 5px;">Plano Profissional</h3>
-        <p style="font-size: 1.5rem; font-weight: bold; color: #fff; margin: 10px 0;">R$ 60 <span style="font-size: 0.8rem; color: #94a3b8; font-weight: normal;">/ 30 dias</span></p>
+        <div style="margin: 12px 0;">
+          <span style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; display: block;">De R$ 90</span>
+          <div style="display: flex; align-items: baseline; gap: 6px;">
+            <span style="font-size: 1.5rem; font-weight: bold; color: #fff;">R$ 60</span>
+            <span style="font-size: 0.8rem; color: #94a3b8;">/ 30 dias</span>
+          </div>
+        </div>
         <ul style="color: #cbd5e1; font-size: 0.85rem; padding-left: 18px; line-height: 1.6; margin-bottom: 20px;">
           <li>Todas as vantagens do Iniciante</li>
           <li>Prioridade máxima na listagem</li>
           <li>Economia de tempo por 1 mês inteiro</li>
         </ul>
       </div>
-      <a href="painel.html" style="background: #22c55e; color: #052e16; text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 0.9rem;">Impulsionar (30 Dias)</a>
+      <a href="painel.html" class="btn-acao-pro">
+        <i class="fa-solid fa-rocket"></i>
+        <span>Impulsionar Grupo</span>
+      </a>
     </div>
 
-    <!-- Plano 60 Dias -->
-    <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+    <!-- Plano 60 Dias (Master) -->
+    <div style="position: relative; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+      <span style="position: absolute; top: -12px; right: 20px; background: #22c55e; color: #052e16; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 4px;">MELHOR CUSTO-BENEFÍCIO</span>
       <div>
         <h3 style="color: #eab008; margin-top: 0; margin-bottom: 5px;">Plano Master</h3>
-        <p style="font-size: 1.5rem; font-weight: bold; color: #fff; margin: 10px 0;">R$ 120 <span style="font-size: 0.8rem; color: #94a3b8; font-weight: normal;">/ 60 dias</span></p>
+        <div style="margin: 12px 0;">
+          <span style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; display: block;">De R$ 200</span>
+          <div style="display: flex; align-items: baseline; gap: 6px;">
+            <span style="font-size: 1.5rem; font-weight: bold; color: #fff;">R$ 120</span>
+            <span style="font-size: 0.8rem; color: #94a3b8;">/ 60 dias</span>
+          </div>
+        </div>
         <ul style="color: #cbd5e1; font-size: 0.85rem; padding-left: 18px; line-height: 1.6; margin-bottom: 20px;">
           <li>2 meses inteiros de destaque</li>
           <li>Máxima visibilidade garantida</li>
-          <li>Melhor custo-benefício para crescimento</li>
+          <li>Economia real de R$ 80 no período</li>
         </ul>
       </div>
-      <a href="painel.html" style="background: #22c55e; color: #052e16; text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 0.9rem;">Impulsionar (60 Dias)</a>
+      <a href="painel.html" class="btn-acao-pro">
+        <i class="fa-solid fa-rocket"></i>
+        <span>Impulsionar Grupo</span>
+      </a>
     </div>
 
   </div>
 </div>
+
+<style>
+/* Estilo reutilizável para os botões de ação */
+.btn-acao-pro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #052e16 !important;
+  text-align: center;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none !important;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-acao-pro i {
+  font-size: 1.1rem;
+}
+
+.btn-acao-pro:hover {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(34, 197, 94, 0.5);
+}
+
+.btn-acao-pro:active {
+  transform: translateY(0);
+}
+</style>
+
+<!-- SEÇÃO DE DUVIDAS / CHAMADA PARA PLANOS -->
+<div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 12px; padding: 25px 20px; margin-top: 30px; margin-bottom: 30px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+  <div style="font-size: 1.8rem; color: #eab008;">
+    <i class="fa-solid fa-circle-question"></i>
+  </div>
+  <h3 style="color: #f8fafc; font-size: 1.2rem; font-weight: 700; margin: 0;">Dúvidas sobre os planos?</h3>
+  <p style="color: #94a3b8; font-size: 0.9rem; max-width: 500px; margin: 0; line-height: 1.5;">
+    Conheça todas as vantagens detalhadas, veja avaliações de outros criadores e tire todas as suas dúvidas antes de impulsionar.
+  </p>
+  <a href="planos.html" class="btn-planos-pro">
+  <i class="fa-solid fa-arrow-right icon-arrow"></i> 
+  <span>Acesse nossa página de planos detalhados</span>
+</a>
+ </div>
+<style>
+/* Estilo profissional para o link/botão de planos detalhados */
+.btn-planos-pro {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08));
+  color: #eab008 !important;
+  border: 1px solid rgba(234, 176, 8, 0.5);
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(234, 176, 8, 0.15), inset 0 0 10px rgba(234, 176, 8, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Efeito ao passar o mouse ou tocar */
+.btn-planos-pro:hover {
+  background: linear-gradient(135deg, rgba(234, 176, 8, 0.25), rgba(202, 138, 4, 0.18));
+  border-color: #eab008;
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(234, 176, 8, 0.35), inset 0 0 15px rgba(234, 176, 8, 0.2);
+}
+
+/* Animação sutil da setinha para a direita no hover */
+.btn-planos-pro:hover .icon-arrow {
+  transform: translateX(4px);
+}
+
+.icon-arrow {
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 4px rgba(234, 176, 8, 0.6));
+}
+
+.btn-planos-pro:active {
+  transform: translateY(0);
+}
+</style>
+
+
+  <!-- Bloco Oficial RTA Destacado -->
+  <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color, #1e293b); border-radius: 12px; padding: 16px; margin: 20px auto; max-width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+    <a href="https://rtalabel.org/" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 14px; text-decoration: none;">
+      
+      <!-- Ícone / Logo com destaque -->
+      <div style="background: #0284c7; color: white; width: 45px; height: 45px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+
+      <!-- Textos explicativos -->
+      <div style="text-align: left;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="color: #f8fafc; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">RTA CERTIFIED</span>
+          <span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px;">18+</span>
+        </div>
+        <div style="color: #94a3b8; font-size: 11px; margin-top: 2px; line-height: 1.3;">
+          Conteúdo protegido e restrito para adultos. <span style="color: var(--accent, #22c55e); text-decoration: underline;">Verificar selo &rarr;</span>
+        </div>
+      </div>
+
+    </a>
+  </div>
 
     <!-- Modal de Aviso +18 -->
     <div id="modal-adulto" class="modal-overlay" style="display: none;">
@@ -344,19 +853,106 @@
       </div>
     </div>
 
-<div class="stats-container">
-    <div class="stat-item">
-        <i class="fa-solid fa-users-viewfinder"></i>
-        <span class="stat-number" id="count-grupos">0</span>
-        <span class="stat-label">Grupos Ativos</span>
+<div class="stats-container-pro">
+    <div class="stat-card">
+        <div class="stat-icon-wrapper">
+            <i class="fa-solid fa-users-viewfinder"></i>
+        </div>
+        <div class="stat-content">
+            <span class="stat-number" id="count-grupos">0</span>
+            <span class="stat-label">Grupos Ativos 100%</span>
+        </div>
     </div>
-    <div class="stat-item">
-        <i class="fa-solid fa-user-check"></i>
-        <span class="stat-number" id="count-usuarios">0</span>
-        <span class="stat-label">Usuários Cadastrados</span>
+
+    <div class="stat-card">
+        <div class="stat-icon-wrapper user-icon">
+            <i class="fa-solid fa-user-check"></i>
+        </div>
+        <div class="stat-content">
+            <span class="stat-number" id="count-usuarios">0</span>
+            <span class="stat-label">Usuários Cadastrados</span>
+        </div>
     </div>
 </div>
 
+<style>
+/* Container principal das estatísticas */
+.stats-container-pro {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 25px 0;
+}
+
+/* Card individual com efeito Glassmorphism e borda suave */
+.stat-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+  padding: 18px 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Efeito de destaque ao passar o mouse ou tocar */
+.stat-card:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.4), rgba(15, 23, 42, 0.95));
+}
+
+/* Caixa circular para o ícone */
+.stat-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  color: #60a5fa;
+  font-size: 1.25rem;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Variação de cor para o ícone de usuários */
+.stat-card:hover .stat-icon-wrapper {
+  background: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.5);
+}
+
+/* Textos dentro do card */
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+</style>
 
     <!-- Seção de Dúvidas Frequentes (FAQ) -->
     <section class="faq-section">
@@ -410,22 +1006,27 @@
       </div>
     </section>
 
-
   <!-- Footer -->
-  <footer>
+  <footer>                                                                                                                                                    
     <p style="margin-bottom: 8px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
     <p style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
       <a href="mailto:suporte.gruposnj@gmail.com" style="color: var(--accent); text-decoration: none;">
         <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
       </a>
       <span style="color: var(--border-color);">|</span>
-      <a href="termos.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
+      <a href="termos.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'">
         <i class="fa-solid fa-file-contract"></i> Termos de Uso
-      </a>
+      </a>                                                                                                                                                    
+    </p>
+    
+    <!-- Aviso e Link Oficial do RTA -->
+    <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+      Conteúdo restrito para maiores de idade. Protegido pelo selo 
+      <a href="https://rtalabel.org/" target="_blank" style="color: var(--accent); text-decoration: underline;">
+        RTA (Restricted to Adults)
+      </a>.
     </p>
   </footer>
-
-
 
   <script>
     const firebaseConfig = {
@@ -442,6 +1043,13 @@
 
     let gruposGerais = [];
     let categoriaAtual = 'todos';
+    let paginaAtual = 1;
+    const itensPorPagina = 10;
+
+    // Função essencial para evitar quebra de texto no HTML
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
 
     function irParaDivulgar() {
       auth.onAuthStateChanged((user) => {
@@ -453,26 +1061,39 @@
       const container = document.getElementById('lista-grupos');
       try {
         const res = await fetch('/api/grupos');
+        if (!res.ok) throw new Error('Erro na API');
         gruposGerais = await res.json();
         renderizarGrupos(gruposGerais);
       } catch (err) {
-        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #ef4444;">Erro ao carregar lista de grupos.</p>';
+        console.error("Erro ao buscar grupos:", err);
+        if (container) {
+            container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #ef4444;">Erro ao carregar lista de grupos.</p>';
+        }
       }
     }
 
     function renderizarGrupos(lista) {
       const container = document.getElementById('lista-grupos');
-      if (lista.length === 0) {
+      if (!container) return;
+
+      if (!lista || lista.length === 0) {
         container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8;">Nenhum grupo encontrado.</p>';
+        atualizarControlesPaginacao(1);
         return;
       }
 
-      // Definimos os termos que ativam a proteção
+      const totalPaginas = Math.max(1, Math.ceil(lista.length / itensPorPagina));
+      if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+      if (paginaAtual < 1) paginaAtual = 1;
+
+      const inicio = (paginaAtual - 1) * itensPorPagina;
+      const fim = inicio + itensPorPagina;
+      const gruposDaPagina = lista.slice(inicio, fim);
+
       const termosAdultos = ['Adulto', 'Vazados', 'Amadoras', 'Stickers', '🔞'];
 
-      container.innerHTML = lista.map(g => {
-        // Verifica se é adulto pelo nome da categoria ou nome do grupo
-        const ehAdulto = termosAdultos.some(termo => 
+      container.innerHTML = gruposDaPagina.map(g => {
+        const ehAdulto = termosAdultos.some(termo =>
             (g.categoria && g.categoria.includes(termo)) || (g.nome && g.nome.includes(termo))
         );
 
@@ -485,22 +1106,65 @@
               <div>
                 <div class="card-title">${escapeHtml(g.nome)}</div>
                 <div class="card-members"><i class="fa-solid fa-users"></i> ${escapeHtml(g.membros || '100+')} membros</div>
-                <!-- AQUI ADICIONAMOS A CATEGORIA -->
                 <div class="card-categoria-tag">${escapeHtml(g.categoria || 'Geral')}</div>
               </div>
             </div>
             <div class="card-desc">${escapeHtml(g.descricao || 'Sem descrição cadastrada.')}</div>
           </div>
-          <!-- AQUI ADICIONAMOS O DATA-ADULTO PARA O NOSSO SCRIPT RECONHECER -->
           <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}">Ver Detalhes / Entrar</a>
         </div>
         `;
       }).join('');
+
+      atualizarControlesPaginacao(totalPaginas);
     }
 
+    function atualizarControlesPaginacao(totalPaginas) {
+        const spanInfo = document.getElementById('info-pagina');
+        const btnAnterior = document.getElementById('btn-anterior');
+        const btnProximo = document.getElementById('btn-proximo');
+
+        if (spanInfo) {
+            spanInfo.innerText = `Página ${paginaAtual} de ${totalPaginas}`;
+        }
+
+        if (btnAnterior) {
+            btnAnterior.disabled = (paginaAtual <= 1);
+            btnAnterior.style.opacity = paginaAtual <= 1 ? '0.4' : '1';
+            btnAnterior.style.cursor = paginaAtual <= 1 ? 'not-allowed' : 'pointer';
+        }
+
+        if (btnProximo) {
+            btnProximo.disabled = (paginaAtual >= totalPaginas);
+            btnProximo.style.opacity = paginaAtual >= totalPaginas ? '0.4' : '1';
+            btnProximo.style.cursor = paginaAtual >= totalPaginas ? 'not-allowed' : 'pointer';
+        }
+    }
+
+    function mudarPagina(direcao) {
+        const termo = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : '';
+        const filtrados = gruposGerais.filter(g => {
+            const bateNome = g.nome.toLowerCase().includes(termo);
+            const bateCategoria = categoriaAtual === 'todos' || g.categoria === categoriaAtual;
+            return bateNome && bateCategoria;
+        });
+
+        const totalPaginas = Math.max(1, Math.ceil(filtrados.length / itensPorPagina));
+        let novaPagina = paginaAtual + direcao;
+
+        if (novaPagina > totalPaginas) novaPagina = totalPaginas;
+        if (novaPagina < 1) novaPagina = 1;
+        
+        paginaAtual = novaPagina;
+        renderizarGrupos(filtrados);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     function filtrarGrupos() {
-      const termo = document.getElementById('search-input').value.toLowerCase();
+      paginaAtual = 1;
+      const campoBusca = document.getElementById('search-input');
+      const termo = campoBusca ? campoBusca.value.toLowerCase() : '';
+      
       const filtrados = gruposGerais.filter(g => {
         const bateNome = g.nome.toLowerCase().includes(termo);
         const bateCategoria = categoriaAtual === 'todos' || g.categoria === categoriaAtual;
@@ -511,191 +1175,113 @@
 
     function filtrarCategoria(cat, elemento) {
       document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
-      elemento.classList.add('active');
+      if (elemento) elemento.classList.add('active');
       categoriaAtual = cat;
+      paginaAtual = 1;
       filtrarGrupos();
     }
-
-    function escapeHtml(str) {
-      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
-
-    carregarGrupos();
 
     function toggleFaq(button) {
       const item = button.parentElement;
       const isActive = item.classList.contains('active');
-      
-      // Opcional: Fecha os outros itens quando um novo for aberto
-      document.querySelectorAll('.faq-item').forEach(el => {
-        el.classList.remove('active');
-      });
-
-      // Se não estava ativo, abre agora
-      if (!isActive) {
-        item.classList.add('active');
-      }
+      document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+      if (!isActive) item.classList.add('active');
     }
 
-        // Função que verifica se o usuário já confirmou a maioridade
     function verificarAcessoAdulto(callbackDeAcesso) {
       const maioridadeConfirmada = localStorage.getItem('maioridade_confirmada');
-      
       if (maioridadeConfirmada === 'true') {
         if (callbackDeAcesso) callbackDeAcesso();
       } else {
-        document.getElementById('modal-adulto').style.display = 'flex';
+        const modal = document.getElementById('modal-adulto');
+        if (modal) modal.style.display = 'flex';
         window.acaoPendenteAdulto = callbackDeAcesso;
       }
     }
 
-    // Botões de resposta do modal
     function confirmarMaioridade(autorizado) {
       const modal = document.getElementById('modal-adulto');
-      modal.style.display = 'none';
+      if (modal) modal.style.display = 'none';
 
       if (autorizado) {
         localStorage.setItem('maioridade_confirmada', 'true');
-        if (window.acaoPendenteAdulto) {
-          window.acaoPendenteAdulto();
-          window.acaoPendenteAdulto = null;
-        }
-      } else {
-        alert('Você precisa ter 18 anos ou mais para acessar este conteúdo.');
-        window.location.href = '/'; 
-      }
-    }
-        // Função que lida com o clique nas categorias e protege as adultas com o aviso 🔞
-    function lidarComCliqueCategoria(nomeCategoria) {
-      // Lista de termos que identificam as categorias restritas
-      const categoriasAdultas = ['Adulto', 'Amadoras', 'Vazados', 'Stickers'];
-
-      // Verifica se a categoria clicada contém algum dos termos restritos (ou o emoji 🔞)
-      const éRestrito = categoriasAdultas.some(cat => nomeCategoria.includes(cat)) || nomeCategoria.includes('🔞');
-
-      if (éRestrito) {
-        // Se for adulto, aciona a verificação de maioridade do modal
-        verificarAcessoAdulto(() => {
-          // Código que executa após o usuário confirmar que tem 18+
-          filtrarGruposPorCategoria(nomeCategoria);
-        });
-      } else {
-        // Se for categoria normal, libera o filtro direto
-        filtrarGruposPorCategoria(nomeCategoria);
-      }
-    }
-
-    // Escuta qualquer clique na página inteira
-    document.addEventListener('click', function(event) {
-      // Procura se o clique foi em um botão de entrar, categoria ou card
-      const elementoAlvo = event.target.closest('a, button, .categoria-btn, .grupo-card');
-      if (!elementoAlvo) return;
-
-      // 1. Verifica se o elemento tem o nosso atributo direto data-adulto="true"
-      const ehAdultoPorAtributo = elementoAlvo.getAttribute('data-adulto') === 'true';
-
-      // 2. Ou verifica pelo texto (para categorias e outros elementos)
-      const texto = elementoAlvo.innerText || elementoAlvo.textContent || '';
-      const termosAdultos = ['Adulto', 'Vazados', 'Amadoras', 'Stickers', '🔞', '18'];
-      const ehAdultoPorTexto = termosAdultos.some(termo => texto.includes(termo));
-
-      // Se for adulto por qualquer um dos dois métodos
-      if (ehAdultoPorAtributo || ehAdultoPorTexto) {
-        const jaConfirmou = localStorage.getItem('maioridade_confirmada');
-        if (jaConfirmou !== 'true') {
-          event.preventDefault(); // Trava a navegação/clique
-          event.stopPropagation();
-
-          // Abre o modal de forma garantida
-          const modal = document.getElementById('modal-adulto');
-          if (modal) {
-            modal.style.setProperty('display', 'flex', 'important');
-          }
-          
-          // Guarda para onde o usuário queria ir
-          window.urlDestinoAdulto = elementoAlvo.href || elementoAlvo.getAttribute('data-url') || null;
-        }
-      }
-    });
-
-
-    // Função ajustada para quando clicar em "Sim, tenho 18+" no modal
-    function confirmarMaioridade(autorizado) {
-      const modal = document.getElementById('modal-adulto');
-      modal.style.display = 'none';
-
-      if (autorizado) {
-        localStorage.setItem('maioridade_confirmada', 'true');
-        // Se tinha um link pendente, redireciona o usuário para lá
         if (window.urlDestinoAdulto) {
           window.location.href = window.urlDestinoAdulto;
           window.urlDestinoAdulto = null;
-        } else {
-          // Recarrega ou reaplica os filtros se necessário
-          location.reload();
+        } else if (window.acaoPendenteAdulto) {
+          window.acaoPendenteAdulto();
+          window.acaoPendenteAdulto = null;
         }
       } else {
         alert('Você precisa ter 18 anos ou mais para acessar este conteúdo.');
         window.location.href = '/';
       }
     }
-async function carregarEstatisticas() {
-  try {
-    const res = await fetch('/api/estatisticas');
-    const data = await res.json();
-    
-    document.getElementById('count-grupos').innerText = data.totalGrupos;
-    document.getElementById('count-usuarios').innerText = data.totalUsuarios;
-  } catch (e) {
-    console.error('Erro ao carregar estatísticas:', e);
-  }
-}
 
-// Chame essa função junto com o carregarGrupos()
-document.addEventListener('DOMContentLoaded', () => {
-  carregarGrupos();
-  carregarEstatisticas();
-});
+    document.addEventListener('click', function(event) {
+      const elementoAlvo = event.target.closest('a, button, .categoria-btn, .grupo-card');
+      if (!elementoAlvo) return;
 
-function toggleMenu() {
-    document.getElementById('menuLateral').classList.toggle('ativo');
-    document.getElementById('menuOverlay').classList.toggle('ativo');
-}
+      const ehAdultoPorAtributo = elementoAlvo.getAttribute('data-adulto') === 'true';
+      const texto = elementoAlvo.innerText || elementoAlvo.textContent || '';
+      const termosAdultos = ['Adulto', 'Vazados', 'Amadoras', 'Stickers', '🔞', '18'];
+      const ehAdultoPorTexto = termosAdultos.some(termo => texto.includes(termo));
 
-// Atualiza a saudação se o usuário estiver logado
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                const nome = user.displayName || user.email.split('@')[0];
-                document.getElementById('saudacao-usuario').innerText = `Olá, ${nome}`;
-            } else {
-                document.getElementById('saudacao-usuario').innerText = 'Olá, Visitante';
-            }
-        });
+      if (ehAdultoPorAtributo || ehAdultoPorTexto) {
+        const jaConfirmou = localStorage.getItem('maioridade_confirmada');
+        if (jaConfirmou !== 'true') {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const modal = document.getElementById('modal-adulto');
+          if (modal) {
+            modal.style.setProperty('display', 'flex', 'important');
+          }
+
+          window.urlDestinoAdulto = elementoAlvo.href || elementoAlvo.getAttribute('data-url') || null;
+        }
+      }
+    });
+
+    async function carregarEstatisticas() {
+      try {
+        const res = await fetch('/api/estatisticas');
+        const data = await res.json();
+        const elGrupos = document.getElementById('count-grupos');
+        const elUsuarios = document.getElementById('count-usuarios');
+
+        if (elGrupos && data.totalGrupos) elGrupos.innerText = data.totalGrupos;
+        if (elUsuarios && data.totalUsuarios) elUsuarios.innerText = data.totalUsuarios;
+      } catch (e) {
+        console.error('Erro ao carregar estatísticas:', e);
+      }
     }
-});
-// Alterna o status de favorito de um grupo pelo ID
-function alternarFavorito(idGrupo, elementoIcone) {
-  let favoritos = JSON.parse(localStorage.getItem('grupos_favoritos')) || [];
-  
-  const index = favoritos.indexOf(idGrupo);
-  if (index > -1) {
-    // Se já estava favoritado, remove
-    favoritos.splice(index, 1);
-    elementoIcone.classList.remove('fa-solid');
-    elementoIcone.classList.add('fa-regular');
-    elementoIcone.style.color = '#94a3b8'; // Cor cinza/padrão
-  } else {
-    // Se não estava, adiciona
-    favoritos.push(idGrupo);
-    elementoIcone.classList.remove('fa-regular');
-    elementoIcone.classList.add('fa-solid');
-    elementoIcone.style.color = '#ef4444'; // Cor vermelha de favorito
-  }
-  
-  localStorage.setItem('grupos_favoritos', JSON.stringify(favoritos));
-}
+
+    function toggleMenu() {
+        const menu = document.getElementById('menuLateral');
+        const overlay = document.getElementById('menuOverlay');
+        if (menu) menu.classList.toggle('ativo');
+        if (overlay) overlay.classList.toggle('ativo');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarGrupos();
+      carregarEstatisticas();
+
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+          firebase.auth().onAuthStateChanged((user) => {
+              const saudacao = document.getElementById('saudacao-usuario');
+              if (saudacao) {
+                  if (user) {
+                      const nome = user.displayName || user.email.split('@')[0];
+                      saudacao.innerText = `Olá, ${nome}`;
+                  } else {
+                      saudacao.innerText = 'Olá, Visitante';
+                  }
+              }
+          });
+      }
+    });
 
   </script>
 </body>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <link rel="icon" type="image/png" href="IconNj.png">
   <meta name="google-site-verification" content="bKLtKz4nfHs1ztY2O5z3PUMPPnIhRUTWqVvyr7STpr4" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
@@ -112,6 +113,56 @@
   display: block;
 }
 
+/* Estilos limpos e compactos para os botões do painel */
+.grupo-actions-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-group-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-painel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  outline: none;
+  text-decoration: none;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+/* Botão de Impulsionar ocupando a largura total em cima */
+.btn-promover-painel {
+  width: 100%;
+  background: linear-gradient(135deg, #eab008, #ca8a04);
+  color: #0f172a;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(234, 176, 8, 0.3);
+}
+
+/* Botão Editar e Excluir dividindo espaço embaixo */
+.btn-edit-painel {
+  flex: 1;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.btn-del-painel {
+  flex: 1;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
   </style>
   <!-- Scripts Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -156,34 +207,25 @@
   </div>
 </div>
 
-
     <!-- Seção Meu Perfil -->
     <div class="card">
       <h3><i class="fa-solid fa-user-gear"></i> Meu Perfil & Dados</h3>
 
       <!-- Área da Foto de Perfil -->
       <div style="text-align: center; margin-bottom: 20px;">
-        <div style="position: relative; width: 85px; height: 85px; margin: 0 auto 12px;">
-          <img id="foto-perfil-preview" src="https://via.placeholder.com/90" alt="Foto de Perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8;">
-        </div>
-
-        <div style="display: flex; gap: 8px; justify-content: center;">
-          <label for="input-escolher-foto" style="background: #3b82f6; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">
-            <i class="fa-solid fa-folder-open"></i> Foto
-          </label>
-          <input type="file" id="input-escolher-foto" accept="image/*" style="display: none;" onchange="carregarFotoPerfil(event)" />
-
-          <button onclick="removerFotoPerfil()" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
-      </div>
+  <div style="position: relative; width: 85px; height: 85px; margin: 0 auto 12px;">
+    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6;">
+  </div>
+</div>
 
       <!-- Configuração de Nome -->
-      <label>Nome de Exibição</label>
-      <input type="text" id="input-nome" placeholder="Seu Nome">
-      <button class="btn-blue" onclick="salvarNome()"><i class="fa-solid fa-floppy-disk"></i> Salvar Alterações</button>
-    </div>
+      <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Nome de Exibição</label>
+      <input type="text" id="input-nome" placeholder="Seu Nome" style="width: 100%; background: #0f172a; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box;">
+      <button class="btn-blue" onclick="salvarNome()" style="width: 100%; margin-bottom: 20px;"><i class="fa-solid fa-floppy-disk"></i> Salvar Nome</button>
+
+      <!-- Configuração de Senha -->
+      <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Segurança da Conta</label>
+      <button class="btn-blue" onclick="salvarSenha()" style="width: 100%; margin-bottom: 20px; background: #334155;"><i class="fa-solid fa-key"></i> Enviar E-mail para Alterar Senha</button>
 
     <!-- Seção Meus Grupos -->
     <div class="card">
@@ -219,6 +261,15 @@
       <button onclick="fecharModal('modal-aviso')" class="btn-main">OK</button>
     </div>
   </div>
+
+<!-- Modal de Notificação Personalizado -->
+<div id="custom-alert-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+  <div style="background: #1e293b; border: 1px solid #334155; padding: 24px; border-radius: 12px; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <div id="custom-alert-icon" style="font-size: 2rem; margin-bottom: 12px; color: #38bdf8;"><i class="fa-solid fa-circle-info"></i></div>
+    <p id="custom-alert-message" style="color: #fff; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;"></p>
+    <button onclick="fecharCustomAlert()" style="background: #3b82f6; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">OK</button>
+  </div>
+</div>
 
   <!-- Modal Promover VIP -->
   <div class="modal-overlay" id="modal-promover">
@@ -294,7 +345,7 @@
   </div>
 
   <!-- Scripts e Lógica -->
-  <script>
+    <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
       authDomain: "gruposnj-41858.firebaseapp.com",
@@ -313,7 +364,7 @@
     let planoSelecionado = { dias: 10, valor: 20.00 };
     let checagemInterval = null;
 
-    // Autenticação
+    // Autenticação e Carregamento Isolado por Conta
     auth.onAuthStateChanged((user) => {
       if (!user) {
         window.location.href = '/login.html';
@@ -323,14 +374,38 @@
         document.getElementById('display-email').innerText = user.email;
         document.getElementById('input-nome').value = user.displayName || '';
         carregarMeusGrupos(user.email);
+
+        // Carrega a foto específica desta conta do Firebase
+        const fotoSalva = localStorage.getItem('foto_' + user.email);
+        if (fotoSalva) {
+          const imgPreview = document.getElementById('foto-perfil-preview');
+          if (imgPreview) imgPreview.src = fotoSalva;
+        } else {
+          // Reseta para o padrão caso a nova conta não tenha foto
+          const imgPreview = document.getElementById('foto-perfil-preview');
+          if (imgPreview) imgPreview.src = 'https://via.placeholder.com/90';
+        }
+
+        // Carrega a rede social específica desta conta do Firebase
+        const socialSalva = localStorage.getItem('redeSocial_' + user.email);
+        const inputSocial = document.getElementById('input-social');
+        if (inputSocial) {
+          inputSocial.value = socialSalva || '';
+        }
       }
     });
 
-    // Funções de Modais Gerais
-    function mostrarAviso(titulo, msg) {
-      document.getElementById('modal-titulo').innerHTML = `<i class="fa-solid fa-circle-info"></i> ${titulo}`;
-      document.getElementById('modal-msg').innerText = msg;
-      document.getElementById('modal-aviso').classList.add('active');
+    // Funções de Modais Gerais e Alertas
+    function mostrarAviso(mensagem) {
+      const modal = document.getElementById('custom-alert-modal');
+      const msgEl = document.getElementById('custom-alert-message');
+      if (msgEl) msgEl.innerText = mensagem;
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function fecharCustomAlert() {
+      const modal = document.getElementById('custom-alert-modal');
+      if (modal) modal.style.display = 'none';
     }
 
     function fecharModal(id) {
@@ -347,14 +422,14 @@
     // Salvar Nome do Perfil
     async function salvarNome() {
       const novoNome = document.getElementById('input-nome').value.trim();
-      if (!novoNome) return mostrarAviso('Aviso', 'Digite um nome válido.');
+      if (!novoNome) return mostrarAviso('Digite um nome válido.');
 
       try {
         await usuarioAtual.updateProfile({ displayName: novoNome });
         document.getElementById('display-name').innerText = novoNome;
-        mostrarAviso('Sucesso', 'Nome alterado com sucesso!');
+        mostrarAviso('Nome alterado com sucesso!');
       } catch (e) {
-        mostrarAviso('Erro', 'Não foi possível alterar o nome.');
+        mostrarAviso('Não foi possível alterar o nome.');
       }
     }
 
@@ -368,56 +443,71 @@
         const res = await fetch('/api/meus-grupos?email=' + encodeURIComponent(email));
         const grupos = await res.json();
 
-        // Atualiza o total
-        counterEl.innerText = grupos.length;
+        if (counterEl) counterEl.innerText = grupos.length;
 
-        // Filtra e conta os grupos em análise/pendentes (cobrimos várias formas que o banco pode salvar)
         if (counterAnalise) {
-          const gruposEmAnalise = grupos.filter(g => 
-            g.status === 'analise' || 
-            g.status === 'pendente' || 
-            g.emAnalise === true || 
-            g.aprovado === false || 
+          const gruposEmAnalise = grupos.filter(g =>
+            g.status === 'analise' ||
+            g.status === 'pendente' ||
+            g.emAnalise === true ||
+            g.aprovado === false ||
             g.status === false
           );
           counterAnalise.innerText = gruposEmAnalise.length;
         }
 
         if (grupos.length === 0) {
-          container.innerHTML = '<p style="color:#64748b; font-size:0.85rem;">Você ainda não possui grupos publicados.</p>';
+          if (container) container.innerHTML = '<p style="color:#64748b; font-size:0.85rem;">Você ainda não possui grupos publicados.</p>';
           return;
         }
 
-        container.innerHTML = grupos.map(g => {
-          let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;
-          if (g.isVip) {
-            statusBadge = `<span class="badge badge-vip"><i class="fa-solid fa-crown"></i> VIP ATIVO</span>`;
-          } else if (g.status === 'analise' || g.status === 'pendente' || g.emAnalise === true || g.aprovado === false) {
-            statusBadge = `<span class="badge badge-analise"><i class="fa-solid fa-clock"></i> Em Análise</span>`;
-          }
+        if (container) {
+          container.innerHTML = grupos.map(g => {
+            let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;
+            if (g.isVip) {
+              statusBadge = `<span class="badge badge-vip"><i class="fa-solid fa-crown"></i> VIP ATIVO</span>`;
+            } else if (g.status === 'analise' || g.status === 'pendente' || g.emAnalise === true || g.aprovado === false) {
+              statusBadge = `<span class="badge badge-analise"><i class="fa-solid fa-clock"></i> Em Análise</span>`;
+            }
 
-          return `
-            <div class="grupo-item">
-              <div class="grupo-top">
-                <div class="grupo-info-left">
-                  <img src="${g.imagem || 'https://via.placeholder.com/50'}" class="grupo-img" alt="Grupo">
-                  <div>
-                    <strong class="grupo-nome">${escapeHtml(g.nome)}</strong>
-                    <div style="margin-top: 2px;">${statusBadge}</div>
+            return `
+              <div class="grupo-item">
+                <div class="grupo-top">
+                  <div class="grupo-info-left">
+                    <img src="${g.imagem || 'https://via.placeholder.com/50'}" class="grupo-img" alt="Grupo">
+                    <div>
+                      <strong class="grupo-nome">${escapeHtml(g.nome)}</strong>
+                      <div style="margin-top: 2px;">${statusBadge}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grupo-link"><i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i> ${escapeHtml(g.link)}</div>
+
+                <div class="grupo-actions-pro">
+                  <button onclick="abrirModalPromover('${g.id}')" class="btn-painel btn-promover-painel">
+                    <i class="fa-solid fa-crown"></i>
+                    <span>Impulsionar</span>
+                  </button>
+
+                  <div class="btn-group-row">
+                    <button class="btn-painel btn-edit-painel" onclick="abrirEditarLink('${g.id}', '${escapeHtml(g.link)}')">
+                      <i class="fa-solid fa-pen"></i>
+                      <span>Editar</span>
+                    </button>
+
+                    <button class="btn-painel btn-del-painel" onclick="abrirDeletarGrupo('${g.id}')">
+                      <i class="fa-solid fa-trash"></i>
+                      <span>Excluir</span>
+                    </button>
                   </div>
                 </div>
               </div>
-              <div class="grupo-link"><i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i> ${escapeHtml(g.link)}</div>
-              <div class="grupo-actions">
-                <button onclick="abrirModalPromover('${g.id}')" class="btn-sm btn-promover"><i class="fa-solid fa-crown"></i> Impulsionar</button>
-                <button class="btn-sm btn-edit" onclick="abrirEditarLink('${g.id}', '${escapeHtml(g.link)}')"><i class="fa-solid fa-pen"></i> Editar Link</button>
-                <button class="btn-sm btn-del" onclick="abrirDeletarGrupo('${g.id}')"><i class="fa-solid fa-trash"></i> Excluir</button>
-              </div>
-            </div>
-          `;
-        }).join('');
+            `;
+          }).join('');
+        }
       } catch (err) {
-        container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar seus grupos.</p>';
+        if (container) container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar seus grupos.</p>';
       }
     }
 
@@ -428,8 +518,10 @@
       document.getElementById('vip-step-planos').style.display = 'block';
       document.getElementById('vip-step-pagamento').style.display = 'none';
       const modal = document.getElementById('modal-promover');
-      modal.style.display = 'flex';
-      modal.classList.add('active');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+      }
     }
 
     function fecharModalPromover() {
@@ -461,7 +553,7 @@
 
     async function confirmarAlterarLink() {
       const novoLink = document.getElementById('novo-link-input').value.trim();
-      if (!novoLink) return mostrarAviso('Aviso', 'Cole um link válido.');
+      if (!novoLink) return mostrarAviso('Cole um link válido.');
       fecharModal('modal-editar-link');
 
       try {
@@ -472,13 +564,13 @@
         });
         const data = await res.json();
         if (data.success) {
-          mostrarAviso('Sucesso', 'Link atualizado com sucesso!');
+          mostrarAviso('Link atualizado com sucesso!');
           carregarMeusGrupos(usuarioAtual.email);
         } else {
-          mostrarAviso('Erro', data.error || 'Falha ao alterar o link.');
+          mostrarAviso(data.error || 'Falha ao alterar o link.');
         }
       } catch(e) {
-        mostrarAviso('Erro', 'Não foi possível conectar ao servidor.');
+        mostrarAviso('Não foi possível conectar ao servidor.');
       }
     }
 
@@ -502,19 +594,20 @@
         });
         const data = await res.json();
         if (data.success) {
-          mostrarAviso('Sucesso', 'Grupo removido com sucesso!');
+          mostrarAviso('Grupo removido com sucesso!');
           carregarMeusGrupos(usuarioAtual.email);
         } else {
-          mostrarAviso('Erro', data.error || 'Não foi possível remover o grupo.');
+          mostrarAviso(data.error || 'Não foi possível remover o grupo.');
         }
       } catch(e) {
-        mostrarAviso('Erro', 'Não foi possível conectar ao servidor.');
+        mostrarAviso('Não foi possível conectar ao servidor.');
       }
     }
 
     // Sistema Pix
     async function gerarCobrancaPix() {
       const btn = document.getElementById('btn-gerar-pix');
+      if (!btn) return;
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Gerando Pix...';
 
@@ -533,10 +626,10 @@
           document.getElementById('vip-step-pagamento').style.display = 'block';
           monitorarPagamento(data.paymentId);
         } else {
-          mostrarAviso('Erro', 'Erro ao gerar cobrança Pix.');
+          mostrarAviso('Erro ao gerar cobrança Pix.');
         }
       } catch (err) {
-        mostrarAviso('Erro', 'Erro de comunicação com o servidor.');
+        mostrarAviso('Erro de comunicação com o servidor.');
       } finally {
         btn.disabled = false;
         btn.innerHTML = 'Gerar Pix para Pagamento';
@@ -545,6 +638,7 @@
 
     function copiarPix() {
       const input = document.getElementById('pix-copia-cola');
+      if (!input) return;
       input.select();
       navigator.clipboard.writeText(input.value);
       alert('Código Pix copiado com sucesso!');
@@ -567,39 +661,63 @@
       }, 5000);
     }
 
-    // Foto de Perfil LocalStorage
-    function carregarFotoPerfil(event) {
-      const arquivo = event.target.files[0];
-      if (!arquivo) return;
-      if (!arquivo.type.startsWith('image/')) {
-        mostrarAviso('Erro', 'Por favor, selecione um arquivo de imagem válido.');
+    // Função de carregar perfil adaptada sem o input de arquivo manual
+   async function salvarSocial() {
+  const linkSocial = document.getElementById('input-social').value.trim();
+
+  if (!linkSocial) {
+    mostrarAviso('Por favor, digite o link da sua rede social.');
+    return;
+  }
+
+  if (!usuarioAtual || !usuarioAtual.email) {
+    mostrarAviso('Erro: Usuário não autenticado.');
+    return;
+  }
+
+  localStorage.setItem('redeSocial_' + usuarioAtual.email, linkSocial);
+
+  try {
+    const res = await fetch('/api/usuario/perfil', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: usuarioAtual.email,
+        nomeExibicao: usuarioAtual.displayName || document.getElementById('input-nome').value,
+        redeSocial: linkSocial
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      mostrarAviso('Informações salvas com sucesso!');
+    } else {
+      mostrarAviso('Erro ao salvar no servidor.');
+    }
+  } catch (e) {
+    mostrarAviso('Erro de conexão com o servidor.');
+  }
+}
+
+
+    // Função para Alterar Senha (Envia e-mail seguro via Firebase)
+    function salvarSenha() {
+      const user = firebase.auth().currentUser;
+
+      if (!user || !user.email) {
+        mostrarAviso('Você precisa estar logado para alterar a senha.');
         return;
       }
-      const leitor = new FileReader();
-      leitor.onload = function(e) {
-        const base64Imagem = e.target.result;
-        document.getElementById('foto-perfil-preview').src = base64Imagem;
-        localStorage.setItem('fotoPerfilMembro', base64Imagem);
-        mostrarAviso('Sucesso', 'Foto de perfil atualizada com sucesso!');
-      };
-      leitor.readAsDataURL(arquivo);
-    }
 
-    function removerFotoPerfil() {
-      localStorage.removeItem('fotoPerfilMembro');
-      document.getElementById('foto-perfil-preview').src = 'https://via.placeholder.com/90';
-      const input = document.getElementById('input-escolher-foto');
-      if (input) input.value = '';
-      mostrarAviso('Removido', 'A foto de perfil foi removida.');
+      firebase.auth().sendPasswordResetEmail(user.email)
+        .then(() => {
+            mostrarAviso('Pronto! Enviamos um e-mail de redefinição de senha para a sua caixa de entrada.');
+            const inputSenha = document.getElementById('input-senha');
+            if (inputSenha) inputSenha.value = '';
+        })
+        .catch((error) => {
+            mostrarAviso('Erro ao enviar e-mail: ' + error.message);
+        });
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const fotoSalva = localStorage.getItem('fotoPerfilMembro');
-      if (fotoSalva) {
-        const imgPreview = document.getElementById('foto-perfil-preview');
-        if (imgPreview) imgPreview.src = fotoSalva;
-      }
-    });
 
     function sair() {
       auth.signOut().then(() => window.location.href = '/login.html');
@@ -609,18 +727,93 @@
       return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-function toggleMenu() {
-    const menu = document.getElementById('menuLateral');
-    const overlay = document.getElementById('menuOverlay');
-    if (menu) menu.classList.toggle('ativo');
-    if (overlay) overlay.classList.toggle('ativo');
-  }
+    function toggleMenu() {
+      const menu = document.getElementById('menuLateral');
+      const overlay = document.getElementById('menuOverlay');
+      if (menu) menu.classList.toggle('ativo');
+      if (overlay) overlay.classList.toggle('ativo');
+    }
   </script>
 
-  <!-- Rodapé -->
-  <footer style="text-align: center; padding: 25px 0; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.06); color: #64748b; font-size: 12px;">
-    <p>© GruposNj — Todos os direitos reservados</p>
+
+  <!-- Footer Profissional -->
+  <footer class="footer-pro">
+    <div class="footer-content">
+      <p class="footer-copy">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
+      
+      <div class="footer-links">
+        <a href="mailto:suporte.gruposnj@gmail.com" class="footer-link">
+          <i class="fa-solid fa-envelope"></i> 
+          <span>Suporte: suporte.gruposnj@gmail.com</span>
+        </a>
+        <span class="footer-divider">•</span>
+        <a href="termos.html" class="footer-link">
+          <i class="fa-solid fa-file-contract"></i> 
+          <span>Termos de Uso</span>
+        </a>
+      </div>
+    </div>
   </footer>
+
+<style>
+/* Estilo profissional para o Rodapé */
+.footer-pro {
+  margin-top: 40px;
+  padding: 30px 20px;
+  background: rgba(15, 23, 42, 0.75);
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-copy {
+  margin: 0;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.footer-link:hover {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.footer-divider {
+  color: #475569;
+  font-size: 0.8rem;
+}
+</style>
 
 </body>
 </html>
