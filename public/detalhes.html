@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta name="google-site-verification" content="bKLtKz4nfHs1ztY2O5z3PUMPPnIhRUTWqVvyr7STpr4" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
-  <title>Detalhes do Grupo - GruposNJ</title>
+  <title>Detalhes do Grupo - Grupos NJ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
 
@@ -13,12 +12,43 @@
       background: #070a12;
       color: #f1f5f9;
       min-height: 100vh;
-      padding: 30px 15px;
+      padding: 0;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #070a12 70%);
-  
+    }
+
+    .header-principal {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    main {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 20px 15px;
+    }
+
     .card-detalhes {
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(12px);
@@ -31,9 +61,9 @@
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       position: relative;
       overflow: hidden;
+      margin-bottom: 30px;
     }
 
-    /* Brilho Superior Decorativo */
     .card-detalhes::before {
       content: '';
       position: absolute;
@@ -42,7 +72,6 @@
       background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
     }
 
-    /* Foto do Grupo com Anel de Status */
     .avatar-wrapper { position: relative; width: 130px; height: 130px; margin: 0 auto 20px auto; }
     .img-grupo {
       width: 100%; height: 100%;
@@ -69,9 +98,35 @@
     .titulo-grupo { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
 
     .meta-info { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-    .categoria-badge { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
-    .membros-badge { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
-    .acessos-badge { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
+    .categoria-badge { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .membros-badge { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .acessos-badge { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+    .autor-badge-neon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #93c5fd;
+      margin-bottom: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .autor-badge-neon:hover { background: rgba(59, 130, 246, 0.2); border-color: #60a5fa; }
+
+    .dica-perfil-pro {
+      display: block;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 18px;
+      font-weight: 500;
+      opacity: 0.8;
+    }
 
     .descricao {
       font-size: 0.92rem;
@@ -85,7 +140,6 @@
       border-radius: 12px;
     }
 
-    /* Sistema de Avaliação por Estrelas Aprimorado */
     .avaliacao-box {
       background: rgba(30, 41, 59, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -99,28 +153,6 @@
     .star.selected { color: #eab308; text-shadow: 0 0 12px rgba(234, 179, 8, 0.5); }
     .star-txt { font-size: 0.78rem; color: #94a3b8; margin-top: 6px; font-weight: 500; }
 
-    /* Botão Entrar Premium */
-    .btn-entrar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.05rem;
-      border-radius: 12px;
-      text-decoration: none;
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
-      transition: all 0.2s ease;
-      margin-bottom: 15px;
-    }
-    .btn-entrar:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(34, 197, 94, 0.4); }
-    .btn-entrar:active { transform: scale(0.98); }
-
-    /* Botão de Denúncia Discreto */
     .btn-denunciar {
       background: transparent;
       border: none;
@@ -134,7 +166,6 @@
     }
     .btn-denunciar:hover { color: #dc2626; }
 
-    /* Caixas de Aviso Legal Mais Limpas */
     .aviso-legal {
       background: rgba(239, 68, 68, 0.05);
       border: 1px solid rgba(239, 68, 68, 0.2);
@@ -160,143 +191,207 @@
     }
     .link-voltar:hover { color: #38bdf8; }
 
-    /* Modal Dark Customizado para Denúncia */
-    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index: 1000; }
+    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:99999; }
     .modal-overlay.active { display:flex; }
     .modal-box { background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; width:90%; max-width:340px; text-align:center; }
     .modal-box h3 { color:#38bdf8; margin-bottom:10px; font-size: 1.1rem; }
     .modal-box p { font-size:0.85rem; color:#cbd5e1; margin-bottom:15px; }
-    .modal-box textarea { width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; resize: vertical; }
-    .modal-btns { display: flex; gap: 8px; }
-    .modal-btns button { flex: 1; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 0.85rem; }
+    .modal-box textarea { width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px; resize: none; }
+    
+    .modal-btns { display: flex; gap: 10px; margin-top: 15px; }
+    .modal-btns button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
     .btn-modal-enviar { background: #ef4444; color: #fff; }
     .btn-modal-cancelar { background: #334155; color: #cbd5e1; }
 
-    .autor-badge { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; }
+    .btn-menu-hamburguer {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
 
-    .autor-badge {
-  transition: all 0.2s ease;
-  display: inline-block;
-}
-.autor-badge:active {
-  transform: scale(0.95);
-  opacity: 0.8;
-  color: #38bdf8 !important;
-}
+    .menu-lateral-pro {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(148, 163, 184, 0.15);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
 
-/* Força a estilização para todos os estados possíveis de um link */
-.autor-badge-neon, 
-.autor-badge-neon:link, 
-.autor-badge-neon:visited, 
-.autor-badge-neon:active {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.5), rgba(15, 23, 42, 0.95));
-  color: #e2e8f0 !important;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-decoration: none !important;
-  border: 1px solid rgba(96, 165, 250, 0.6);
-  box-shadow: 0 0 14px rgba(59, 130, 246, 0.4), inset 0 0 8px rgba(59, 130, 246, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  animation: neonPulse 3s infinite;
-}
+    .menu-lateral-pro.ativo { right: 0; }
 
-.autor-badge-neon i {
-  font-size: 1rem;
-  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.8));
-}
+    .menu-header-pro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      margin-bottom: 20px;
+    }
 
-.autor-badge-neon:hover {
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(15, 23, 42, 0.98));
-  border-color: #9333ea;
-  color: #fff !important;
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 22px rgba(59, 130, 246, 0.7), 0 0 40px rgba(147, 51, 234, 0.4);
-}
+    .menu-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #f8fafc;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
 
-@keyframes neonPulse {
-  0% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); border-color: rgba(96, 165, 250, 0.6); }
-  50% { box-shadow: 0 0 22px rgba(59, 130, 246, 0.7); border-color: rgba(147, 51, 234, 0.9); }
-  100% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); border-color: rgba(96, 165, 250, 0.6); }
-}
+    .menu-avatar-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-radius: 10px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .close-menu-pro {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 0 6px;
+    }
+    .close-menu-pro:hover { color: #fff; }
+
+    .menu-links-pro { display: flex; flex-direction: column; gap: 10px; }
+
+    .menu-item-pro {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+      transition: all 0.25s;
+    }
+    .menu-item-pro:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #fff;
+    }
+    .menu-item-pro.vip-item {
+      background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08));
+      border-color: rgba(234, 176, 8, 0.4);
+      color: #eab008;
+      font-weight: 600;
+    }
+
+    .menu-overlay-pro {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 99988;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
   </style>
 </head>
 <body>
- <div class="card-detalhes" style="position: relative;">
 
-<header class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; width: 100%;">
-  <a href="/" class="brand" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-    <i class="fa-brands fa-whatsapp" style="color: #22c55e; font-size: 1.4rem;"></i> Grupos<span style="color: #22c55e;">NJ</span>
-  </a>
-  <div class="nav-btns" style="display: flex; gap: 6px; align-items: center;">
-      <i class="fa-solid fa-heart" style="color: #ef4444; font-size: 1.1rem;"></i>
-    </a>
-  </div>
-</header>
-
-    <!-- Avatar com Badge VIP Condicional -->
-    <div class="avatar-wrapper">
-      <img id="foto-grupo" src="https://via.placeholder.com/130" alt="Foto do Grupo" class="img-grupo">
-      <div id="badge-vip" class="badge-vip-tag">⭐ VIP</div>
+  <!-- CABEÇALHO -->
+  <header class="header-principal">
+    <div class="logo-area">
+      <i class="fa-brands fa-whatsapp" style="color: #25d366 !important; font-size: 1.5rem; display: inline-block;"></i>
+      <span class="logo-text">Grupos <span style="color: #25d366;">NJ</span></span>
     </div>
+    <button onclick="toggleMenu()" class="btn-menu-hamburguer" aria-label="Abrir Menu">
+      <i class="fa-solid fa-bars" style="color: #60a5fa !important;"></i>
+    </button>
+  </header>
 
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main style="padding: 20px;">
+    <div class="card-detalhes" style="position: relative;">
 
-    <h1 id="nome-grupo" class="titulo-grupo">Carregando...</h1>
-
-        <div class="meta-info">
-      <span id="categoria-grupo" class="categoria-badge">Geral</span>
-      <span id="membros-grupo" class="membros-badge">👥 100+ Membros</span>
-      <span id="acessos-grupo" class="acessos-badge">👁️ 0 Acessos</span>
-<a href="perfil.html" id="autor-grupo" class="autor-badge-neon" style="text-decoration: none;">
-  <i class="fa-solid fa-user-astronaut" style="color: #60a5fa;"></i> 
-  <span>Publicado por: <strong id="nome-autor-texto" style="color: #fff;">Carregando...</strong></span>
-</a>
-    
-    <div class="descricao" id="desc-grupo">Carregando detalhes do grupo...</div>
-
-    <!-- Avaliação Interativa -->
-    <div class="avaliacao-box">
-      <div class="stars" id="stars-container">
-        <span class="star" onclick="avaliar(1)">★</span>
-        <span class="star" onclick="avaliar(2)">★</span>
-        <span class="star" onclick="avaliar(3)">★</span>
-        <span class="star" onclick="avaliar(4)">★</span>
-        <span class="star" onclick="avaliar(5)">★</span>
+      <div class="avatar-wrapper">
+        <img id="foto-grupo" src="https://via.placeholder.com/130" alt="Foto do Grupo" class="img-grupo">
+        <div id="badge-vip" class="badge-vip-tag">⭐ VIP</div>
       </div>
-      <div class="star-txt" id="star-label">Clique nas estrelas para avaliar este grupo</div>
+
+      <h1 id="nome-grupo" class="titulo-grupo">Carregando...</h1>
+
+      <div class="meta-info">
+        <span id="categoria-grupo" class="categoria-badge">Geral</span>
+        <span id="membros-grupo" class="membros-badge">👥 100+ Membros</span>
+        <span id="acessos-grupo" class="acessos-badge">👁️ 0 Acessos</span>
+      </div>
+
+      <a href="perfil.html" id="autor-grupo" class="autor-badge-neon">
+        <i class="fa-solid fa-user-astronaut" style="color: #60a5fa;"></i>
+        <span>Publicado por: <strong id="nome-autor-texto" style="color: #fff;">Carregando...</strong></span>
+      </a>
+
+      <span class="dica-perfil-pro">👆 Toque no criador para ver o perfil completo</span>
+
+      <div class="descricao" id="desc-grupo">Carregando detalhes do grupo...</div>
+
+      <div class="avaliacao-box">
+        <div class="stars" id="stars-container">
+          <span class="star" onclick="avaliar(1)">★</span>
+          <span class="star" onclick="avaliar(2)">★</span>
+          <span class="star" onclick="avaliar(3)">★</span>
+          <span class="star" onclick="avaliar(4)">★</span>
+          <span class="star" onclick="avaliar(5)">★</span>
+        </div>
+        <div class="star-txt" id="star-label">Clique nas estrelas para avaliar este grupo</div>
+      </div>
+
+      <!-- BOTÃO DE ENTRAR ÚNICO E ESTILIZADO -->
+      <button type="button" id="btn-entrar-link" data-id="SEU_ID_DO_GRUPO" onclick="registrarAcessoEEntrar(event)" style="display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #ffffff !important; font-weight: 700; font-size: 1.05rem; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3); margin-bottom: 15px;">
+        <span style="color: #ffffff !important; font-size: 1.2rem;">🚀</span>
+        <span style="color: #ffffff !important;">ENTRAR NO GRUPO AGORA</span>
+      </button>
+
+      <button onclick="abrirModalDenuncia()" class="btn-denunciar">🚨 Denunciar este grupo</button>
+
+      <div class="aviso-legal">
+        ⚠️ <strong>Aviso Importante:</strong> O <strong>GruposNJ</strong> atua exclusivamente como agregador de links. Não possuímos vínculo e não nos responsabilizamos pelo conteúdo dos grupos.
+      </div>
+
+      <a href="/" class="link-voltar">← Voltar para Todos os Grupos</a>
+
     </div>
+  </main>
 
-    <!-- Botão de Acesso Direto com clique rastreado -->
-    <a href="#" id="btn-entrar-link" onclick="registrarAcessoEEntrar(event)" class="btn-entrar">
-      <span>🚀</span> ENTRAR NO GRUPO AGORA
-    </a>
-
-    <!-- Botão de Denúncia -->
-    <button onclick="abrirModalDenuncia()" class="btn-denunciar">🚨 Denunciar este grupo</button>
-
-    <!-- Aviso Legal de Responsabilidade -->
-    <div class="aviso-legal">
-      ⚠️ <strong>Aviso Importante:</strong> O <strong>GruposNJ</strong> atua exclusivamente como agregador de links. Não possuímos vínculo e não nos responsabilizamos pelo conteúdo dos grupos.
-    </div>
-
-    <a href="/" class="link-voltar">← Voltar para Todos os Grupos</a>
-  </div>
-
-  <!-- Modal de Denúncia -->
+  <!-- MODAL DE DENÚNCIA -->
   <div class="modal-overlay" id="modal-denuncia">
     <div class="modal-box">
       <h3>🚨 Denunciar Grupo</h3>
       <p>Explique brevemente o motivo da denúncia:</p>
       <textarea id="motivo-denuncia" placeholder="Ex: Conteúdo impróprio, spam, golpe..." rows="3"></textarea>
-      
-      <!-- Novo campo para o e-mail de quem denuncia -->
-      <input type="email" id="email-denunciante" placeholder="Seu e-mail de contato (obrigatório)" style="width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem;" />
+
+      <input type="email" id="email-denunciante" placeholder="Seu e-mail de contato (obrigatório)" style="width: 100%; padding: 10px; background: #161e2e; border: 1px solid #334155; color: #fff; border-radius: 6px; margin-bottom: 12px;">
 
       <div class="modal-btns">
         <button onclick="enviarDenuncia()" class="btn-modal-enviar">Enviar</button>
@@ -305,16 +400,36 @@
     </div>
   </div>
 
-
-  <!-- Modal de Aviso Geral -->
+  <!-- MODAL DE AVISO -->
   <div class="modal-overlay" id="modal-aviso">
     <div class="modal-box">
       <h3 id="modal-titulo">Aviso</h3>
       <p id="modal-msg"></p>
-      <button onclick="fecharModalAviso()" style="background: #22c55e; color:#000; width:100%; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">OK</button>
+      <button onclick="fecharModalAviso()" style="background: #22c55e; color:#000; width:100%; padding:10px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">OK</button>
     </div>
   </div>
 
+  <!-- MENU LATERAL -->
+  <div class="menu-lateral-pro" id="menuLateral">
+    <div class="menu-header-pro">
+      <div class="menu-user-info">
+        <div class="menu-avatar-icon"><i class="fa-solid fa-user"></i></div>
+        <span id="saudacao-usuario">Olá, Visitante</span>
+      </div>
+      <button onclick="toggleMenu()" class="close-menu-pro">&times;</button>
+    </div>
+
+    <div class="menu-links-pro">
+      <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início</span></a>
+      <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a>
+      <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a>
+      <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a>
+    </div>
+  </div>
+
+  <div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
+
+</body>
   <script>
 let grupoId = '';
 
@@ -324,39 +439,51 @@ let grupoId = '';
 })();
 
 // Carrega os dados do grupo na tela
-async function carregarDetalhes() {
-  try {
-    const res = await fetch('/api/grupos/' + grupoId);
-    if (!res.ok) throw new Error();
-    const grupo = await res.json();
+    async function carregarDetalhes() {
+      try {
+        const res = await fetch('/api/grupos/' + grupoId);
+        if (!res.ok) throw new Error();
+        const grupo = await res.json();
 
-    document.getElementById('nome-grupo').innerText = grupo.nome;
-    document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
-    document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
-    
-    // Atualiza o texto e aponta corretamente para a página de perfil na raiz
-    const nomeAutor = grupo.autor || 'Comunidade';
-    const autorElemento = document.getElementById('autor-grupo');
-    autorElemento.innerText = `👤 Publicado por: ${nomeAutor}`;
-    autorElemento.href = `/perfil.html?autor=${encodeURIComponent(nomeAutor)}`;
+        document.getElementById('nome-grupo').innerText = grupo.nome;
+        document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
+        document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
 
-    document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
-    document.getElementById('foto-grupo').src = grupo.imagem || '';
-    document.getElementById('btn-entrar-link').href = grupo.link;
+        // Atualiza o contador de acessos visualmente na tela
+        const acessosEl = document.getElementById('acessos-grupo');
+        if (acessosEl) {
+          acessosEl.innerText = `👁️ ${grupo.acessos || 0} Acessos`;
+        }
 
-    // Restaura a avaliação salva no localStorage ao carregar a página
-    const avaliacaoSalva = localStorage.getItem('rating_' + grupoId);
-    if (avaliacaoSalva && typeof marcarEstrelas === 'function') {
-      marcarEstrelas(parseInt(avaliacaoSalva));
+        // Atualiza o texto e aponta corretamente para a página de perfil na raiz
+        const nomeAutor = grupo.autor || 'Comunidade';
+        const autorElemento = document.getElementById('autor-grupo');
+        autorElemento.innerText = `👤 Publicado por: ${nomeAutor}`;
+        autorElemento.href = `/perfil.html?autor=${encodeURIComponent(nomeAutor)}`;
+
+        document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
+        document.getElementById('foto-grupo').src = grupo.imagem || '';
+        
+        // Configura o link e o ID no botão de acesso direto
+        const btnEntrar = document.getElementById('btn-entrar-link');
+        if (btnEntrar) {
+          btnEntrar.href = grupo.link;
+          btnEntrar.setAttribute('data-id', grupo.id); // Fundamental para registrar o clique!
+        }
+
+        // Restaura a avaliação salva no localStorage ao carregar a página
+        const avaliacaoSalva = localStorage.getItem('rating_' + grupoId);
+        if (avaliacaoSalva && typeof marcarEstrelas === 'function') {
+          marcarEstrelas(parseInt(avaliacaoSalva));
+        }
+      } catch (e) {
+        console.error("Erro ao carregar grupo");
+        document.getElementById('nome-grupo').innerText = 'Grupo Não Encontrado';
+        document.getElementById('desc-grupo').innerText = 'O grupo solicitado pode ter sido removido ou o link está incorreto.';
+      }
     }
-  } catch (e) {
-    console.error("Erro ao carregar grupo");
-    document.getElementById('nome-grupo').innerText = 'Grupo Não Encontrado';
-    document.getElementById('desc-grupo').innerText = 'O grupo solicitado pode ter sido removido ou o link está incorreto.';
-  }
-}
 
-window.onload = carregarDetalhes;
+    window.onload = carregarDetalhes;
 
 
     function avaliar(nota) {
@@ -446,50 +573,75 @@ window.onload = carregarDetalhes;
         mostrarAvisoModal('Erro', 'Não foi possível enviar a denúncia. Tente novamente mais tarde.');
       }
     }
-    async function registrarAcessoEEntrar(event) {
-      event.preventDefault(); // Evita abrir o link imediatamente
-      const linkDestino = document.getElementById('btn-entrar-link').href;
+async function registrarAcessoEEntrar(event) {
+  event.preventDefault(); // Evita abrir o link imediatamente
+  
+  const btn = document.getElementById('btn-entrar-link');
+  if (!btn) return;
 
-      // 1. Verifica se a página atual é de conteúdo adulto de forma segura
-      const textoPagina = document.body.innerText || '';
-      const termosAdultos = ['Adulto', 'Vazados', 'Amadoras', 'Stickers', '🔞', '+18'];
-      const eAdulto = termosAdultos.some(termo => textoPagina.includes(termo));
+  const linkDestino = btn.href;
+  const grupoId = btn.getAttribute('data-id');
 
-      // 2. Se for adulto e o usuário ainda não confirmou a idade, abre o modal
-      if (eAdulto) {
-        const jaConfirmou = localStorage.getItem('maioridade_confirmada');
-        if (jaConfirmou !== 'true') {
-          const modal = document.getElementById('modal-adulto');
-          if (modal) {
-            modal.style.setProperty('display', 'flex', 'important');
-          }
-          window.urlDestinoAdulto = linkDestino;
-          return; // Para a execução aqui e não deixa entrar nem conta acesso
-        }
+  // 1. Verificação de conteúdo adulto / modal de maioridade
+  const textoPagina = document.body.innerText || '';
+  const termosAdultos = ['Adulto', 'Vazados', 'Amadoras', 'Stickers', '🔞', '+18'];
+  const eAdulto = termosAdultos.some(termo => textoPagina.includes(termo));
+
+  if (eAdulto) {
+    const jaConfirmou = localStorage.getItem('maioridade_confirmada');
+    if (jaConfirmou !== 'true') {
+      const modal = document.getElementById('modal-adulto');
+      if (modal) {
+        modal.style.setProperty('display', 'flex', 'important');
       }
-
-      // 3. Código original que faz o registro e abre o link se não for bloqueado
-      try {
-        // Avisa o servidor para somar +1 acesso
-        await fetch(`/api/grupos/${grupoId}/acessar`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-      } catch (e) {
-        console.error('Erro ao registrar acesso', e);
-      }
-
-      // Abre o link do grupo em uma nova aba
-      window.open(linkDestino, '_blank');
+      window.urlDestinoAdulto = linkDestino;
+      return; 
     }
+  }
 
-    // Carrega os dados na abertura da página
-    carregarDetalhes(false);
+  // 2. Registra o acesso no servidor (contabiliza +1)
+  try {
+    if (grupoId) {
+      await fetch(`/api/grupos/${grupoId}/acessar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  } catch (e) {
+    console.error('Erro ao registrar acesso', e);
+  }
 
-    // Configura o timer para atualizar os acessos automaticamente a cada 5 segundos
-    setInterval(() => {
-      carregarDetalhes(true);
-    }, 5000);
+  // 3. Redireciona para o WhatsApp
+  if (linkDestino && linkDestino !== '#') {
+    window.open(linkDestino, '_blank');
+  }
+}
+// Configura um timer para atualizar os dados e os acessos automaticamente a cada 5 segundos
+setInterval(() => {
+  carregarDetalhes();
+}, 5000);
+
+  // Função para abrir e fechar o menu lateral gaveta
+  function toggleMenu() {
+    const menu = document.getElementById('menuLateral');
+    const overlay = document.getElementById('menuOverlay');
+    if (menu && overlay) {
+      menu.classList.toggle('ativo');
+      overlay.classList.toggle('ativo');
+    }
+  }
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Tenta buscar o nome do usuário salvo no navegador
+  const nomeUsuario = localStorage.getItem('usuario_nome') || localStorage.getItem('nome') || 'Ninja™';
+  
+  // Se houver dados salvos de login, atualiza o menu
+  const saudacaoEl = document.getElementById('saudacao-usuario');
+  if (saudacaoEl && nomeUsuario) {
+    saudacaoEl.innerText = `Olá, ${nomeUsuario}`;
+  }
+});
+
   </script>
 </body>
 </html>
