@@ -6,49 +6,6 @@ const cheerio = require('cheerio');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
 
-async function salvarNoGitHub(nomeArquivo, dados, resParaErro = null) {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) {
-    console.error("ERRO: GITHUB_TOKEN não configurado!");
-    if (resParaErro) resParaErro.status(500).json({ error: 'Erro: GITHUB_TOKEN não configurado nas variáveis do Render!' });
-    return false;
-  }
-
-  const owner = 'alcantarajoao820-criador';
-  const repo = 'Gruposnj';
-  const filePath = nomeArquivo;
-  const contentBase64 = Buffer.from(JSON.stringify(dados, null, 2)).toString('base64');
-
-  try {
-    let sha = '';
-    try {
-      const getFile = await axios.get(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
-        headers: { Authorization: `token ${token}` }
-      });
-      sha = getFile.data.sha;
-    } catch (e) {
-      // Arquivo ainda não existe
-    }
-
-    await axios.put(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
-      message: `Auto-update dados via Render: ${nomeArquivo}`,
-      content: contentBase64,
-      sha: sha
-    }, {
-      headers: { Authorization: `token ${token}` }
-    });
-
-    return true;
-  } catch (err) {
-    const erroMsg = err.response?.data?.message || err.message;
-    console.error('FALHA AO ENVIAR PRO GITHUB:', erroMsg);
-    if (resParaErro) {
-      resParaErro.status(500).json({ error: 'Erro do GitHub: ' + erroMsg });
-    }
-    return false;
-  }
-}
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -89,14 +46,8 @@ function lerJson(file, defaultData = []) {
   }
 }
 
-async function salvarJsonComSync(file, data, res) {
+function salvarJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
-  
-  if (file === DATA_FILE) {
-    await salvarNoGitHub('grupos.json', data, res);
-  } else if (file === SOLICITACOES_FILE) {
-    await salvarNoGitHub('solicitacoes.json', data, res);
-  }
 }
 
 function getAdminPassword() {
@@ -280,12 +231,13 @@ app.post('/api/usuario/perfil', (req, res) => {
   let usuarios = lerJson(USERS_FILE, []);
   let index = usuarios.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
 
+  // Força sempre a foto padrão única para todo mundo no servidor
   const fotoPadrao = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop";
 
   if (index >= 0) {
     if (nomeExibicao !== undefined) usuarios[index].nomeExibicao = nomeExibicao;
     if (redeSocial !== undefined) usuarios[index].redeSocial = redeSocial;
-    usuarios[index].foto = fotoPadrao;
+    usuarios[index].foto = fotoPadrao; // Trava a foto padrão aqui também
   } else {
     usuarios.push({
       email,
@@ -293,13 +245,11 @@ app.post('/api/usuario/perfil', (req, res) => {
       foto: fotoPadrao,
       redeSocial: redeSocial || ''
     });
-  }
-
+  }                                                                                                                                                       
   fs.writeFileSync(USERS_FILE, JSON.stringify(usuarios, null, 2));
-  salvarNoGitHub('usuarios.json', usuarios);
-
   res.json({ success: true });
 });
+
 
 app.post('/api/grupos/:id/acessar', (req, res) => {
   const id = String(req.params.id);
@@ -309,7 +259,6 @@ app.post('/api/grupos/:id/acessar', (req, res) => {
   if (idx !== -1) {
     grupos[idx].acessos = (grupos[idx].acessos || 0) + 1;
     salvarJson(DATA_FILE, grupos);
-    salvarNoGitHub('grupos.json', grupos);
     return res.json({ success: true, acessos: grupos[idx].acessos });
   }
 
@@ -327,7 +276,7 @@ app.get('/api/preview-link', async (req, res) => {
     });
     const $ = cheerio.load(response.data);
     const title = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
-    const image = $('meta[property="og:image"]').attr('content') || ''; // Corrigido o fechamento aqui
+    const image = $('meta[property="og:image"]').attr('content') || '';
 
     res.json({ title: title.trim(), image });
   } catch (e) {
@@ -346,6 +295,7 @@ app.get('/api/grupos', (req, res) => {
       g.vipAte = null;
     }
 
+    // Padroniza o autor de cada grupo puxando o nome de exibição correto do usuário
     if (g.email) {
       const usuarioMatch = usuarios.find(u => u.email && u.email.toLowerCase() === g.email.toLowerCase());
       if (usuarioMatch && usuarioMatch.nomeExibicao) {
@@ -368,59 +318,49 @@ app.get('/api/grupos', (req, res) => {
 });
 
 app.post('/api/solicitar', (req, res) => {
-  try {
-    const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
+  const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
 
-    if (!nome || !link) {
-      return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
-    }
-
-    if (!aceitouTermos) {
-      return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
-    }
-
-    const linkFormatado = link.trim().toLowerCase();
-    const grupos = lerJson(DATA_FILE, []);
-    const solicitacoes = lerJson(SOLICITACOES_FILE, []);
-
-    const existeEmGrupos = grupos.some(g => g.link && g.link.trim().toLowerCase() === linkFormatado);
-    const existeEmSolicitacoes = solicitacoes.some(s => s.link && s.link.trim().toLowerCase() === linkFormatado);
-
-    if (existeEmGrupos || existeEmSolicitacoes) {
-      return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
-    }
-
-    const novaSolicitacao = {
-      id: Date.now(),
-      nome,
-      link: link.trim(),
-      categoria: categoria || 'Geral',
-      descricao: descricao || '',
-      imagem: imagem || 'https://via.placeholder.com/100',
-      email: email || 'Anonimo',
-      data: new Date().toISOString()
-    };
-
-    solicitacoes.push(novaSolicitacao);
-    salvarJson(SOLICITACOES_FILE, solicitacoes);
-    
-    // Tenta mandar pro GitHub, mas se falhar, não quebra a requisição do usuário
-    salvarNoGitHub('solicitacoes.json', solicitacoes).catch(err => {
-      console.error("Erro interno do GitHub:", err);
-    });
-
-    res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
-
-  } catch (erroServidor) {
-    // Se der qualquer erro no código, ele te devolve o erro exato como JSON na tela!
-    res.status(500).json({ error: 'Erro no servidor: ' + erroServidor.message });
+  if (!nome || !link) {
+    return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
   }
+
+  if (!aceitouTermos) {
+    return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
+  }
+
+  const linkFormatado = link.trim().toLowerCase();
+  const grupos = lerJson(DATA_FILE, []);
+  const solicitacoes = lerJson(SOLICITACOES_FILE, []);
+
+  const existeEmGrupos = grupos.some(g => g.link && g.link.trim().toLowerCase() === linkFormatado);
+  const existeEmSolicitacoes = solicitacoes.some(s => s.link && s.link.trim().toLowerCase() === linkFormatado);
+
+  if (existeEmGrupos || existeEmSolicitacoes) {
+    return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
+  }
+
+  const novaSolicitacao = {
+    id: Date.now(),
+    nome,
+    link: link.trim(),
+    categoria: categoria || 'Geral',
+    descricao: descricao || '',
+    imagem: imagem || 'https://via.placeholder.com/100',
+    email: email || 'Anonimo',
+    data: new Date().toISOString()
+  };
+
+  solicitacoes.push(novaSolicitacao);
+  salvarJson(SOLICITACOES_FILE, solicitacoes);
+
+  res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
 });
 
+// Rota para pegar as estatísticas do site
 app.get('/api/estatisticas', (req, res) => {
   try {
-    const grupos = lerJson(DATA_FILE, []);
-    const usuarios = lerJson(USERS_FILE, []);
+    const grupos = lerJson(DATA_FILE, []); // Lê o arquivo grupos.json
+    const usuarios = lerJson(USERS_FILE, []); // Lê o arquivo usuarios.json
 
     res.json({
       totalGrupos: grupos.length,
