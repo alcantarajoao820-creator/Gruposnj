@@ -143,6 +143,51 @@ app.get('/api/pix/status/:paymentId', async (req, res) => {
   }
 });
 
+// Rota de Webhook para receber notificações automáticas do Mercado Pago
+app.post('/api/webhook', async (req, res) => {
+  try {
+    const payment = req.body;
+
+    // O Mercado Pago envia vários tipos de notificações, queremos apenas de pagamento
+    if (payment.type === 'payment' || (payment.data && payment.id)) {
+      const paymentId = payment.data ? payment.data.id : payment.id;
+      
+      // Consulta o pagamento na API do Mercado Pago para garantir que é real
+      const response = await paymentClient.get({ id: paymentId });
+
+      if (response.status === 'approved') {
+        const grupoId = response.metadata.grupo_id || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].grupoId);
+        const dias = Number(response.metadata.vip_days || response.metadata.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
+
+        if (grupoId) {
+          let grupos = lerJson(DATA_FILE, []);
+          const idx = grupos.findIndex(g => String(g.id) === String(grupoId));
+
+          if (idx !== -1) {
+            const tempoMs = dias * 24 * 60 * 60 * 1000;
+            const agora = Date.now();
+
+            const baseTempo = (grupos[idx].isVip && grupos[idx].vipAte && grupos[idx].vipAte > agora)
+              ? grupos[idx].vipAte
+              : agora;
+
+            grupos[idx].isVip = true;
+            grupos[idx].vipAte = baseTempo + tempoMs;
+
+            salvarJson(DATA_FILE, grupos);
+            console.log(`[WEBHOOK] VIP ativado com sucesso para o grupo ${grupoId} por ${dias} dias.`);
+          }
+        }
+      }
+    }
+
+    res.status(200).send('OK');
+  } catch (error) {
+    console.error('Erro no Webhook:', error);
+    res.status(500).send('Erro interno');
+  }
+});
+
 // ==========================================
 // ROTAS PÚBLICAS / UTILITÁRIAS
 // ==========================================
