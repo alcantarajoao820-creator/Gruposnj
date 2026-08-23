@@ -482,15 +482,27 @@
     carregarDados();
   }
 
-  async function ativarVip(grupoId) {
-    const senha = localStorage.getItem('adminPassword');
-    await fetch('/api/admin/ativar-vip', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha, grupoId, dias: 30 })
-    });
+async function ativarVip(grupoId) {
+  const diasStr = prompt("Quantos dias de VIP deseja dar? (10, 30 ou 60):", "30");
+  if (!diasStr) return; // Se cancelar, não faz nada
+  
+  const dias = parseInt(diasStr);
+
+  const senha = localStorage.getItem('adminPassword');
+  const res = await fetch('/api/admin/ativar-vip', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ senha, grupoId, dias })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    alert(`VIP ativado com sucesso por ${dias} dias!`);
     carregarDados();
+  } else {
+    alert('Erro ao ativar VIP: ' + (data.error || 'Erro desconhecido'));
   }
+}
 
   async function removerVip(grupoId) {
     const senha = localStorage.getItem('adminPassword');

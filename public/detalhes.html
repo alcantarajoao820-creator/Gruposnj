@@ -330,6 +330,9 @@
     </button>
   </header>
 
+<!-- BOTAO HOME -->
+  <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>
+
   <!-- CONTEÚDO PRINCIPAL -->
   <main style="padding: 20px;">
     <div class="card-detalhes" style="position: relative;">
@@ -409,6 +412,94 @@
     </div>
   </div>
 
+<!-- Bloco de Destaque / Divulgação com verificação de login -->
+<div class="card" style="margin: 25px 0; background: linear-gradient(135deg, #1e293b, #0f172a); padding: 22px; border-radius: 16px; border: 2px solid transparent; background-clip: padding-box; position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.4); text-align: center; overflow: hidden;">
+  
+  <!-- Efeito de brilho animado na borda -->
+  <div style="position: absolute; inset: -2px; background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8); background-size: 300% 300%; z-index: -1; border-radius: 16px; animation: gradientBorder 6s linear infinite;"></div>
+
+  <div style="font-size: 1.8rem; margin-bottom: 8px;">
+    <i class="fa-solid fa-bullhorn" style="color: #38bdf8; animation: bounceIcon 2s infinite;"></i>
+  </div>
+  
+  <h4 style="font-size: 1.1rem; color: #f8fafc; font-weight: 700; margin-bottom: 6px;">Divulgue seu Grupo Aqui!</h4>
+  
+  <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px; line-height: 1.4;">
+    Quer mais membros ativos no seu grupo do WhatsApp? Cadastre agora e destaque-se com o plano VIP!
+  </p>
+
+  <!-- Botão inteligente que verifica o login -->
+  <a href="javascript:void(0);" onclick="verificarLoginDivulgar()" style="display: inline-block; background: linear-gradient(135deg, #38bdf8, #2563eb); color: #fff; font-size: 0.85rem; font-weight: 700; padding: 10px 20px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+    <i class="fa-solid fa-rocket"></i> Divulgar Agora
+  </a>
+
+  <!-- Termos de uso logo abaixo -->
+  <p style="font-size: 0.7rem; color: #64748b; margin-top: 12px; line-height: 1.3;">
+    Ao apertar aqui, você concorda e aceita os <a href="/termos.html" style="color: #38bdf8; text-decoration: underline;">Termos de Uso</a> e Políticas da plataforma.
+  </p>
+</div>
+
+<script>
+function verificarLoginDivulgar() {
+  // Verifica se o usuário tem a senha ou dados salvos no navegador (indicando que está logado)
+  const logado = localStorage.getItem('adminPassword') || localStorage.getItem('userEmail') || localStorage.getItem('usuarioLogado');
+  
+  if (logado) {
+    window.location.href = '/publicar.html';
+  } else {
+    window.location.href = '/login.html';
+  }
+}
+</script>
+
+<style>
+@keyframes gradientBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes bounceIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+</style>
+
+
+  <!-- Grupos Relacionados -->
+<div class="card" style="margin-top: 30px; margin-bottom: 20px; background: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+  <h3 style="font-size: 1.15rem; font-weight: 700; text-align: center; background: linear-gradient(135deg, #38bdf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; text-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);">
+    <i class="fa-solid fa-fire-flame-curved" style="color: #f59e0b; -webkit-text-fill-color: initial; animation: pulsar 1.5s infinite;"></i> 
+    Mais Grupos Relacionados 
+    <i class="fa-solid fa-fire-flame-curved" style="color: #f59e0b; -webkit-text-fill-color: initial; animation: pulsar 1.5s infinite;"></i>
+  </h3>
+  
+  <div id="grupos-relacionados-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+    <p style="color: #94a3b8; font-size: 0.85rem; grid-column: span 2; text-align: center;">Carregando relacionados...</p>
+  </div>
+</div>
+
+<style>
+@keyframes pulsar {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 6px #f59e0b); }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+</style>
+
+  <!-- Footer Corrigido -->
+  <footer style="text-align: center; padding: 25px 15px; margin-top: 40px; border-top: 1px solid #1e293b; color: #94a3b8; font-size: 0.8rem;">
+    <p style="margin-bottom: 10px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <a href="mailto:suporte.gruposnj@gmail.com" style="color: #38bdf8; text-decoration: none;">
+        <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
+      </a>
+      <span style="color: #475569;">|</span>
+      <a href="/termos.html" style="color: #94a3b8; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#94a3b8'">
+        <i class="fa-solid fa-file-contract"></i> Termos de Uso
+      </a>
+    </div>
+  </footer>
+
   <!-- MENU LATERAL -->
   <div class="menu-lateral-pro" id="menuLateral">
     <div class="menu-header-pro">
@@ -447,6 +538,7 @@ let grupoId = '';
 
         document.getElementById('nome-grupo').innerText = grupo.nome;
         document.getElementById('categoria-grupo').innerText = grupo.categoria || 'Geral';
+        carregarGruposRelacionados(grupo.categoria, grupo.id);
         document.getElementById('membros-grupo').innerText = grupo.membros ? `👥 ${grupo.membros}` : '👥 100+ Membros';
 
         // Atualiza o contador de acessos visualmente na tela
@@ -463,7 +555,13 @@ let grupoId = '';
 
         document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
         document.getElementById('foto-grupo').src = grupo.imagem || '';
-        
+
+        // Mostra ou esconde a tag de VIP
+        const badgeVip = document.getElementById('badge-vip');
+        if (badgeVip) {
+          badgeVip.style.display = grupo.isVip ? 'block' : 'none';
+        }
+
         // Configura o link e o ID no botão de acesso direto
         const btnEntrar = document.getElementById('btn-entrar-link');
         if (btnEntrar) {
@@ -485,11 +583,62 @@ let grupoId = '';
 
     window.onload = carregarDetalhes;
 
-
     function avaliar(nota) {
       localStorage.setItem('rating_' + grupoId, nota);
       marcarEstrelas(nota);
     }
+
+async function carregarGruposRelacionados(categoriaAtual, idAtual) {
+  const container = document.getElementById('grupos-relacionados-container');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/grupos');
+    if (!res.ok) throw new Error('Erro na API');
+    const todosOsGrupos = await res.json();
+
+    const relacionados = todosOsGrupos.filter(g => 
+      g.categoria && 
+      String(g.categoria).toLowerCase() === String(categoriaAtual || '').toLowerCase() && 
+      String(g.id) !== String(idAtual)
+    ).slice(0, 6);
+
+    if (relacionados.length === 0) {
+      container.innerHTML = '<p style="color: #64748b; font-size: 0.85rem; grid-column: span 2; text-align: center;">Nenhum outro grupo nesta categoria.</p>';
+      return;
+    }
+
+    // Se tiver apenas 1 grupo, faz ele ocupar o centro da tela de forma elegante
+    if (relacionados.length === 1) {
+      container.style.gridTemplateColumns = '1fr';
+      container.style.maxWidth = '220px';
+      container.style.margin = '0 auto';
+    } else {
+      container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+      container.style.maxWidth = 'none';
+      container.style.margin = '0';
+    }
+
+    container.innerHTML = relacionados.map(g => `
+      <a href="/grupo/${g.id}" style="text-decoration: none; color: inherit;">
+        <div style="background: #0f172a; padding: 10px; border-radius: 12px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 8px; height: 100%; box-sizing: border-box; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='#38bdf8'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#334155'; this.style.transform='translateY(0)';">
+          <div style="position: relative;">
+            <img src="${g.imagem || 'https://via.placeholder.com/100'}" style="width: 100%; height: 95px; border-radius: 8px; object-fit: cover;">
+            ${g.isVip ? '<span style="position: absolute; top: 5px; right: 5px; background: rgba(251, 191, 36, 0.95); color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-crown"></i> VIP</span>' : ''}
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <strong style="font-size: 0.85rem; color: #f8fafc; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;">${g.nome}</strong>
+            <span style="font-size: 0.7rem; color: #38bdf8; margin-top: 4px;"><i class="fa-solid fa-tag"></i> ${g.categoria}</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+
+  } catch (e) {
+    console.error(e);
+    container.innerHTML = '<p style="color: #ef4444; font-size: 0.85rem; grid-column: span 2; text-align: center;">Erro ao carregar relacionados.</p>';
+  }
+}
 
     function marcarEstrelas(nota) {
       const stars = document.querySelectorAll('.star');
@@ -641,6 +790,49 @@ document.addEventListener("DOMContentLoaded", () => {
     saudacaoEl.innerText = `Olá, ${nomeUsuario}`;
   }
 });
+
+function gerarBreadcrumbs() {
+  const container = document.getElementById('breadcrumb-container');
+  if (!container) return;
+
+  const caminho = window.location.pathname;
+
+  // Se estiver na página inicial, exibe o link clicável para a Home
+  if (caminho === '/' || caminho.includes('index.html')) {
+    container.innerHTML = `
+      <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+        <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Início</a>
+      </div>
+    `;
+    return;
+  }
+
+  // Para as demais páginas internas
+  let nomePagina = 'Página';
+  if (caminho.includes('/grupo/')) {
+    nomePagina = 'Detalhes do Grupo';
+  } else if (caminho.includes('perfil.html')) {
+    nomePagina = 'Meu Perfil';
+  } else if (caminho.includes('publicar.html')) {
+    nomePagina = 'Publicar Grupo';
+  } else if (caminho.includes('termos.html')) {
+    nomePagina = 'Termos de Uso';
+  } else if (caminho.includes('painel.html')) {
+    nomePagina = 'Painel do Usuário';
+  } else if (caminho.includes('planos.html')) {
+    nomePagina = "Planos VIP's";
+  }
+
+  container.innerHTML = `
+    <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+      <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
+      <span style="color: #475569;">/</span>
+      <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span>
+    </div>
+  `;
+}
+
+window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
 
   </script>
 </body>

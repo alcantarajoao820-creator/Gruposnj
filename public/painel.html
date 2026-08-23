@@ -191,6 +191,9 @@
       <button class="btn-sair" onclick="sair()"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
     </div>
 
+<!-- BOTAO HOME -->
+  <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>
+
 <!-- Estatísticas Rápidas -->
 <div class="stats-box">
   <div class="stat-card">
@@ -463,13 +466,20 @@
 
         if (container) {
           container.innerHTML = grupos.map(g => {
-            let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;
-            if (g.isVip) {
-              statusBadge = `<span class="badge badge-vip"><i class="fa-solid fa-crown"></i> VIP ATIVO</span>`;
-            } else if (g.status === 'analise' || g.status === 'pendente' || g.emAnalise === true || g.aprovado === false) {
-              statusBadge = `<span class="badge badge-analise"><i class="fa-solid fa-clock"></i> Em Análise</span>`;
-            }
-
+           let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;
+if (g.isVip) {
+  const tempoRestante = formatarTempoVip(g.vipAte);
+  statusBadge = `
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <span class="badge badge-vip"><i class="fa-solid fa-crown"></i> VIP ATIVO</span>
+      <span style="font-size: 0.75rem; color: #fbbf24; font-weight: 500;">
+        <i class="fa-regular fa-clock"></i> ${tempoRestante}
+      </span>
+    </div>
+  `;
+} else if (g.status === 'analise' || g.status === 'pendente' || g.emAnalise === true || g.aprovado === false) {
+  statusBadge = `<span class="badge badge-analise"><i class="fa-solid fa-clock"></i> Em Análise</span>`;
+}
             return `
               <div class="grupo-item">
                 <div class="grupo-top">
@@ -733,6 +743,70 @@
       if (menu) menu.classList.toggle('ativo');
       if (overlay) overlay.classList.toggle('ativo');
     }
+
+function formatarTempoVip(vipAte) {
+  if (!vipAte) return '';
+  const agora = Date.now();
+  const diff = vipAte - agora;
+
+  if (diff <= 0) return 'Expirado';
+
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (dias > 0) {
+    return `${dias}d ${horas}h restantes`;
+  } else if (horas > 0) {
+    return `${horas}h ${minutos}m restantes`;
+  } else {
+    return `${minutos} minutos restantes`;
+  }
+}
+
+function gerarBreadcrumbs() {
+  const container = document.getElementById('breadcrumb-container');
+  if (!container) return;
+
+  const caminho = window.location.pathname;
+
+  // Se estiver na página inicial, exibe o link clicável para a Home
+  if (caminho === '/' || caminho.includes('index.html')) {
+    container.innerHTML = `
+      <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+        <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Início</a>
+      </div>
+    `;
+    return;
+  }
+
+  // Para as demais páginas internas
+  let nomePagina = 'Página';
+  if (caminho.includes('/grupo/')) {
+    nomePagina = 'Detalhes do Grupo';
+  } else if (caminho.includes('perfil.html')) {
+    nomePagina = 'Meu Perfil';
+  } else if (caminho.includes('publicar.html')) {
+    nomePagina = 'Publicar Grupo';
+  } else if (caminho.includes('termos.html')) {
+    nomePagina = 'Termos de Uso';
+  } else if (caminho.includes('painel.html')) {
+    nomePagina = 'Painel do Usuário';
+  } else if (caminho.includes('planos.html')) {
+    nomePagina = "Planos VIP's";
+  }
+
+  container.innerHTML = `
+    <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+      <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
+      <span style="color: #475569;">/</span>
+      <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span>
+    </div>
+  `;
+}
+
+window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
+
   </script>
 
 

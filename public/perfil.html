@@ -118,6 +118,10 @@
   </header>
 
   <div class="container">
+
+<!-- BOTAO HOME -->
+  <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>
+
     <!-- Card de Perfil -->
     <div class="perfil-card">
       <div id="avatar-container" class="avatar-container">
@@ -289,6 +293,49 @@
         container.innerHTML = '<div class="sem-grupos" style="color:#ef4444;">Erro ao carregar os grupos publicados.</div>';
       }
     }
+
+function gerarBreadcrumbs() {
+  const container = document.getElementById('breadcrumb-container');
+  if (!container) return;
+
+  const caminho = window.location.pathname;
+
+  // Se estiver na página inicial, exibe o link clicável para a Home
+  if (caminho === '/' || caminho.includes('index.html')) {
+    container.innerHTML = `
+      <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+        <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Home</a>
+      </div>
+    `;
+    return;
+  }
+
+  // Para as demais páginas internas
+  let nomePagina = 'Página';
+  if (caminho.includes('/grupo/')) {
+    nomePagina = 'Detalhes do Grupo';
+  } else if (caminho.includes('perfil.html')) {
+    nomePagina = 'Detalhes';
+  } else if (caminho.includes('publicar.html')) {
+    nomePagina = 'Publicar Grupo';
+  } else if (caminho.includes('termos.html')) {
+    nomePagina = 'Termos de Uso';
+  } else if (caminho.includes('painel.html')) {
+    nomePagina = 'Painel do Usuário';
+  } else if (caminho.includes('planos.html')) {
+    nomePagina = "Planos VIP's";
+  }
+
+  container.innerHTML = `
+    <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+      <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
+      <span style="color: #475569;">/</span>
+      <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span>
+    </div>
+  `;
+}
+
+window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
 
   </script>
 

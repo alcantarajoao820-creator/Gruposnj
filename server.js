@@ -4,6 +4,42 @@ const path = require('path');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
+const admin = require('firebase-admin');
+
+async function salvarNoGitHub(nomeArquivo, dados) {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return; // Se não tiver o token configurado, não faz nada
+
+  const owner = 'Ninjadabodega'; 
+  const repo = 'site-grupos'; // Ajuste o nome do repositório se for diferente
+  const filePath = nomeArquivo;
+
+  const contentBase64 = Buffer.from(JSON.stringify(dados, null, 2)).toString('base64');
+
+  try {
+    let sha = '';
+    try {
+      const getFile = await axios.get(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+        headers: { Authorization: `token ${token}` }
+      });
+      sha = getFile.data.sha;
+    } catch (e) {
+      // Arquivo ainda não existe no repositório remoto
+    }
+
+    await axios.put(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+      message: `Auto-update dados: ${nomeArquivo}`,
+      content: contentBase64,
+      sha: sha
+    }, {
+      headers: { Authorization: `token ${token}` }
+    });
+
+    console.log(`Arquivo ${nomeArquivo} sincronizado com o GitHub com sucesso!`);
+  } catch (err) {
+    console.error('Erro ao sincronizar com o GitHub:', err.response?.data || err.message);
+  }
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -230,26 +266,26 @@ app.post('/api/usuario/perfil', (req, res) => {
   let usuarios = lerJson(USERS_FILE, []);
   let index = usuarios.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
 
-  // Força sempre a foto padrão única para todo mundo no servidor
   const fotoPadrao = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop";
 
   if (index >= 0) {
     if (nomeExibicao !== undefined) usuarios[index].nomeExibicao = nomeExibicao;
     if (redeSocial !== undefined) usuarios[index].redeSocial = redeSocial;
-    usuarios[index].foto = fotoPadrao; // Trava a foto padrão aqui também
+    usuarios[index].foto = fotoPadrao;
   } else {
-    usuarios.push({ 
-      email, 
-      nomeExibicao: nomeExibicao || 'Ninja', 
-      foto: fotoPadrao, 
-      redeSocial: redeSocial || '' 
+    usuarios.push({
+      email,
+      nomeExibicao: nomeExibicao || 'Ninja',
+      foto: fotoPadrao,
+      redeSocial: redeSocial || ''
     });
   }
 
   fs.writeFileSync(USERS_FILE, JSON.stringify(usuarios, null, 2));
+  salvarNoGitHub('usuarios.json', usuarios);
+
   res.json({ success: true });
 });
-
 
 app.post('/api/grupos/:id/acessar', (req, res) => {
   const id = String(req.params.id);
@@ -259,6 +295,7 @@ app.post('/api/grupos/:id/acessar', (req, res) => {
   if (idx !== -1) {
     grupos[idx].acessos = (grupos[idx].acessos || 0) + 1;
     salvarJson(DATA_FILE, grupos);
+    salvarNoGitHub('grupos.json', grupos);
     return res.json({ success: true, acessos: grupos[idx].acessos });
   }
 
@@ -276,7 +313,7 @@ app.get('/api/preview-link', async (req, res) => {
     });
     const $ = cheerio.load(response.data);
     const title = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
-    const image = $('meta[property="og:image"]').attr('content') || '';
+    const image = $('meta[property="og:image"]').attr('content') || ''; // Corrigido o fechamento aqui
 
     res.json({ title: title.trim(), image });
   } catch (e) {
@@ -295,7 +332,6 @@ app.get('/api/grupos', (req, res) => {
       g.vipAte = null;
     }
 
-    // Padroniza o autor de cada grupo puxando o nome de exibição correto do usuário
     if (g.email) {
       const usuarioMatch = usuarios.find(u => u.email && u.email.toLowerCase() === g.email.toLowerCase());
       if (usuarioMatch && usuarioMatch.nomeExibicao) {
@@ -352,16 +388,16 @@ app.post('/api/solicitar', (req, res) => {
 
   solicitacoes.push(novaSolicitacao);
   salvarJson(SOLICITACOES_FILE, solicitacoes);
+  salvarNoGitHub('solicitacoes.json', solicitacoes);
 
   res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
 });
 
-// Rota para pegar as estatísticas do site
 app.get('/api/estatisticas', (req, res) => {
   try {
-    const grupos = lerJson(DATA_FILE, []); // Lê o arquivo grupos.json
-    const usuarios = lerJson(USERS_FILE, []); // Lê o arquivo usuarios.json
-    
+    const grupos = lerJson(DATA_FILE, []);
+    const usuarios = lerJson(USERS_FILE, []);
+
     res.json({
       totalGrupos: grupos.length,
       totalUsuarios: usuarios.length
@@ -654,11 +690,7 @@ app.post('/api/login', (req, res) => {
 
 app.get('/api/admin/solicitacoes', (req, res) => {
   try {
-    const fs = require('fs');
-    if (!fs.existsSync('solicitacoes.json')) {
-      fs.writeFileSync('solicitacoes.json', '[]');
-    }
-    const data = JSON.parse(fs.readFileSync('solicitacoes.json', 'utf8'));
+    const data = lerJson(SOLICITACOES_FILE, []);
     res.json(data);
   } catch (err) {
     res.json([]);
@@ -668,17 +700,12 @@ app.get('/api/admin/solicitacoes', (req, res) => {
 // Rota para puxar todos os grupos cadastrados
 app.get('/api/grupos', (req, res) => {
   try {
-    const fs = require('fs');
-    if (!fs.existsSync('grupos.json')) {
-      fs.writeFileSync('grupos.json', '[]');
-    }
-    const data = JSON.parse(fs.readFileSync('grupos.json', 'utf8'));
+    const data = lerJson(DATA_FILE, []);
     res.json(data);
   } catch (err) {
     res.json([]);
   }
 });
-
 
 app.post('/api/admin/decidir-solicitacao', (req, res) => {
   const { senha, id, aceito } = req.body;
@@ -687,13 +714,14 @@ app.post('/api/admin/decidir-solicitacao', (req, res) => {
   let solicitacoes = lerJson(SOLICITACOES_FILE, []);
   const item = solicitacoes.find(s => String(s.id) === String(id));
   solicitacoes = solicitacoes.filter(s => String(s.id) !== String(id));
+  
   salvarJson(SOLICITACOES_FILE, solicitacoes);
+  salvarNoGitHub('solicitacoes.json', solicitacoes); // Sincroniza solicitações atualizadas no GitHub
 
   if (aceito && item) {
     let grupos = lerJson(DATA_FILE, []);
     let usuarios = lerJson(USERS_FILE, []);
 
-    // Procura o perfil do usuário para pegar o nome de exibição correto
     let usuarioPerfil = usuarios.find(u => u.email === item.email || String(u.email).replace(/[@.]/g, '') === String(item.email).replace(/[@.]/g, ''));
 
     let nomeAutor = 'Membro / Comunidade';
@@ -719,11 +747,11 @@ app.post('/api/admin/decidir-solicitacao', (req, res) => {
     });
 
     salvarJson(DATA_FILE, grupos);
+    salvarNoGitHub('grupos.json', grupos); // Sincroniza o novo grupo aprovado no GitHub
   }
 
   res.json({ success: true });
 });
-
 
 app.post('/api/admin/ativar-vip', (req, res) => {
   const { senha, grupoId, dias } = req.body;
@@ -736,7 +764,10 @@ app.post('/api/admin/ativar-vip', (req, res) => {
     const tempoMs = (parseInt(dias) || 30) * 24 * 60 * 60 * 1000;
     grupos[idx].isVip = true;
     grupos[idx].vipAte = Date.now() + tempoMs;
+    
     salvarJson(DATA_FILE, grupos);
+    salvarNoGitHub('grupos.json', grupos); // Sincroniza VIP ativado no GitHub
+    
     return res.json({ success: true });
   }
   res.status(404).json({ error: 'Grupo não encontrado' });
@@ -752,7 +783,10 @@ app.post('/api/admin/remover-vip', (req, res) => {
   if (idx !== -1) {
     grupos[idx].isVip = false;
     grupos[idx].vipAte = null;
+    
     salvarJson(DATA_FILE, grupos);
+    salvarNoGitHub('grupos.json', grupos); // Sincroniza VIP removido no GitHub
+    
     return res.json({ success: true });
   }
   res.status(404).json({ error: 'Grupo não encontrado' });
@@ -767,6 +801,8 @@ app.delete('/api/grupos/:id', (req, res) => {
   grupos = grupos.filter(g => String(g.id) !== idParaDeletar);
 
   salvarJson(DATA_FILE, grupos);
+  salvarNoGitHub('grupos.json', grupos); // Sincroniza exclusão no GitHub
+
   res.json({ success: true });
 });
 

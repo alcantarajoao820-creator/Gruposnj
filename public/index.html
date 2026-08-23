@@ -30,10 +30,37 @@
     .btn-blue { background: #1e293b; color: #38bdf8; border: 1px solid #334155; }
     .btn-blue:hover { background: #334155; }
 
-    /* Hero Section */
-    .hero { text-align: center; margin-bottom: 25px; }
-    .hero h1 { font-size: 1.75rem; color: #fff; margin-bottom: 6px; font-weight: 800; letter-spacing: -0.5px; }
-    .hero p { color: #94a3b8; font-size: 0.85rem; max-width: 500px; margin: 0 auto 15px auto; }
+/* Estilos do Hero Section */
+.hero {
+  text-align: center;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.2) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 18px;
+  padding: 24px 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 100%;
+}
+
+.hero-title-cyber {
+  font-family: 'Outfit', sans-serif, system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.highlight-red {
+  color: #ef4444;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+.hero p {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
 
     /* Barra de Pesquisa e Filtros */
     .search-box { position: relative; max-width: 500px; margin: 0 auto 15px auto; }
@@ -385,13 +412,15 @@
 }
 </style>
 
+<!-- Hero Section -->
+<section class="hero">
+  <h1 class="hero-title-cyber">Encontre os melhores <span class="highlight-red">grupos</span> de <span class="highlight-red">putaria</span> mais ativos da internet...</h1>
+  <p>Comunidades exclusivas no WhatsApp para você interagir, fazer amizades e se divertir sem limites.</p>
+</section>
 
-
-  <!-- Hero Section -->
-    <section class="hero">                                                                                                    
-      <h1 class="hero-title-cyber">Encontre os Melhores Grupos de Putaria...</h1>
-      <p>Comunidades ativas no WhatsApp para você fazer networking, amizades e bons negócios.</p>
-                                                                                                                              <!-- Pesquisa -->
+  <!-- BOTAO HOME -->
+  <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>         
+                                                                                                                    <!-- Pesquisa -->
     <!-- Pesquisa -->
     <div class="search-box-pro">
       <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -1282,6 +1311,49 @@
           });
       }
     });
+
+function gerarBreadcrumbs() {
+  const container = document.getElementById('breadcrumb-container');
+  if (!container) return;
+
+  const caminho = window.location.pathname;
+
+  // Se estiver na página inicial, exibe o link clicável para a Home
+  if (caminho === '/' || caminho.includes('index.html')) {
+    container.innerHTML = `
+      <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+        <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Início</a>
+      </div>
+    `;
+    return;
+  }
+
+// Para as demais páginas internas
+  let nomePagina = 'Página';
+  if (caminho.includes('/grupo/')) {
+    nomePagina = 'Detalhes do Grupo';
+  } else if (caminho.includes('perfil.html')) {
+    nomePagina = 'Meu Perfil';
+  } else if (caminho.includes('publicar.html')) {
+    nomePagina = 'Publicar Grupo';
+  } else if (caminho.includes('termos.html')) {
+    nomePagina = 'Termos de Uso';
+  } else if (caminho.includes('painel.html')) {
+    nomePagina = 'Painel do Usuário';
+  } else if (caminho.includes('planos.html')) {
+    nomePagina = 'Planos VIP\'s';
+  }
+
+  container.innerHTML = `
+    <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+      <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
+      <span style="color: #475569;">/</span>
+      <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span>
+    </div>
+  `;
+}
+
+window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
 
   </script>
 </body>
