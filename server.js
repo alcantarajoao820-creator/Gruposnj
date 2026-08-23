@@ -6,17 +6,17 @@ const cheerio = require('cheerio');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
 
-async function salvarNoGitHub(nomeArquivo, dados) {
+async function salvarNoGitHub(nomeArquivo, dados, resParaErro = null) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    console.error("ERRO: GITHUB_TOKEN não configurado nas variáveis de ambiente!");
-    return;
+    console.error("ERRO: GITHUB_TOKEN não configurado!");
+    if (resParaErro) resParaErro.status(500).json({ error: 'Erro: GITHUB_TOKEN não configurado nas variáveis do Render!' });
+    return false;
   }
 
   const owner = 'alcantarajoao820-criador';
   const repo = 'Gruposnj';
   const filePath = nomeArquivo;
-
   const contentBase64 = Buffer.from(JSON.stringify(dados, null, 2)).toString('base64');
 
   try {
@@ -27,7 +27,7 @@ async function salvarNoGitHub(nomeArquivo, dados) {
       });
       sha = getFile.data.sha;
     } catch (e) {
-      // Arquivo ainda não existe no repositório remoto, será criado
+      // Arquivo ainda não existe
     }
 
     await axios.put(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
@@ -38,9 +38,14 @@ async function salvarNoGitHub(nomeArquivo, dados) {
       headers: { Authorization: `token ${token}` }
     });
 
-    console.log(`SUCESSO: ${nomeArquivo} atualizado com sucesso no GitHub!`);
+    return true;
   } catch (err) {
-    console.error('FALHA AO ENVIAR PRO GITHUB:', err.response?.data || err.message);
+    const erroMsg = err.response?.data?.message || err.message;
+    console.error('FALHA AO ENVIAR PRO GITHUB:', erroMsg);
+    if (resParaErro) {
+      resParaErro.status(500).json({ error: 'Erro do GitHub: ' + erroMsg });
+    }
+    return false;
   }
 }
 
@@ -84,13 +89,13 @@ function lerJson(file, defaultData = []) {
   }
 }
 
-function salvarJson(file, data) {
+async function salvarJsonComSync(file, data, res) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
   
   if (file === DATA_FILE) {
-    salvarNoGitHub('grupos.json', data);
+    await salvarNoGitHub('grupos.json', data, res);
   } else if (file === SOLICITACOES_FILE) {
-    salvarNoGitHub('solicitacoes.json', data);
+    await salvarNoGitHub('solicitacoes.json', data, res);
   }
 }
 
