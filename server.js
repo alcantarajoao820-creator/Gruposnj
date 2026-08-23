@@ -8,10 +8,13 @@ const admin = require('firebase-admin');
 
 async function salvarNoGitHub(nomeArquivo, dados) {
   const token = process.env.GITHUB_TOKEN;
-  if (!token) return; // Se não tiver o token configurado, não faz nada
+  if (!token) {
+    console.error("ERRO: GITHUB_TOKEN não configurado nas variáveis de ambiente!");
+    return;
+  }
 
-  const owner = 'Ninjadabodega'; 
-  const repo = 'site-grupos'; // Ajuste o nome do repositório se for diferente
+  const owner = 'alcantarajoao820-criador';
+  const repo = 'Gruposnj';
   const filePath = nomeArquivo;
 
   const contentBase64 = Buffer.from(JSON.stringify(dados, null, 2)).toString('base64');
@@ -24,20 +27,20 @@ async function salvarNoGitHub(nomeArquivo, dados) {
       });
       sha = getFile.data.sha;
     } catch (e) {
-      // Arquivo ainda não existe no repositório remoto
+      // Arquivo ainda não existe no repositório remoto, será criado
     }
 
     await axios.put(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
-      message: `Auto-update dados: ${nomeArquivo}`,
+      message: `Auto-update dados via Render: ${nomeArquivo}`,
       content: contentBase64,
       sha: sha
     }, {
       headers: { Authorization: `token ${token}` }
     });
 
-    console.log(`Arquivo ${nomeArquivo} sincronizado com o GitHub com sucesso!`);
+    console.log(`SUCESSO: ${nomeArquivo} atualizado com sucesso no GitHub!`);
   } catch (err) {
-    console.error('Erro ao sincronizar com o GitHub:', err.response?.data || err.message);
+    console.error('FALHA AO ENVIAR PRO GITHUB:', err.response?.data || err.message);
   }
 }
 
@@ -83,6 +86,12 @@ function lerJson(file, defaultData = []) {
 
 function salvarJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
+  
+  if (file === DATA_FILE) {
+    salvarNoGitHub('grupos.json', data);
+  } else if (file === SOLICITACOES_FILE) {
+    salvarNoGitHub('solicitacoes.json', data);
+  }
 }
 
 function getAdminPassword() {
