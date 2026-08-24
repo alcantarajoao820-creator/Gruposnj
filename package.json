@@ -11,6 +11,8 @@
     "express": "^4.22.2",
     "firebase-admin": "^14.3.0",
     "mercadopago": "^3.4.0",
+    "mongodb": "^7.5.0",
+    "mongoose": "^9.9.3",
     "nodemailer": "^9.0.5"
   },
   "description": "",

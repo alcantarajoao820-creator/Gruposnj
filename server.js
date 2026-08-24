@@ -5,6 +5,62 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
+const mongoose = require('mongoose');
+
+// URL do MongoDB Atlas (já com sua chave configurada)
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://alcantarajoao501_db_user:tSmnRScUEeKK541D@ac-tbyhp8j.ul2jraq.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster';
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('Conectado ao MongoDB Atlas com sucesso!'))
+  .catch(err => console.error('Erro ao conectar no MongoDB:', err));
+
+// Definição dos Modelos (Schemas)
+const GrupoSchema = new mongoose.Schema({
+  id: { type: Number, unique: true },
+  nome: String,
+  link: String,
+  categoria: String,
+  descricao: String,
+  imagem: String,
+  email: String,
+  autor: String,
+  isVip: { type: Boolean, default: false },
+  vipAte: { type: Number, default: null },
+  acessos: { type: Number, default: 0 },
+  data: { type: Date, default: Date.now }
+});
+const Grupo = mongoose.model('Grupo', GrupoSchema);
+
+const SolicitacaoSchema = new mongoose.Schema({
+  id: Number,
+  nome: String,
+  link: String,
+  categoria: String,
+  descricao: String,
+  imagem: String,
+  email: String,
+  aceitouTermos: Boolean,
+  data: { type: Date, default: Date.now }
+});
+const Solicitacao = mongoose.model('Solicitacao', SolicitacaoSchema);
+
+const UsuarioSchema = new mongoose.Schema({
+  email: { type: String, unique: true, lowercase: true },
+  nomeExibicao: String,
+  foto: String,
+  redeSocial: String
+});
+const Usuario = mongoose.model('Usuario', UsuarioSchema);
+
+const DenunciaSchema = new mongoose.Schema({
+  id: String,
+  grupoId: String,
+  nomeGrupo: String,
+  motivo: String,
+  usuarioEmail: String,
+  data: { type: Date, default: Date.now }
+});
+const Denuncia = mongoose.model('Denuncia', DenunciaSchema);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,18 +92,17 @@ app.use(express.static(__dirname));
 // ==========================================
 // FUNÇÕES AUXILIARES DE LEITURA E ESCRITA
 // ==========================================
-
-function lerJson(file, defaultData = []) {
-  if (!fs.existsSync(file)) fs.writeFileSync(file, JSON.stringify(defaultData, null, 2));
+function lerJson(filePath, defaultValue) {
   try {
-    return JSON.parse(fs.readFileSync(file, 'utf-8')) || defaultData;
+    if (!fs.existsSync(filePath)) return defaultValue;
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
   } catch (e) {
-    return defaultData;
+    return defaultValue;
   }
 }
 
-function salvarJson(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+function salvarJson(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
 }
 
 function getAdminPassword() {
@@ -62,8 +117,6 @@ app.get('/admin.html', (req, res) => {
 // ==========================================
 // ROTAS DO MERCADO PAGO (PIX AUTO-PROMOÇÃO)
 // ==========================================
-
-// Função Rota: Gerar Cobrança Pix
 app.post('/api/pix/gerar', async (req, res) => {
   try {
     const { grupoId, dias, valor } = req.body;
@@ -87,7 +140,6 @@ app.post('/api/pix/gerar', async (req, res) => {
 
     const response = await paymentClient.create({ body });
 
-    // Salva a relação no cache em memória
     cobrancasPixMemoria[response.id] = {
       grupoId: String(grupoId),
       dias: Number(dias),
@@ -107,7 +159,6 @@ app.post('/api/pix/gerar', async (req, res) => {
   }
 });
 
-// Função Rota: Checar Status do Pix e Ativar VIP Automaticamente
 app.get('/api/pix/status/:paymentId', async (req, res) => {
   try {
     const { paymentId } = req.params;
@@ -144,16 +195,12 @@ app.get('/api/pix/status/:paymentId', async (req, res) => {
   }
 });
 
-// Rota de Webhook para receber notificações automáticas do Mercado Pago
 app.post('/api/webhook', async (req, res) => {
   try {
     const payment = req.body;
 
-    // O Mercado Pago envia vários tipos de notificações, queremos apenas de pagamento
     if (payment.type === 'payment' || (payment.data && payment.id)) {
       const paymentId = payment.data ? payment.data.id : payment.id;
-      
-      // Consulta o pagamento na API do Mercado Pago para garantir que é real
       const response = await paymentClient.get({ id: paymentId });
 
       if (response.status === 'approved') {
@@ -192,7 +239,6 @@ app.post('/api/webhook', async (req, res) => {
 // ==========================================
 // ROTAS PÚBLICAS / UTILITÁRIAS
 // ==========================================
-
 app.get('/termos', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'termos.html'));
 });
@@ -201,68 +247,48 @@ app.get('/grupo/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'detalhes.html'));
 });
 
-app.get('/api/grupos/:id', (req, res) => {
-  const id = String(req.params.id);
-  const grupos = lerJson(DATA_FILE, []);
-  const grupo = grupos.find(g => String(g.id) === id);
+app.get('/api/grupos/:id', async (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const grupo = await Grupo.findOne({ id: isNaN(id) ? id : Number(id) });
 
-  if (!grupo) {
-    return res.status(404).json({ success: false, message: 'Grupo não encontrado' });
+    if (!grupo) {
+      return res.status(404).json({ success: false, message: 'Grupo não encontrado' });
+    }
+
+    let grupoObj = grupo.toObject();
+    let usuarios = await Usuario.find();
+    let usuarioPerfil = usuarios.find(u => u.email === grupoObj.email || u.email?.replace(/[@.]/g, '') === String(grupoObj.email).replace(/[@.]/g, ''));
+
+    if (!usuarioPerfil && String(grupoObj.email).includes('manoel153153')) {
+      grupoObj.autor = 'Ninja';
+    } else if (usuarioPerfil && usuarioPerfil.nomeExibicao) {
+      grupoObj.autor = usuarioPerfil.nomeExibicao;
+    } else if (!grupoObj.autor) {
+      grupoObj.autor = grupoObj.email ? grupoObj.email.split('@')[0] : 'Membro / Comunidade';
+    }
+
+    res.json(grupoObj);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erro no servidor' });
   }
-
-  let usuarios = lerJson(USERS_FILE, []);
-  let usuarioPerfil = usuarios.find(u => u.email === grupo.email || u.email?.replace(/[@.]/g, '') === String(grupo.email).replace(/[@.]/g, ''));
-
-  if (!usuarioPerfil && String(grupo.email).includes('manoel153153')) {
-    grupo.autor = 'Ninja';
-  } else if (usuarioPerfil && usuarioPerfil.nomeExibicao) {
-    grupo.autor = usuarioPerfil.nomeExibicao;
-  } else if (!grupo.autor) {
-    grupo.autor = grupo.email ? grupo.email.split('@')[0] : 'Membro / Comunidade';
-  }
-
-  res.json(grupo);
 });
 
-app.post('/api/usuario/perfil', (req, res) => {
-  const { email, nomeExibicao, redeSocial } = req.body;
-  if (!email) return res.status(400).json({ success: false, message: 'E-mail obrigatório' });
+app.post('/api/grupos/:id/acessar', async (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const grupo = await Grupo.findOne({ id: isNaN(id) ? id : Number(id) });
 
-  let usuarios = lerJson(USERS_FILE, []);
-  let index = usuarios.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+    if (grupo) {
+      grupo.acessos = (grupo.acessos || 0) + 1;
+      await grupo.save();
+      return res.json({ success: true, acessos: grupo.acessos });
+    }
 
-  // Força sempre a foto padrão única para todo mundo no servidor
-  const fotoPadrao = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop";
-
-  if (index >= 0) {
-    if (nomeExibicao !== undefined) usuarios[index].nomeExibicao = nomeExibicao;
-    if (redeSocial !== undefined) usuarios[index].redeSocial = redeSocial;
-    usuarios[index].foto = fotoPadrao; // Trava a foto padrão aqui também
-  } else {
-    usuarios.push({
-      email,
-      nomeExibicao: nomeExibicao || 'Ninja',
-      foto: fotoPadrao,
-      redeSocial: redeSocial || ''
-    });
-  }                                                                                                                                                       
-  fs.writeFileSync(USERS_FILE, JSON.stringify(usuarios, null, 2));
-  res.json({ success: true });
-});
-
-
-app.post('/api/grupos/:id/acessar', (req, res) => {
-  const id = String(req.params.id);
-  let grupos = lerJson(DATA_FILE, []);
-  const idx = grupos.findIndex(g => String(g.id) === id);
-
-  if (idx !== -1) {
-    grupos[idx].acessos = (grupos[idx].acessos || 0) + 1;
-    salvarJson(DATA_FILE, grupos);
-    return res.json({ success: true, acessos: grupos[idx].acessos });
+    res.status(404).json({ success: false, error: 'Grupo não encontrado.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erro ao registrar acesso.' });
   }
-
-  res.status(404).json({ success: false, error: 'Grupo não encontrado.' });
 });
 
 app.get('/api/preview-link', async (req, res) => {
@@ -284,209 +310,156 @@ app.get('/api/preview-link', async (req, res) => {
   }
 });
 
-app.get('/api/grupos', (req, res) => {
-  let grupos = lerJson(DATA_FILE, []);
-  let usuarios = lerJson(USERS_FILE, []);
-  const agora = Date.now();
-
-  grupos = grupos.map(g => {
-    if (g.isVip && g.vipAte && agora > g.vipAte) {
-      g.isVip = false;
-      g.vipAte = null;
-    }
-
-    // Padroniza o autor de cada grupo puxando o nome de exibição correto do usuário
-    if (g.email) {
-      const usuarioMatch = usuarios.find(u => u.email && u.email.toLowerCase() === g.email.toLowerCase());
-      if (usuarioMatch && usuarioMatch.nomeExibicao) {
-        g.autor = usuarioMatch.nomeExibicao;
-      } else if (g.email.includes('manoel153153')) {
-        g.autor = 'Ninja';
-      } else {
-        g.autor = g.email.split('@')[0];
-      }
-    } else if (!g.autor) {
-      g.autor = 'Membro';
-    }
-
-    return g;
-  });
-
-  salvarJson(DATA_FILE, grupos);
-  grupos.sort((a, b) => (b.isVip ? 1 : 0) - (a.isVip ? 1 : 0) || b.id - a.id);
-  res.json(grupos);
-});
-
-app.post('/api/solicitar', (req, res) => {
-  const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
-
-  if (!nome || !link) {
-    return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
-  }
-
-  if (!aceitouTermos) {
-    return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
-  }
-
-  const linkFormatado = link.trim().toLowerCase();
-  const grupos = lerJson(DATA_FILE, []);
-  const solicitacoes = lerJson(SOLICITACOES_FILE, []);
-
-  const existeEmGrupos = grupos.some(g => g.link && g.link.trim().toLowerCase() === linkFormatado);
-  const existeEmSolicitacoes = solicitacoes.some(s => s.link && s.link.trim().toLowerCase() === linkFormatado);
-
-  if (existeEmGrupos || existeEmSolicitacoes) {
-    return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
-  }
-
-  const novaSolicitacao = {
-    id: Date.now(),
-    nome,
-    link: link.trim(),
-    categoria: categoria || 'Geral',
-    descricao: descricao || '',
-    imagem: imagem || 'https://via.placeholder.com/100',
-    email: email || 'Anonimo',
-    data: new Date().toISOString()
-  };
-
-  solicitacoes.push(novaSolicitacao);
-  salvarJson(SOLICITACOES_FILE, solicitacoes);
-
-  res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
-});
-
-// Rota para pegar as estatísticas do site
-app.get('/api/estatisticas', (req, res) => {
+app.get('/api/grupos', async (req, res) => {
   try {
-    const grupos = lerJson(DATA_FILE, []); // Lê o arquivo grupos.json
-    const usuarios = lerJson(USERS_FILE, []); // Lê o arquivo usuarios.json
+    let grupos = await Grupo.find();
+    let usuarios = await Usuario.find();
+    const agora = Date.now();
+
+    for (let g of grupos) {
+      if (g.isVip && g.vipAte && agora > g.vipAte) {
+        g.isVip = false;
+        g.vipAte = null;
+      }
+
+      if (g.email) {
+        const usuarioMatch = usuarios.find(u => u.email && u.email.toLowerCase() === g.email.toLowerCase());
+        if (usuarioMatch && usuarioMatch.nomeExibicao) {
+          g.autor = usuarioMatch.nomeExibicao;
+        } else if (g.email.includes('manoel153153')) {
+          g.autor = 'Ninja';
+        } else {
+          g.autor = g.email.split('@')[0];
+        }
+      } else if (!g.autor) {
+        g.autor = 'Membro';
+      }
+
+      await g.save();
+    }
+
+    grupos.sort((a, b) => (b.isVip ? 1 : 0) - (a.isVip ? 1 : 0) || b.id - a.id);
+    res.json(grupos);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar grupos' });
+  }
+});
+
+app.post('/api/solicitar', async (req, res) => {
+  try {
+    const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
+
+    if (!nome || !link) {
+      return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
+    }
+
+    if (!aceitouTermos) {
+      return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
+    }
+
+    const linkFormatado = link.trim().toLowerCase();
+
+    const existeEmGrupos = await Grupo.findOne({ link: { $regex: new RegExp(`^${linkFormatado}$`, 'i') } });
+    const existeEmSolicitacoes = await Solicitacao.findOne({ link: { $regex: new RegExp(`^${linkFormatado}$`, 'i') } });
+
+    if (existeEmGrupos || existeEmSolicitacoes) {
+      return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
+    }
+
+    await Solicitacao.create({
+      id: Date.now(),
+      nome,
+      link: link.trim(),
+      categoria: categoria || 'Geral',
+      descricao: descricao || '',
+      imagem: imagem || 'https://via.placeholder.com/100',
+      email: email || 'Anonimo',
+      aceitouTermos,
+      data: new Date()
+    });
+
+    res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao processar solicitação' });
+  }
+});
+
+app.get('/api/estatisticas', async (req, res) => {
+  try {
+    const totalGrupos = await Grupo.countDocuments();
+    const totalUsuarios = await Usuario.countDocuments();
 
     res.json({
-      totalGrupos: grupos.length,
-      totalUsuarios: usuarios.length
+      totalGrupos,
+      totalUsuarios
     });
   } catch (err) {
     res.status(500).json({ error: 'Erro ao carregar estatísticas' });
   }
 });
 
-// Função auxiliar para ler os favoritos de um usuário específico (por UID)
-function lerFavoritosDoDisco(uid = 'anonimo') {
-  try {
-    // Cria uma pasta separada para favoritos se não existir, ou usa um nome de arquivo por usuário
-    const arquivoUsuario = path.join(__dirname, `favoritos_${uid}.json`);
-    
-    if (!fs.existsSync(arquivoUsuario)) {
-      fs.writeFileSync(arquivoUsuario, JSON.stringify({ favoritos: [] }, null, 2));
-      return [];
-    }
-    const conteudo = fs.readFileSync(arquivoUsuario, 'utf8');
-    const dados = JSON.parse(conteudo);
-    return dados.favoritos || [];
-  } catch (e) {
-    console.error(`Erro ao ler favoritos do usuário ${uid}:`, e);
-    return [];
-  }
-}
-
-// Rota GET /api/favoritos (agora lê pelo ?uid=...)
-app.get('/api/favoritos', (req, res) => {
-  const uid = req.query.uid || 'anonimo';
-  const lista = lerFavoritosDoDisco(uid);
-  console.log(`Enviando favoritos para o usuário ${uid}:`, lista);
-  res.json(lista);
-});
-
-// Rota POST /api/favoritos/alternar (agora salva no arquivo específico do uid)
-app.post('/api/favoritos/alternar', express.json(), (req, res) => {
-  try {
-    const { grupoId, uid = 'anonimo' } = req.body;
-    console.log(`Requisição para alternar favorito ID: ${grupoId} para o usuário: ${uid}`);
-
-    if (!grupoId) return res.status(400).json({ erro: 'ID inválido' });
-
-    const arquivoUsuario = path.join(__dirname, `favoritos_${uid}.json`);
-    let favoritos = lerFavoritosDoDisco(uid);
-
-    const index = favoritos.indexOf(grupoId);
-    let status = '';
-
-    if (index > -1) {
-      favoritos.splice(index, 1);
-      status = 'removido';
-      console.log(`-> Removido dos favoritos do usuário ${uid}.`);
-    } else {
-      favoritos.push(grupoId);
-      status = 'adicionado';
-      console.log(`-> Adicionado aos favoritos do usuário ${uid}.`);
-    }
-
-    // Salva permanentemente no arquivo específico daquele usuário
-    fs.writeFileSync(arquivoUsuario, JSON.stringify({ favoritos: favoritos }, null, 2), 'utf8');
-    console.log(`-> Salvo com sucesso no arquivo do usuário ${uid}!`);
-
-    res.json({ sucesso: true, status, favoritos: favoritos });
-  } catch (e) {
-    console.error("Erro ao salvar favorito:", e);
-    res.status(500).json({ erro: 'Erro ao salvar favorito' });
-  }
-});
-
-// Rota para Atualizar Senha
 app.post('/api/atualizar-senha', express.json(), (req, res) => {
     const { senha } = req.body;
-    // Lógica para salvar a nova senha
     res.json({ sucesso: true, mensagem: 'Senha alterada com sucesso!' });
 });
 
-// Salva a rede social, foto e nome de exibição de uma vez só
-app.post('/api/usuario/perfil', (req, res) => {
-  const { email, nomeExibicao, foto, redeSocial } = req.body;
-  if (!email) return res.status(400).json({ success: false, message: 'E-mail obrigatório' });
+app.post('/api/usuario/perfil', async (req, res) => {
+  try {
+    const { email, nomeExibicao, foto, redeSocial } = req.body;
+    if (!email) return res.status(400).json({ success: false, message: 'E-mail obrigatório' });
 
-  let usuarios = lerJson(USERS_FILE, []);
-  let index = usuarios.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+    let usuario = await Usuario.findOne({ email: email.toLowerCase() });
 
-  if (index >= 0) {
-    if (nomeExibicao !== undefined) usuarios[index].nomeExibicao = nomeExibicao;
-    if (foto !== undefined) usuarios[index].foto = foto;
-    if (redeSocial !== undefined) usuarios[index].redeSocial = redeSocial;
-  } else {
-    usuarios.push({ email, nomeExibicao: nomeExibicao || 'Ninja', foto: foto || '', redeSocial: redeSocial || '' });
+    if (usuario) {
+      if (nomeExibicao !== undefined) usuario.nomeExibicao = nomeExibicao;
+      if (foto !== undefined) usuario.foto = foto;
+      if (redeSocial !== undefined) usuario.redeSocial = redeSocial;
+      await usuario.save();
+    } else {
+      await Usuario.create({
+        email: email.toLowerCase(),
+        nomeExibicao: nomeExibicao || 'Ninja',
+        foto: foto || '',
+        redeSocial: redeSocial || ''
+      });
+    }
+
+    res.json({ success: true, message: 'Dados salvos com sucesso!' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erro ao salvar perfil' });
   }
-
-  fs.writeFileSync(USERS_FILE, JSON.stringify(usuarios, null, 2));
-  res.json({ success: true, message: 'Dados salvos com sucesso!' });
 });
 
-// Retorna os dados do usuário para a página de perfil
-app.get('/api/usuario/perfil', (req, res) => {
-  const { email, nome } = req.query;
-  let usuarios = lerJson(USERS_FILE, []);
-  let usuario = usuarios.find(u =>
-    (email && u.email && u.email.toLowerCase() === String(email).toLowerCase()) ||
-    (nome && u.nomeExibicao && u.nomeExibicao.toLowerCase() === decodeURIComponent(nome).toLowerCase())
-  );
+app.get('/api/usuario/perfil', async (req, res) => {
+  try {
+    const { email, nome } = req.query;
+    let usuario = null;
 
-  // Se não encontrar o usuário cadastrado, cria um perfil dinâmico com o nome que veio na URL (sem forçar o Ninja)
-  if (!usuario) {
-    const nomeDecodificado = nome ? decodeURIComponent(nome) : 'Membro';
-    usuario = {
-      nomeExibicao: nomeDecodificado,
-      foto: '',
-      redeSocial: ''
-    };
+    if (email) {
+      usuario = await Usuario.findOne({ email: email.toLowerCase() });
+    } else if (nome) {
+      const nomeDecodificado = decodeURIComponent(nome);
+      usuario = await Usuario.findOne({ nomeExibicao: new RegExp(`^${nomeDecodificado}$`, 'i') });
+    }
+
+    if (!usuario) {
+      const nomeDecodificado = nome ? decodeURIComponent(nome) : 'Membro';
+      usuario = {
+        nomeExibicao: nomeDecodificado,
+        foto: '',
+        redeSocial: ''
+      };
+    }
+
+    res.json({ success: true, usuario });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erro ao buscar perfil' });
   }
-
-  res.json({ success: true, usuario });
 });
 
 // ==========================================
 // ROTAS DE DENÚNCIAS
 // ==========================================
-
-// Rota para registrar denúncia (Garante que o ID seja sempre gerado)
 app.post('/api/denunciar', async (req, res) => {
   try {
     const { grupoId, motivo, usuarioEmail } = req.body;
@@ -498,29 +471,22 @@ app.post('/api/denunciar', async (req, res) => {
     let nomeGrupo = `ID: ${grupoId}`;
 
     try {
-      if (fs.existsSync(DATA_FILE)) {
-        const grupos = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-        const grupoEncontrado = grupos.find(g => String(g.id) === String(grupoId));
-        if (grupoEncontrado && grupoEncontrado.nome) {
-          nomeGrupo = grupoEncontrado.nome;
-        }
+      const grupoEncontrado = await Grupo.findOne({ id: String(grupoId) });
+      if (grupoEncontrado && grupoEncontrado.nome) {
+        nomeGrupo = grupoEncontrado.nome;
       }
     } catch (err) {}
 
-    const denuncias = lerJson(DENUNCIAS_FILE, []);
-    
-    // Geramos um ID único garantido usando timestamp + número aleatório
-    const novaDenuncia = {
-      id: 'den_' + Date.now() + Math.floor(Math.random() * 1000),
+    const idDenuncia = 'den_' + Date.now() + Math.floor(Math.random() * 1000);
+
+    await Denuncia.create({
+      id: idDenuncia,
       grupoId: String(grupoId),
       nomeGrupo: nomeGrupo,
       motivo: motivo,
       usuarioEmail: usuarioEmail,
-      data: new Date().toISOString()
-    };
-
-    denuncias.unshift(novaDenuncia);
-    salvarJson(DENUNCIAS_FILE, denuncias);
+      data: new Date()
+    });
 
     return res.json({ success: true });
   } catch (error) {
@@ -529,42 +495,31 @@ app.post('/api/denunciar', async (req, res) => {
   }
 });
 
-// Rota para listar denúncias
 app.get('/api/denuncias', async (req, res) => {
   try {
-    const denuncias = lerJson(DENUNCIAS_FILE, []);
-    return res.json({ success: true, denuncias });
+    const listaDenuncias = await Denuncia.find().sort({ data: -1 });
+    res.json(listaDenuncias);
   } catch (error) {
     console.error('Erro ao buscar denúncias:', error);
-    return res.status(500).json({ success: false, error: 'Erro ao carregar denúncias.' });
+    res.status(500).json({ error: 'Erro ao buscar denúncias.' });
   }
 });
 
-app.delete('/api/denuncias/:id', (req, res) => {
+app.delete('/api/denuncias/:id', async (req, res) => {
   try {
     const target = decodeURIComponent(req.params.id).trim();
-    let denuncias = lerJson(DENUNCIAS_FILE, []);
 
-    console.log('--- TENTANDO EXCLUIR ---');
-    console.log('Alvo recebido da URL:', target);
-    console.log('IDs disponíveis no JSON:', denuncias.map(d => ({ id: d.id, grupoId: d.grupoId })));
-
-    const tamanhoInicial = denuncias.length;
-
-    // Filtra mantendo apenas os que NÃO batem nem com o id único nem com o grupoId
-    denuncias = denuncias.filter(d => {
-      const matchId = String(d.id || '').trim() === target;
-      const matchGrupo = String(d.grupoId || '').trim() === target;
-      return !matchId && !matchGrupo; // Se for igual a qualquer um dos dois, remove
+    const resultado = await Denuncia.deleteMany({
+      $or: [
+        { id: target },
+        { grupoId: target }
+      ]
     });
 
-    if (denuncias.length === tamanhoInicial) {
-      console.log('❌ Nenhuma denúncia correspondente encontrada para remover.');
+    if (resultado.deletedCount === 0) {
       return res.status(404).json({ success: false, error: 'Denúncia não encontrada.' });
     }
 
-    salvarJson(DENUNCIAS_FILE, denuncias);
-    console.log('✅ Denúncia apagada com sucesso! Restaram:', denuncias.length);
     return res.json({ success: true });
   } catch (error) {
     console.error('Erro ao excluir denúncia:', error);
@@ -575,202 +530,216 @@ app.delete('/api/denuncias/:id', (req, res) => {
 // ==========================================
 // ROTAS DO PAINEL DO USUÁRIO
 // ==========================================
+app.get('/api/meus-grupos', async (req, res) => {
+  try {
+    const email = req.query.email;
+    if (!email) return res.json([]);
 
-app.get('/api/meus-grupos', (req, res) => {
-  const email = req.query.email;
-  if (!email) return res.json([]);
+    const meusAtivos = await Grupo.find({ email: email });
+    const solicitacoes = await Solicitacao.find({ email: email });
 
-  // Lê os grupos aprovados/ativos e também as solicitações pendentes (em análise)
-  const gruposAtivos = lerJson(DATA_FILE, []);
-  const solicitacoes = lerJson(SOLICITACOES_FILE, []);
+    const minhasSolicitacoes = solicitacoes.map(s => {
+      const obj = s.toObject();
+      return { ...obj, status: 'analise', emAnalise: true };
+    });
 
-  // Filtra os do usuário em ambas as listas
-  const meusAtivos = gruposAtivos.filter(g => g.email === email);
-  
-  // Garante que o objeto venha com uma flag clara de que está em análise
-  const minhasSolicitacoes = solicitacoes
-    .filter(s => s.email === email)
-    .map(s => ({ ...s, status: 'analise', emAnalise: true }));
+    const todosOsMeusGrupos = [...meusAtivos, ...minhasSolicitacoes];
 
-  // Junta tudo em um único array para o painel exibir
-  const todosOsMeusGrupos = [...meusAtivos, ...minhasSolicitacoes];
-
-  res.json(todosOsMeusGrupos);
+    res.json(todosOsMeusGrupos);
+  } catch (error) {
+    console.error('Erro ao buscar meus grupos:', error);
+    res.status(500).json({ error: 'Erro interno ao buscar grupos.' });
+  }
 });
 
-app.put('/api/meus-grupos/link', (req, res) => {
-  const { grupoId, email, novoLink } = req.body;
-  if (!email || !grupoId || !novoLink) return res.status(400).json({ error: 'Dados incompletos.' });
+app.put('/api/meus-grupos/link', async (req, res) => {
+  try {
+    const { grupoId, email, novoLink } = req.body;
+    if (!email || !grupoId || !novoLink) return res.status(400).json({ error: 'Dados incompletos.' });
 
-  const linkFormatado = novoLink.trim().toLowerCase();
-  let grupos = lerJson(DATA_FILE, []);
-  let solicitacoes = lerJson(SOLICITACOES_FILE, []);
+    const linkFormatado = novoLink.trim().toLowerCase();
 
-  const duplicadoGrupo = grupos.some(g => String(g.id) !== String(grupoId) && g.link && g.link.trim().toLowerCase() === linkFormatado);
-  const duplicadoSolicitacao = solicitacoes.some(s => s.link && s.link.trim().toLowerCase() === linkFormatado);
+    const duplicadoGrupo = await Grupo.findOne({
+      id: { $ne: String(grupoId) },
+      link: { $regex: new RegExp(`^${linkFormatado}$`, 'i') }
+    });
 
-  if (duplicadoGrupo || duplicadoSolicitacao) {
-    return res.status(400).json({ error: 'Este link já está cadastrado em outro grupo!' });
-  }
+    const duplicadoSolicitacao = await Solicitacao.findOne({
+      link: { $regex: new RegExp(`^${linkFormatado}$`, 'i') }
+    });
 
-  const idx = grupos.findIndex(g => String(g.id) === String(grupoId) && g.email === email);
-  if (idx !== -1) {
-    grupos[idx].link = novoLink.trim();
-    salvarJson(DATA_FILE, grupos);
+    if (duplicadoGrupo || duplicadoSolicitacao) {
+      return res.status(400).json({ error: 'Este link já está cadastrado em outro grupo!' });
+    }
+
+    const grupo = await Grupo.findOne({ id: String(grupoId), email: email });
+    if (!grupo) {
+      return res.status(404).json({ error: 'Grupo não encontrado ou sem permissão.' });
+    }
+
+    grupo.link = novoLink.trim();
+    await grupo.save();
+
     return res.json({ success: true });
+  } catch (error) {
+    console.error('Erro ao atualizar link:', error);
+    res.status(500).json({ error: 'Erro interno ao atualizar link.' });
   }
-
-  res.status(404).json({ error: 'Grupo não encontrado ou sem permissão.' });
 });
 
-app.delete('/api/meus-grupos/:id', (req, res) => {
-  const email = req.body.email;
-  const idParaDeletar = String(req.params.id);
+app.delete('/api/meus-grupos/:id', async (req, res) => {
+  try {
+    const email = req.body.email;
+    const idParaDeletar = String(req.params.id);
 
-  if (!email) return res.status(400).json({ error: 'E-mail não fornecido.' });
+    if (!email) return res.status(400).json({ error: 'E-mail não fornecido.' });
 
-  let grupos = lerJson(DATA_FILE, []);
-  const tamanhoOriginal = grupos.length;
+    const resultado = await Grupo.deleteOne({ id: idParaDeletar, email: email });
 
-  grupos = grupos.filter(g => !(String(g.id) === idParaDeletar && g.email === email));
+    if (resultado.deletedCount > 0) {
+      return res.json({ success: true });
+    }
 
-  if (grupos.length < tamanhoOriginal) {
-    salvarJson(DATA_FILE, grupos);
-    return res.json({ success: true });
+    res.status(404).json({ error: 'Grupo não encontrado ou você não é o dono.' });
+  } catch (error) {
+    console.error('Erro ao deletar grupo:', error);
+    res.status(500).json({ error: 'Erro interno ao excluir grupo.' });
   }
-
-  res.status(404).json({ error: 'Grupo não encontrado ou você não é o dono.' });
 });
 
 // ==========================================
 // ROTAS DO PAINEL ADMINISTRATIVO
 // ==========================================
-
 app.post('/api/login', (req, res) => {
   const { senha } = req.body;
   if (senha === getAdminPassword()) return res.json({ success: true });
   res.status(401).json({ error: 'Senha incorreta' });
 });
 
-app.get('/api/admin/solicitacoes', (req, res) => {
+app.get('/api/admin/solicitacoes', async (req, res) => {
   try {
-    const data = lerJson(SOLICITACOES_FILE, []);
+    const data = await Solicitacao.find().sort({ data: -1 });
     res.json(data);
   } catch (err) {
     res.json([]);
   }
 });
 
-// Rota para puxar todos os grupos cadastrados
-app.get('/api/grupos', (req, res) => {
+app.get('/api/admin/grupos', async (req, res) => {
   try {
-    const data = lerJson(DATA_FILE, []);
+    const data = await Grupo.find().sort({ data: -1 });
     res.json(data);
   } catch (err) {
     res.json([]);
   }
 });
 
-app.post('/api/admin/decidir-solicitacao', (req, res) => {
-  const { senha, id, aceito } = req.body;
-  if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
+app.post('/api/admin/decidir-solicitacao', async (req, res) => {
+  try {
+    const { senha, id, aceito } = req.body;
+    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
 
-  let solicitacoes = lerJson(SOLICITACOES_FILE, []);
-  const item = solicitacoes.find(s => String(s.id) === String(id));
-  solicitacoes = solicitacoes.filter(s => String(s.id) !== String(id));
-  
-  salvarJson(SOLICITACOES_FILE, solicitacoes);
-  salvarNoGitHub('solicitacoes.json', solicitacoes); // Sincroniza solicitações atualizadas no GitHub
+    const numericId = isNaN(id) ? id : Number(id);
+    const item = await Solicitacao.findOne({ id: numericId });
 
-  if (aceito && item) {
-    let grupos = lerJson(DATA_FILE, []);
-    let usuarios = lerJson(USERS_FILE, []);
+    await Solicitacao.deleteOne({ id: numericId });
 
-    let usuarioPerfil = usuarios.find(u => u.email === item.email || String(u.email).replace(/[@.]/g, '') === String(item.email).replace(/[@.]/g, ''));
+    if (aceito && item) {
+      let usuarios = await Usuario.find();
+      let usuarioPerfil = usuarios.find(u => u.email === item.email || String(u.email).replace(/[@.]/g, '') === String(item.email).replace(/[@.]/g, ''));
 
-    let nomeAutor = 'Membro / Comunidade';
-    if (usuarioPerfil && usuarioPerfil.nomeExibicao) {
-      nomeAutor = usuarioPerfil.nomeExibicao;
-    } else if (String(item.email).includes('manoel153153')) {
-      nomeAutor = 'Ninja';
-    } else if (item.email) {
-      nomeAutor = item.email.split('@')[0];
+      let nomeAutor = 'Membro / Comunidade';
+      if (usuarioPerfil && usuarioPerfil.nomeExibicao) {
+        nomeAutor = usuarioPerfil.nomeExibicao;
+      } else if (String(item.email).includes('manoel153153')) {
+        nomeAutor = 'Ninja';
+      } else if (item.email) {
+        nomeAutor = item.email.split('@')[0];
+      }
+
+      await Grupo.create({
+        id: Date.now(),
+        nome: item.nome,
+        categoria: item.categoria || 'Geral',
+        link: item.link,
+        descricao: item.descricao || '',
+        imagem: item.imagem || 'https://via.placeholder.com/100',
+        membros: '100+',
+        email: item.email || '',
+        autor: nomeAutor,
+        isVip: false,
+        acessos: 0
+      });
     }
 
-    grupos.push({
-      id: Date.now(),
-      nome: item.nome,
-      categoria: item.categoria || 'Geral',
-      link: item.link,
-      descricao: item.descricao || '',
-      imagem: item.imagem || 'https://via.placeholder.com/100',
-      membros: '100+',
-      email: item.email || '',
-      autor: nomeAutor,
-      isVip: false
-    });
-
-    salvarJson(DATA_FILE, grupos);
-    salvarNoGitHub('grupos.json', grupos); // Sincroniza o novo grupo aprovado no GitHub
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao processar solicitação' });
   }
-
-  res.json({ success: true });
 });
 
-app.post('/api/admin/ativar-vip', (req, res) => {
-  const { senha, grupoId, dias } = req.body;
-  if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
+app.post('/api/admin/ativar-vip', async (req, res) => {
+  try {
+    const { senha, grupoId, dias } = req.body;
+    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
 
-  let grupos = lerJson(DATA_FILE, []);
-  const idx = grupos.findIndex(g => String(g.id) === String(grupoId));
+    const numericId = isNaN(grupoId) ? grupoId : Number(grupoId);
+    const grupo = await Grupo.findOne({ id: numericId });
 
-  if (idx !== -1) {
-    const tempoMs = (parseInt(dias) || 30) * 24 * 60 * 60 * 1000;
-    grupos[idx].isVip = true;
-    grupos[idx].vipAte = Date.now() + tempoMs;
-    
-    salvarJson(DATA_FILE, grupos);
-    salvarNoGitHub('grupos.json', grupos); // Sincroniza VIP ativado no GitHub
-    
-    return res.json({ success: true });
+    if (grupo) {
+      const tempoMs = (parseInt(dias) || 30) * 24 * 60 * 60 * 1000;
+      grupo.isVip = true;
+      grupo.vipAte = Date.now() + tempoMs;
+      await grupo.save();
+
+      return res.json({ success: true });
+    }
+    res.status(404).json({ error: 'Grupo não encontrado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro no servidor' });
   }
-  res.status(404).json({ error: 'Grupo não encontrado' });
 });
 
-app.post('/api/admin/remover-vip', (req, res) => {
-  const { senha, grupoId } = req.body;
-  if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
+app.post('/api/admin/remover-vip', async (req, res) => {
+  try {
+    const { senha, grupoId } = req.body;
+    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
 
-  let grupos = lerJson(DATA_FILE, []);
-  const idx = grupos.findIndex(g => String(g.id) === String(grupoId));
+    const numericId = isNaN(grupoId) ? grupoId : Number(grupoId);
+    const grupo = await Grupo.findOne({ id: numericId });
 
-  if (idx !== -1) {
-    grupos[idx].isVip = false;
-    grupos[idx].vipAte = null;
-    
-    salvarJson(DATA_FILE, grupos);
-    salvarNoGitHub('grupos.json', grupos); // Sincroniza VIP removido no GitHub
-    
-    return res.json({ success: true });
+    if (grupo) {
+      grupo.isVip = false;
+      grupo.vipAte = null;
+      await grupo.save();
+
+      return res.json({ success: true });
+    }
+    res.status(404).json({ error: 'Grupo não encontrado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro no servidor' });
   }
-  res.status(404).json({ error: 'Grupo não encontrado' });
 });
 
-app.delete('/api/grupos/:id', (req, res) => {
-  const { senha } = req.body;
-  if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
+app.delete('/api/grupos/:id', async (req, res) => {
+  try {
+    const { senha } = req.body;
+    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
 
-  const idParaDeletar = String(req.params.id);
-  let grupos = lerJson(DATA_FILE, []);
-  grupos = grupos.filter(g => String(g.id) !== idParaDeletar);
+    const idParaDeletar = req.params.id;
+    const numericId = isNaN(idParaDeletar) ? idParaDeletar : Number(idParaDeletar);
 
-  salvarJson(DATA_FILE, grupos);
-  salvarNoGitHub('grupos.json', grupos); // Sincroniza exclusão no GitHub
+    await Grupo.deleteOne({ id: numericId });
 
-  res.json({ success: true });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao deletar grupo' });
+  }
 });
 
 // ==========================================
 // INICIALIZAÇÃO DO SERVIDOR
 // ==========================================
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});

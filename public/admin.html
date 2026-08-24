@@ -274,90 +274,91 @@
 </body>
 </html>
 <script>
-  let todasAsDenuncias = [];
+let todasAsDenuncias = [];
 
-  async function carregarDenunciasAdmin() {
-    const container = document.getElementById('lista-denuncias');
-    if (!container) return;
+async function carregarDenunciasAdmin() {
+  const container = document.getElementById('lista-denuncias');
+  if (!container) return;
 
-    try {
-      const res = await fetch('/api/denuncias');
-      const data = await res.json();
+  try {
+    const res = await fetch('/api/denuncias');
+    const data = await res.json();
 
-      if (!data.success || !data.denuncias || data.denuncias.length === 0) {
-        container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia registrada até o momento.</p>';
-        todasAsDenuncias = [];
-        return;
-      }
-
-      todasAsDenuncias = data.denuncias;
-      exibirDenuncias(todasAsDenuncias);
-
-    } catch (err) {
-      console.error('Erro ao carregar denúncias:', err);
-      container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de denúncias.</p>';
-    }
-  }
-
-  function exibirDenuncias(lista) {
-    const container = document.getElementById('lista-denuncias');
-    container.innerHTML = '';
-
-    if (lista.length === 0) {
-      container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia encontrada com esse termo.</p>';
+    // Como a API retorna um array direto [...]
+    if (!Array.isArray(data) || data.length === 0) {
+      container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia registrada até o momento.</p>';
+      todasAsDenuncias = [];
       return;
     }
 
-    lista.forEach(d => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.style.cssText = 'background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 10px;';
+    todasAsDenuncias = data;
+    exibirDenuncias(todasAsDenuncias);
 
-      card.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong>
-          <span style="font-size: 11px; color: #94a3b8;">${new Date(d.data).toLocaleString()}</span>
-        </div>
-        <p style="margin: 5px 0; color: #f1f5f9;"><strong>Motivo:</strong> ${d.motivo}</p>
-        <p style="margin: 5px 0 12px 0; font-size: 13px; color: #cbd5e1;"><strong>Contato:</strong> ${d.usuarioEmail}</p>
-        <button onclick="apagarDenuncia('${d.id}')" style="background: #dc2626; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
-          🗑️ Apagar Denúncia
-        </button>
-      `;
+  } catch (err) {
+    console.error('Erro ao carregar denúncias:', err);
+    container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de denúncias.</p>';
+  }
+}
 
-      container.appendChild(card);
-    });
+function exibirDenuncias(lista) {
+  const container = document.getElementById('lista-denuncias');
+  container.innerHTML = '';
+
+  if (lista.length === 0) {
+    container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia encontrada com esse termo.</p>';
+    return;
   }
 
-  function filtrarDenuncias() {
-    const termo = document.getElementById('input-busca-denuncia').value.toLowerCase().trim();
+  lista.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.cssText = 'background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 10px;';
 
-    const filtradas = todasAsDenuncias.filter(d => {
-      const nome = (d.nomeGrupo || '').toLowerCase();
-      const id = String(d.grupoId || '').toLowerCase();
-      return nome.includes(termo) || id.includes(termo);
-    });
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong>
+        <span style="font-size: 11px; color: #94a3b8;">${new Date(d.data).toLocaleString()}</span>
+      </div>
+      <p style="margin: 5px 0; color: #f1f5f9;"><strong>Motivo:</strong> ${d.motivo}</p>
+      <p style="margin: 5px 0 12px 0; font-size: 13px; color: #cbd5e1;"><strong>Contato:</strong> ${d.usuarioEmail}</p>
+      <button onclick="apagarDenuncia('${d.id}')" style="background: #dc2626; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+        🗑️ Apagar Denúncia
+      </button>
+    `;
 
-    exibirDenuncias(filtradas);
-  }
+    container.appendChild(card);
+  });
+}
 
-  async function apagarDenuncia(id) {
-    if (!confirm('Tem certeza que deseja apagar esta denúncia?')) return;
+function filtrarDenuncias() {
+  const termo = document.getElementById('input-busca-denuncia').value.toLowerCase().trim();
 
-    try {
-      const res = await fetch(`/api/denuncias/${encodeURIComponent(id)}`, { method: 'DELETE' });
-      const data = await res.json();
+  const filtradas = todasAsDenuncias.filter(d => {
+    const nome = (d.nomeGrupo || '').toLowerCase();
+    const id = String(d.grupoId || '').toLowerCase();
+    return nome.includes(termo) || id.includes(termo);
+  });
 
-      if (data.success) {
-        carregarDenunciasAdmin();
-      } else {
-        alert(data.error || 'Erro ao apagar denúncia.');
-      }
-    } catch (err) {
-      console.error('Erro ao excluir:', err);
-      alert('Erro de conexão ao tentar apagar a denúncia.');
+  exibirDenuncias(filtradas);
+}
+
+async function apagarDenuncia(id) {
+  if (!confirm('Tem certeza que deseja apagar esta denúncia?')) return;
+
+  try {
+    const res = await fetch(`/api/denuncias/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    const data = await res.json();
+
+    if (data.success) {
+      carregarDenunciasAdmin();
+    } else {
+      alert(data.error || 'Erro ao apagar denúncia.');
     }
+  } catch (err) {
+    console.error('Erro ao excluir:', err);
+    alert('Erro de conexão ao tentar apagar a denúncia.');
   }
+}
 
   async function autenticar() {
     const senhaInput = document.getElementById('admin-pass').value.trim();
