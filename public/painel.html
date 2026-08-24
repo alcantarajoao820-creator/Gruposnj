@@ -6,7 +6,6 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Painel - GruposNJ</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
@@ -81,38 +80,6 @@
     .btn-plano { padding: 12px 6px; border-radius: 8px; border: 1px solid #334155; background: #161e2e; cursor: pointer; transition: 0.2s; text-align: center; width: 100%; }
     .btn-plano.active { border: 2px solid #eab308; background: rgba(234, 179, 8, 0.05); }
 
-.menu-lateral {
-  position: fixed;
-  top: 0;
-  right: -280px;
-  width: 280px;
-  height: 100%;
-  background: #0f172a;
-  border-left: 1px solid #1e293b;
-  z-index: 1000;
-  transition: right 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-}
-.menu-lateral.ativo {
-  right: 0;
-}
-.menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  z-index: 999;
-}
-.menu-overlay.ativo {
-  display: block;
-}
-
 /* Estilos limpos e compactos para os botões do painel */
 .grupo-actions-pro {
   display: flex;
@@ -162,8 +129,177 @@
   flex: 1;
   background: linear-gradient(135deg, #ef4444, #dc2626);
 }
+ 
 
+    .header-principal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-text {
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .badge-telegram-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(14, 116, 144, 0.18) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .badge-telegram-header i {
+      font-size: 0.85rem;
+      color: #38bdf8;
+    }
+
+    /* Botão do Menu Estilizado */
+    .btn-nav-pro {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(8px);
+      outline: none;
+    }
+
+    .btn-blue-pro {
+      background: rgba(30, 41, 59, 0.75);
+      color: #60a5fa;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-blue-pro:hover {
+      background: rgba(59, 130, 246, 0.25);
+      color: #fff;
+      border-color: rgba(59, 130, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .menu-lateral-pro {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100dvh;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(148, 163, 184, 0.15);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .menu-lateral-pro.ativo { right: 0; }
+
+    .menu-header-pro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .menu-user-info { display: flex; align-items: center; gap: 10px; color: #f8fafc; font-weight: 600; font-size: 0.9rem; overflow: hidden; }
+    .menu-avatar-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3); flex-shrink: 0; }
+    .close-menu-pro { background: transparent; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; flex-shrink: 0; }
+    .close-menu-pro:hover { color: #fff; }
+
+    .menu-links-pro { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+      overflow-y: auto; 
+      flex: 1; 
+      padding-right: 2px;
+    }
+
+    .menu-item-pro { display: flex; align-items: center; gap: 12px; padding: 10px 14px; color: #cbd5e1; text-decoration: none; font-size: 0.9rem; font-weight: 500; border-radius: 10px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(148, 163, 184, 0.08); transition: all 0.25s ease; flex-shrink: 0; }
+    .menu-item-pro i { color: #64748b; font-size: 1rem; }
+    .menu-item-pro:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: #fff; }
+    .menu-item-pro.vip-item { background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08)); border-color: rgba(234, 176, 8, 0.4); color: #eab008; font-weight: 600; }
+    
+    .menu-footer-pro {
+      margin-top: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      flex-shrink: 0;
+    }
+
+    /* Estilo do Botão Sair na Gaveta */
+    .btn-sair {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #ef4444;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-sair:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.6);
+      color: #fff;
+    }
+
+    .menu-overlay-pro { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      background: rgba(0, 0, 0, 0.6); 
+      backdrop-filter: blur(4px); 
+      z-index: 9998; 
+      opacity: 0; 
+      visibility: hidden; 
+      transition: all 0.3s ease; 
+    }
+    .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
   </style>
+
   <!-- Scripts Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -172,24 +308,55 @@
 
   <div class="container">
 
-<header class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #1e293b; margin-bottom: 20px;">
-  <a href="/" class="brand" style="font-size: 1.25rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-    <i class="fa-solid fa-fire" style="color: #22c55e;"></i> Grupos<span style="color: #22c55e;">NJ</span>
-  </a>
-  <div class="nav-btns" style="display: flex; gap: 6px; align-items: center;">
-      <i class="fa-solid fa-heart" style="color:#ef4444;"></i>
-    </a>
-  </div>
-</header>
+  <!-- CABEÇALHO -->
+  <header class="header-principal">
+    <div class="logo-area">
+      <i class="fa-brands fa-whatsapp" style="color: #25d366 !important; font-size: 1.5rem; display: inline-block;"></i>
+      <span class="logo-text">Grupos <span style="color: #25d366;">NJ</span></span>
 
-  <!-- Cabeçalho do Usuário -->
-    <div class="user-header">
-      <div class="user-info">
-        <div class="user-name" id="display-name"><i class="fa-solid fa-spinner fa-spin"></i> Carregando...</div>
-        <div class="user-email" id="display-email">...</div>
+      <!-- Retângulo Profissional para o Telegram -->
+      <div class="badge-telegram-header">
+        <i class="fa-brands fa-telegram"></i>
+        <span>Telegram</span>
       </div>
-      <button class="btn-sair" onclick="sair()"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
     </div>
+
+    <!-- Botão de Menu Retornado para Abrir a Gaveta -->
+    <button onclick="toggleMenu()" class="btn-nav-pro btn-blue-pro" title="Menu" aria-label="Abrir Menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </header>
+
+  <!-- Menu Lateral Retátil (Gaveta) -->
+  <div class="menu-lateral-pro" id="menuLateral">
+    <div class="menu-header-pro">
+      <div class="menu-user-info">
+        <div class="menu-avatar-icon"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <div class="user-name" id="display-name" style="font-size: 0.9rem; font-weight: 600; color: #f8fafc;"><i class="fa-solid fa-spinner fa-spin"></i> Carregando...</div>
+          <div class="user-email" id="display-email" style="font-size: 0.75rem; color: #94a3b8;">...</div>
+        </div>
+      </div>
+      <button onclick="toggleMenu()" class="close-menu-pro">&times;</button>
+    </div>
+
+    <!-- Links do Menu -->
+    <div class="menu-links-pro">                                                                                                                                
+      <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início (WhatsApp)</span></a>
+      <a href="/telegram.html" class="menu-item-pro" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+        <i class="fa-brands fa-telegram"></i> <span>Grupos Telegram</span>
+      </a>    
+      <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a>
+      <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a>
+      <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a>
+    </div>
+
+    <!-- Botão de Sair fixo e visível no rodapé interno -->
+    <div class="menu-footer-pro">
+      <button class="btn-sair" onclick="sair()"><i class="fa-solid fa-right-from-bracket"></i> Sair da Conta</button>
+    </div>
+  </div>
+  <div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
 
 <!-- BOTAO HOME -->
   <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>
@@ -210,40 +377,54 @@
   </div>
 </div>
 
-<!-- Card de Parceria Estilo Premium / VIP -->
-<div style="position: relative; overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 16px; padding: 22px; margin-bottom: 20px;">
+<!-- Card de Parceria Estilo Premium / VIP com Regras (Corrigido com margem inferior) -->
+<div style="position: relative; overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-bottom: 24px;">
 
   <!-- Detalhe de luz neon no fundo -->
-  <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(56, 189, 248, 0.15); border-radius: 50%; filter: blur(20px); pointer-events: none;"></div>
+  <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(56, 189, 248, 0.15); border-radius: 50%; filter: blur(40px); z-index: 0;"></div>
 
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 14px;">
-    <div>
-      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-        <span style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">
-          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Programa Exclusivo
-        </span>
+  <div style="position: relative; z-index: 1;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 14px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Programa Exclusivo
+          </span>
+        </div>
+        <h3 style="margin: 0; font-size: 1.25rem; color: #38bdf8; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Parceiro Oficial GruposNJ</h3>
       </div>
-      <h3 style="margin: 0; font-size: 1.25rem; color: #38bdf8; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Parceiro Oficial GruposNJ</h3>
+
+      <!-- Contador de Vagas Estilizado -->
+      <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); padding: 8px 16px; border-radius: 12px; text-align: center;">
+        <span style="font-size: 0.65rem; color: #94a3b8; display: block; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Sua Vaga</span>
+        <span id="contadorVagaParceria" style="font-size: 1.1rem; font-weight: 800; color: #4ade80;">0/1</span>
+      </div>
     </div>
 
-    <!-- Contador de Vagas Estilizado -->
-    <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); padding: 8px 16px; border-radius: 12px; text-align: center;">
-      <span style="font-size: 0.65rem; color: #94a3b8; display: block; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Sua Vaga</span>
-      <span id="contadorVagaParceria" style="font-size: 1.1rem; font-weight: 800; color: #4ade80;">0/1</span>
-    </div>
-  </div>
+    <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 16px;">
+      Destaque seu grupo no topo das categorias com um selo oficial de autoridade! Cada usuário tem direito a <b>1 vaga de parceria ativa</b>. Confira os requisitos abaixo:
+    </p>
 
-  <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 16px;">
-    Destaque seu grupo no topo das categorias com um selo oficial de autoridade! Cada usuário tem direito a <b>1 vaga de parceria ativa</b>. Adicione o link do nosso site para resgatar.
-  </p>
-
-  <!-- Benefícios Modernos -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 0.8rem; color: #e2e8f0;">
-    <div style="background: rgba(255, 255, 255, 0.04); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; gap: 8px;">
-      <i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> Selo Exclusivo ⭐
+    <!-- Caixa de Regras da Parceria -->
+    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;">
+      <div style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+        <i class="fa-solid fa-clipboard-list"></i> Regras e Requisitos:
+      </div>
+      <ul style="margin: 0; padding-left: 18px; font-size: 0.8rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 8px; line-height: 1.4;">
+        <li><b>Link no Topo:</b> É obrigatório colocar o link do nosso site no <b>topo da descrição</b> do seu Grupo ou Canal.</li>
+        <li><b>Mínimo de Participantes:</b> O grupo/canal deve possuir <b>mais de 200 participantes</b> (+200).</li>
+        <li><b>Manutenção do Selo:</b> Caso o link seja removido do topo da descrição, o selo de parceiro será <b>perdido automaticamente</b>.</li>
+      </ul>
     </div>
-    <div style="background: rgba(255, 255, 255, 0.04); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; gap: 8px;">
-      <i class="fa-solid fa-chart-line" style="color: #4ade80;"></i> Máxima Visibilidade
+
+    <!-- Benefícios Modernos -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; font-size: 0.8rem; color: #e2e8f0;">
+      <div style="background: rgba(255, 255, 255, 0.04); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> Selo Exclusivo ⭐
+      </div>
+      <div style="background: rgba(255, 255, 255, 0.04); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-chart-line" style="color: #4ade80;"></i> Máxima Visibilidade
+      </div>
     </div>
   </div>
 
@@ -268,6 +449,7 @@
       <!-- Configuração de Senha -->
       <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Segurança da Conta</label>
       <button class="btn-blue" onclick="salvarSenha()" style="width: 100%; margin-bottom: 20px; background: #334155;"><i class="fa-solid fa-key"></i> Enviar E-mail para Alterar Senha</button>
+</div>
 
     <!-- Seção Meus Grupos -->
     <div class="card">
@@ -376,14 +558,15 @@
     </div>
 
     <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">
-      Para ganhar o selo e a vaga de destaque, adicione a frase abaixo <b>no topo da descrição do seu grupo</b> do WhatsApp:
+      Para ganhar o selo e a vaga de destaque, adicione a frase abaixo <b>no topo da descrição do seu Grupo/Canal</b> do WhatsApp/Telegram:
     </p>
 
     <!-- Caixa com a frase e o Botão de Copiar integrado -->
     <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px dashed #475569; margin-bottom: 15px; position: relative;">
       <div id="textoParaCopiar" style="font-size: 0.85rem; color: #e2e8f0; line-height: 1.4; margin-bottom: 10px; user-select: all;">
-        ✅ Parceiro Oficial do GruposNJ. 🔥<br>
-        👉 https://gruposnj.onrender.com
+        ✅ Canal/Grupo Parceiro do
+        Grupos NJ  😈👇🔗
+        Acesse: https://gruposnj.onrender.com<br>
       </div>
       <button onclick="copiarTextoParceria()" id="btnCopiarTexto" style="background: #334155; color: #f8fafc; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: background 0.2s;">
         <i class="fa-solid fa-copy"></i> Copiar Frase
@@ -535,8 +718,7 @@
     }
 
 async function carregarMeusGrupos(email) {
-  const container = document.getElementById('lista-meus-grupos');
-  const counterEl = document.getElementById('stat-total-grupos');
+  const container = document.getElementById('lista-meus-grupos');                                                                                           const counterEl = document.getElementById('stat-total-grupos');
   const counterAnalise = document.getElementById('stat-analise-grupos');
 
   try {
@@ -566,8 +748,7 @@ async function carregarMeusGrupos(email) {
       elementoVaga.style.padding = '2px 8px';
       elementoVaga.style.margin = '0';
       elementoVaga.innerText = `${parceriasAtivas}/1`;
-    }
-
+    }                                                                                                                                                     
     if (grupos.length === 0) {
       if (container) container.innerHTML = '<p style="color:#64748b; font-size:0.85rem;">Você ainda não possui grupos publicados.</p>';
       return;
@@ -575,7 +756,7 @@ async function carregarMeusGrupos(email) {
 
     if (container) {
       container.innerHTML = grupos.map(g => {
-        let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;                                               
+        let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;
         if (g.isVip) {
           const tempoRestante = typeof formatarTempoVip === 'function' ? formatarTempoVip(g.vipAte) : 'VIP Ativo';
           statusBadge = `
@@ -591,16 +772,16 @@ async function carregarMeusGrupos(email) {
         }
 
         let botaoParceriaHtml = '';
-        
+
         if (g.isVip) {
           // TRAVA VISUAL: Se o grupo for VIP, exibe o aviso que já possui destaque máximo
           botaoParceriaHtml = `
-            <button disabled style="background: #334155; color: #94a3b8; border: none; padding: 10px; border-radius: 8px; cursor: not-allowed; font-weight: 600; width: 100%; margin-top: 8px; font-size: 0.8rem;">
+            <button disabled style="background: #334155; color: #94a3b8; border: none; padding: 10px; border-radius: 8px; cursor: not-allowed;">
               <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Grupo VIP (Destaque Máximo)
             </button>
           `;
         } else if (g.statusParceria === 'pendente') {
-          botaoParceriaHtml = `<button disabled style="background: #eab308; color: #000; border: none; padding: 10px; border-radius: 8px; cursor: not-allowed; font-weight: bold; width: 100%; margin-top: 8px;">Solicitação Pendente</button>`;
+          botaoParceriaHtml = `<button disabled style="background: #eab308; color: #000; border: none; padding: 10px; border-radius: 8px; cursor: not-allowed;">Parceria em Análise</button>`;
         } else if (g.statusParceria === 'aprovado' || g.isParceiro) {
           const dataTermino = g.parceriaAte || g.validadeparceria || (Date.now() + (10 * 24 * 60 * 60 * 1000));
 
@@ -616,29 +797,34 @@ async function carregarMeusGrupos(email) {
 
           botaoParceriaHtml = `
             <div style="display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 8px;">
-              <button disabled style="background: #22c55e; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: default; font-weight: bold; width: 100%;">Parceria Ativa</button>
+              <button disabled style="background: #22c55e; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: default; font-weight: bold;">Parceiro Ativo</button>
               <div style="font-size: 0.75rem; color: #38bdf8; font-weight: 500; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;">
                 <i class="fa-regular fa-clock"></i> <span>${tempoParceriaStr}</span>
               </div>
             </div>
           `;
         } else {
-          botaoParceriaHtml = `<button onclick="solicitarParceria('${g.id}', '${g.email || ''}')" style="background: #3b82f6; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px;">Solicitar Parceria</button>`;
+          botaoParceriaHtml = `<button onclick="solicitarParceria('${g.id}', '${g.email || ''}')" style="background: #3b82f6; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer;">Solicitar Parceria</button>`;
         }
+
+        // 👈 VERIFICA SE É TELEGRAM OU WHATSAPP PARA O ÍCONE
+        const ehTelegram = g.link && (g.link.includes('t.me') || g.link.includes('telegram.me') || g.plataforma === 'telegram');
+        const iconeHtml = ehTelegram 
+          ? `<i class="fa-brands fa-telegram" style="color:#0088cc;"></i>` 
+          : `<i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i>`;
 
         return `
           <div class="grupo-item">
             <div class="grupo-top">
               <div class="grupo-info-left">
-                <img src="${g.imagem || 'https://via.placeholder.com/50'}" class="grupo-img" alt="Grupo">
-                <div>
+                <img src="${g.imagem || 'https://via.placeholder.com/50'}" class="grupo-img" alt="Grupo">                                                                 <div>
                   <strong class="grupo-nome">${escapeHtml(g.nome)}</strong>
                   <div style="margin-top: 2px;">${statusBadge}</div>
                 </div>
               </div>
             </div>
 
-            <div class="grupo-link"><i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i> ${escapeHtml(g.link)}</div>
+            <div class="grupo-link">${iconeHtml} ${escapeHtml(g.link)}</div>
 
             <div class="grupo-actions-pro">
               <button onclick="abrirModalPromover('${g.id}')" class="btn-painel btn-promover-painel">
@@ -669,7 +855,6 @@ async function carregarMeusGrupos(email) {
     if (container) container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar seus grupos.</p>';
   }
 }
-
 
     // Modal Promover VIP
     function abrirModalPromover(id) {
@@ -936,7 +1121,7 @@ function fecharModalParceria() {
 
 // Copiar o texto obrigatório para a área de transferência
 function copiarTextoParceria() {
-  const texto = "✅ Parceiro Oficial do GruposNJ. 🔥\n👉 https://gruposnj.onrender.com";
+  const texto = "✅ Canal/Grupo Parceiro do Grupos NJ 😈👇🔗 Acesse: https://gruposnj.onrender.com";
   navigator.clipboard.writeText(texto).then(() => {
     const btn = document.getElementById('btnCopiarTexto');
     btn.innerHTML = '<i class="fa-solid fa-check" style="color: #4ade80;"></i> Copiado!';
@@ -1006,6 +1191,12 @@ async function enviarSolicitudeParceriaFinal() {
   }
 }
 
+    function toggleMenu() {
+        const menu = document.getElementById('menuLateral');
+        const overlay = document.getElementById('menuOverlay');
+        if (menu) menu.classList.toggle('ativo');
+        if (overlay) overlay.classList.toggle('ativo');
+    }
 
 function gerarBreadcrumbs() {
   const container = document.getElementById('breadcrumb-container');

@@ -253,11 +253,165 @@
 </head>
 <body>
 
-  <div class="container">
-    <!-- Cabeçalho -->
-    <a href="/" class="header-logo">
-      <i class="fa-solid fa-fire"></i> Grupos<span>NJ</span>
-    </a>
+  <!-- CABEÇALHO -->
+  <header class="header-principal">
+    <div class="logo-area">
+      <i class="fa-brands fa-whatsapp" style="color: #25d366 !important; font-size: 1.5rem; display: inline-block;"></i>
+      <span class="logo-text">Grupos <span style="color: #25d366;">NJ</span></span>
+
+      <!-- Retângulo Profissional para o Telegram -->
+      <div class="badge-telegram-header">
+        <i class="fa-brands fa-telegram"></i>
+        <span>Telegram</span>
+      </div>
+    </div>
+
+    <!-- Botão de Menu Retornado para Abrir a Gaveta -->
+    <button onclick="toggleMenu()" class="btn-nav-pro btn-blue-pro" title="Menu" aria-label="Abrir Menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </header>
+
+  <!-- Menu Lateral Retátil (Gaveta) -->
+  <div class="menu-lateral-pro" id="menuLateral">
+    <div class="menu-header-pro">
+      <div class="menu-user-info">
+        <div class="menu-avatar-icon"><i class="fa-solid fa-user"></i></div>
+        <span id="saudacao-usuario">Olá, Visitante</span>
+      </div>
+      <button onclick="toggleMenu()" class="close-menu-pro">&times;</button>
+    </div>
+
+    <div class="menu-links-pro">                                                                                                                                
+      <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início (WhatsApp)</span></a>
+      <a href="/telegram.html" class="menu-item-pro" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+        <i class="fa-brands fa-telegram"></i> <span>Grupos Telegram</span>
+      </a>    
+      <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a>
+      <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a>
+      <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a>
+    </div>
+  </div>
+  <div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<style>
+    .header-principal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-text {
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .badge-telegram-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(14, 116, 144, 0.18) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .badge-telegram-header i {
+      font-size: 0.85rem;
+      color: #38bdf8;
+    }
+
+    /* Botão do Menu Estilizado */
+    .btn-nav-pro {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(8px);
+      outline: none;
+    }
+
+    .btn-blue-pro {
+      background: rgba(30, 41, 59, 0.75);
+      color: #60a5fa;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-blue-pro:hover {
+      background: rgba(59, 130, 246, 0.25);
+      color: #fff;
+      border-color: rgba(59, 130, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .menu-lateral-pro {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(20px);                                                                                                                              
+      border-left: 1px solid rgba(148, 163, 184, 0.15);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;                                                                                                                                   
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .menu-lateral-pro.ativo { right: 0; }
+
+    .menu-header-pro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      margin-bottom: 20px;
+    }
+
+    .menu-user-info { display: flex; align-items: center; gap: 10px; color: #f8fafc; font-weight: 600; font-size: 0.9rem; }
+    .menu-avatar-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .close-menu-pro { background: transparent; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; }
+    .close-menu-pro:hover { color: #fff; }
+
+    .menu-links-pro { display: flex; flex-direction: column; gap: 10px; }
+    .menu-item-pro { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: #cbd5e1; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-radius: 12px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(148, 163, 184, 0.08); transition: all 0.25s ease; }
+    .menu-item-pro i { color: #64748b; font-size: 1.1rem; }
+    .menu-item-pro:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: #fff; transform: translateX(4px); }
+    .menu-item-pro.vip-item { background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08)); border-color: rgba(234, 176, 8, 0.4); color: #eab008; font-weight: 600; }
+    
+    .menu-overlay-pro { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
+  </style>
 
   <!-- Topo da Página com Efeito Profissional -->
   <div class="hero-section-vip">
@@ -516,3 +670,12 @@
   </div>
 </body>
 </html>
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('menuLateral');
+        const overlay = document.getElementById('menuOverlay');
+        if (menu) menu.classList.toggle('ativo');
+        if (overlay) overlay.classList.toggle('ativo');
+    }
+  </script>
+
