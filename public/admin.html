@@ -528,23 +528,31 @@ async function ativarVip(grupoId) {
 
   async function removerVip(grupoId) {
     const senha = localStorage.getItem('adminPassword');
-    await fetch('/api/admin/remover-vip', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha, grupoId })
-    });
-    carregarDados();
-  }
+    
+    if (!senha) {
+      alert('Senha de administrador não encontrada. Faça login novamente no painel ADM.');
+      return;
+    }
 
-  async function deletarGrupo(id) {
-    if(!confirm('Tem certeza que quer deletar?')) return;
-    const senha = localStorage.getItem('adminPassword');
-    await fetch(`/api/grupos/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha })
-    });
-    carregarDados();
+    try {
+      const res = await fetch('/api/admin/remover-vip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha, grupoId })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao remover VIP');
+      }
+
+      // Sucesso: recarrega os dados na tela
+      carregarDados();
+    } catch (err) {
+      console.error('Erro ao remover VIP:', err);
+      alert('Não foi possível remover o VIP: ' + err.message);
+    }
   }
 
 // Função completa para carregar e exibir as solicitações de parceria pendentes no painel admin

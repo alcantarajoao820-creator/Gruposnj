@@ -1159,6 +1159,10 @@
       const container = document.getElementById('lista-grupos');
       if (!container) return;
 
+      container.style.display = 'grid';
+      container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+      container.style.gap = '12px';
+
       if (!lista || lista.length === 0) {
         container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8;">Nenhum grupo encontrado.</p>';
         atualizarControlesPaginacao(1);
@@ -1183,31 +1187,50 @@
         // Verifica se é parceiro oficial aprovado
         const ehParceiro = g.isParceiro || g.statusParceria === 'aprovado';
 
-        return `
-        <div class="card ${g.isVip ? 'vip' : ''}">
-          ${g.isVip ? '<span class="vip-badge"><i class="fa-solid fa-bolt"></i> VIP</span>' : ''}
-          <div>
-            <div class="card-info">
-              <img src="${escapeHtml(g.imagem)}" class="card-img" onerror="this.src='https://via.placeholder.com/100?text=Grupo'">
-              <div>
-                <div class="card-title">${escapeHtml(g.nome)}</div>
-                
-                <!-- Selo de Parceiro Oficial -->
-                ${ehParceiro ? '<div style="margin-top: 4px; margin-bottom: 2px;"><span style="background: #2563eb; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-star"></i> Parceiro Oficial</span></div>' : ''}
+        // Badges organizadas para ficarem logo abaixo do nome
+        let badgeHtml = '';
+        if (g.isVip) {
+          badgeHtml += '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-bolt"></i> VIP</span>';
+        }
+        if (ehParceiro) {
+          badgeHtml += '<span style="background: #2563eb; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-star"></i> Parceiro</span>';
+        }
 
-                <div class="card-members"><i class="fa-solid fa-users"></i> ${escapeHtml(g.membros || '100+')} membros</div>
-                <div class="card-categoria-tag">${escapeHtml(g.categoria || 'Geral')}</div>
-              </div>
+        return `
+        <div class="card ${g.isVip ? 'vip' : ''}" style="display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; text-align: left;">
+          
+          <div>
+            <!-- Foto do grupo no topo centralizada -->
+            <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+              <img src="${escapeHtml(g.imagem)}" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 1px solid #334155;" onerror="this.src='https://via.placeholder.com/100?text=Grupo'">
             </div>
-            <div class="card-desc">${escapeHtml(g.descricao || 'Sem descrição cadastrada.')}</div>
+
+            <!-- Nome do Grupo ocupando espaço total -->
+            <div class="card-title" style="font-size: 0.9rem; font-weight: bold; color: #fff; margin-bottom: 6px; text-align: center; word-break: break-word;">${escapeHtml(g.nome)}</div>
+
+            <!-- Tags VIP / Parceiro centralizadas abaixo do nome -->
+            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+              ${badgeHtml}
+            </div>
+
+            <!-- Informações (Membros e Categoria) -->
+            <div style="display: flex; justify-content: center; gap: 8px; align-items: center; font-size: 0.7rem; color: #94a3b8; margin-bottom: 8px;">
+              <span><i class="fa-solid fa-users"></i> ${escapeHtml(g.membros || '100+')}</span>
+              <span>•</span>
+              <span style="color: #38bdf8;"><i class="fa-solid fa-tag"></i> ${escapeHtml(g.categoria || 'Geral')}</span>
+            </div>
+
+            <div class="card-desc" style="font-size: 0.75rem; color: #cbd5e1; text-align: center; line-height: 1.3; margin-bottom: 10px;">${escapeHtml(g.descricao || 'Sem descrição cadastrada.')}</div>
           </div>
-          <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}">Ver Detalhes / Entrar</a>
+
+          <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box;">Ver Detalhes / Entrar</a>
         </div>
         `;
       }).join('');
 
       atualizarControlesPaginacao(totalPaginas);
     }
+
 
     function atualizarControlesPaginacao(totalPaginas) {
         const spanInfo = document.getElementById('info-pagina');

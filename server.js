@@ -166,11 +166,11 @@ app.post('/api/pix/gerar', async (req, res) => {
 app.get('/api/pix/status/:paymentId', async (req, res) => {
   try {
     const { paymentId } = req.params;
-    const response = await paymentClient.get({ id: paymentId });
-
+    const response = await paymentClient.get({ id: paymentId });                                                                                          
+    
     if (response.status === 'approved') {
-      const grupoId = response.metadata.grupo_id || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].grupoId);
-      const dias = Number(response.metadata.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
+      const grupoId = response.metadata?.grupo_id || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].grupoId);
+      const dias = Number(response.metadata?.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
 
       if (grupoId) {
         let grupos = lerJson(DATA_FILE, []);
@@ -188,6 +188,7 @@ app.get('/api/pix/status/:paymentId', async (req, res) => {
           grupos[idx].vipAte = baseTempo + tempoMs;
 
           salvarJson(DATA_FILE, grupos);
+          console.log(`[STATUS PIX] VIP ativado com sucesso para o grupo ${grupoId} por ${dias} dias.`);
         }
       }
     }
@@ -208,8 +209,8 @@ app.post('/api/webhook', async (req, res) => {
       const response = await paymentClient.get({ id: paymentId });
 
       if (response.status === 'approved') {
-        const grupoId = response.metadata.grupo_id || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].grupoId);
-        const dias = Number(response.metadata.vip_days || response.metadata.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
+        const grupoId = response.metadata?.grupo_id || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].grupoId);
+        const dias = Number(response.metadata?.vip_days || response.metadata?.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
 
         if (grupoId) {
           let grupos = lerJson(DATA_FILE, []);
@@ -689,13 +690,25 @@ app.put('/api/meus-grupos/link', async (req, res) => {
       return res.status(400).json({ error: 'Este link já está cadastrado em outro grupo!' });
     }
 
-    const grupo = await Grupo.findOne({ id: String(grupoId), email: email });
+    // Busca o grupo para garantir que ele existe e pertence ao usuário
+    let query = { id: String(grupoId), email: email };
+    let grupo = await Grupo.findOne(query);
+
+    if (!grupo && !isNaN(grupoId)) {
+      // Tenta buscar com ID numérico caso o banco armazene como número
+      query = { id: Number(grupoId), email: email };
+      grupo = await Grupo.findOne(query);
+    }
+
     if (!grupo) {
       return res.status(404).json({ error: 'Grupo não encontrado ou sem permissão.' });
     }
 
-    grupo.link = novoLink.trim();
-    await grupo.save();
+    // Atualiza diretamente no banco usando updateOne para evitar erro de validação do schema
+    await Grupo.updateOne(
+      { _id: grupo._id },
+      { $set: { link: novoLink.trim() } }
+    );
 
     return res.json({ success: true });
   } catch (error) {
@@ -797,43 +810,80 @@ app.post('/api/admin/decidir-solicitacao', async (req, res) => {
 app.post('/api/admin/ativar-vip', async (req, res) => {
   try {
     const { senha, grupoId, dias } = req.body;
-    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
-
-    const numericId = isNaN(grupoId) ? grupoId : Number(grupoId);
-    const grupo = await Grupo.findOne({ id: numericId });
-
-    if (grupo) {
-      const tempoMs = (parseInt(dias) || 30) * 24 * 60 * 60 * 1000;
-      grupo.isVip = true;
-      grupo.vipAte = Date.now() + tempoMs;
-      await grupo.save();
-
-      return res.json({ success: true });
+    if (senha !== getAdminPassword()) {
+      return res.status(403).json({ error: 'Não autorizado' });
     }
-    res.status(404).json({ error: 'Grupo não encontrado' });
+
+    // Calcula a data de expiração do VIP somando os dias escolhidos
+    const diasNum = parseInt(dias) || 30;
+    const vipAte = new Date();
+    vipAte.setDate(vipAte.getDate() + diasNum);
+
+    // Tenta encontrar o grupo pelo ID personalizado ou _id do Mongo
+    let query = { id: grupoId };
+    if (!isNaN(grupoId)) {
+      query = { $or: [{ id: grupoId }, { id: Number(grupoId) }] };
+    }
+
+    let grupo = await Grupo.findOne(query);
+    if (!grupo && !isNaN(grupoId)) {
+      try {
+        grupo = await Grupo.findById(grupoId);
+      } catch (e) {}
+    }
+
+    if (!grupo) {
+      return res.status(404).json({ error: 'Grupo não encontrado' });
+    }
+
+    // Atualiza diretamente no banco usando updateOne para evitar erro de validação do schema
+    await Grupo.updateOne(
+      { _id: grupo._id },
+      { $set: { isVip: true, vipAte: vipAte } }
+    );
+
+    return res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: 'Erro no servidor' });
+    console.error('ERRO DETALHADO NO ATIVAR VIP:', error);
+    res.status(500).json({ error: 'Erro no servidor: ' + error.message });
   }
 });
 
 app.post('/api/admin/remover-vip', async (req, res) => {
   try {
     const { senha, grupoId } = req.body;
-    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
-
-    const numericId = isNaN(grupoId) ? grupoId : Number(grupoId);
-    const grupo = await Grupo.findOne({ id: numericId });
-
-    if (grupo) {
-      grupo.isVip = false;
-      grupo.vipAte = null;
-      await grupo.save();
-
-      return res.json({ success: true });
+    if (senha !== getAdminPassword()) {
+      return res.status(403).json({ error: 'Não autorizado' });
     }
-    res.status(404).json({ error: 'Grupo não encontrado' });
+
+    // Tenta encontrar o grupo pelo 'id' personalizado ou '_id'
+    let query = { id: grupoId };
+    if (!isNaN(grupoId)) {
+      // Se for número, busca tanto como string quanto como número para garantir
+      query = { $or: [{ id: grupoId }, { id: Number(grupoId) }] };
+    }
+
+    let grupo = await Grupo.findOne(query);
+    if (!grupo && !isNaN(grupoId)) {
+      try {
+        grupo = await Grupo.findById(grupoId);
+      } catch (e) {}
+    }
+
+    if (!grupo) {
+      return res.status(404).json({ error: 'Grupo não encontrado' });
+    }
+
+    // Atualiza diretamente no banco usando updateOne para evitar erro de validação do schema em outros campos
+    await Grupo.updateOne(
+      { _id: grupo._id },
+      { $set: { isVip: false, vipAte: null } }
+    );
+
+    return res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: 'Erro no servidor' });
+    console.error('ERRO DETALHADO NO REMOVER VIP:', error);
+    res.status(500).json({ error: 'Erro no servidor: ' + error.message });
   }
 });
 
