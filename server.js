@@ -6,9 +6,10 @@ const cheerio = require('cheerio');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 // URL do MongoDB Atlas (já com sua chave configurada)
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://alcantarajoao501_db_user:tSmnRScUEeKK541D@ac-tbyhp8j.ul2jraq.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster';
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Conectado ao MongoDB Atlas com sucesso!'))
@@ -72,7 +73,7 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 // CONFIGURAÇÃO DO MERCADO PAGO
 // ==========================================
-const MP_ACCESS_TOKEN = 'APP_USR-1706102792295240-082021-c362fdf2543534d67bafaaf406826137-3629716031';
+const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
 const mpClient = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
 const paymentClient = new Payment(mpClient);
