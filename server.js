@@ -27,8 +27,12 @@ const GrupoSchema = new mongoose.Schema({
   isVip: { type: Boolean, default: false },
   vipAte: { type: Number, default: null },
   acessos: { type: Number, default: 0 },
-  data: { type: Date, default: Date.now }
+  data: { type: Date, default: Date.now },
+  isParceiro: { type: Boolean, default: false },
+  statusParceria: { type: String, enum: ['nenhum', 'pendente', 'aprovado'], default: 'nenhum' },
+  usuarioDonoEmail: { type: String, default: '' }
 });
+
 const Grupo = mongoose.model('Grupo', GrupoSchema);
 
 const SolicitacaoSchema = new mongoose.Schema({
@@ -319,7 +323,15 @@ app.get('/api/grupos', async (req, res) => {
     for (let g of grupos) {
       if (g.isVip && g.vipAte && agora > g.vipAte) {
         g.isVip = false;
-        g.vipAte = null;
+        await g.save();
+      }
+
+      // Expira a parceria automaticamente após 10 dias e libera a vaga
+      if ((g.isParceiro || g.statusParceria === 'aprovado') && g.parceriaAte && agora > g.parceriaAte) {
+        g.isParceiro = false;
+        g.statusParceria = 'expirado';
+        g.parceriaAte = null;
+        await g.save();
       }
 
       if (g.email) {
@@ -334,16 +346,32 @@ app.get('/api/grupos', async (req, res) => {
       } else if (!g.autor) {
         g.autor = 'Membro';
       }
-
-      await g.save();
     }
 
-    grupos.sort((a, b) => (b.isVip ? 1 : 0) - (a.isVip ? 1 : 0) || b.id - a.id);
+    grupos.sort((a, b) => {
+      // 1º: VIPs primeiro
+      const vipDiff = (b.isVip ? 1 : 0) - (a.isVip ? 1 : 0);
+      if (vipDiff !== 0) return vipDiff;
+
+      // 2º: Parceiros aprovados logo depois dos VIPs
+      const aParceiro = (a.isParceiro || a.statusParceria === 'aprovado') ? 1 : 0;
+      const bParceiro = (b.isParceiro || b.statusParceria === 'aprovado') ? 1 : 0;
+      const parceiroDiff = bParceiro - aParceiro;
+      if (parceiroDiff !== 0) return parceiroDiff;
+
+      // 3º: Desempate seguro por data de criação ou ID
+      const dataA = new Date(a.createdAt || 0).getTime();
+      const dataB = new Date(b.createdAt || 0).getTime();
+      return dataB - dataA;
+    });
+
     res.json(grupos);
   } catch (error) {
+    console.error("Erro na rota /api/grupos:", error);
     res.status(500).json({ error: 'Erro ao buscar grupos' });
   }
 });
+
 
 app.post('/api/solicitar', async (req, res) => {
   try {
@@ -381,6 +409,46 @@ app.post('/api/solicitar', async (req, res) => {
     res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
   } catch (error) {
     res.status(500).json({ error: 'Erro ao processar solicitação' });
+  }
+});
+
+// Rota para solicitar parceria (Envia para análise do admin)
+app.post('/api/grupos/solicitar-parceria', async (req, res) => {
+  try {
+    const { grupoId, email } = req.body;
+    
+    if (!grupoId || !email) {
+      return res.status(400).json({ error: 'Dados incompletos.' });
+    }
+
+    // Busca todos os grupos do usuário para verificar se ele já tem vaga ativa/pendente
+    const gruposDoUsuario = await Grupo.find({ email: new RegExp(`^${email}$`, 'i') });
+    
+    const jaTemParceria = gruposDoUsuario.some(g => 
+      String(g.id) !== String(grupoId) && 
+      (g.statusParceria === 'aprovado' || g.statusParceria === 'pendente' || g.isParceiro) &&
+      (!g.parceriaAte || Date.now() < g.parceriaAte)
+    );
+
+    if (jaTemParceria) {
+      return res.status(400).json({ error: 'Você já possui uma vaga de parceria em uso ou pendente.' });
+    }
+
+    const numericId = isNaN(grupoId) ? grupoId : Number(grupoId);
+    const grupo = await Grupo.findOne({ id: numericId });
+    
+    if (!grupo) {
+      return res.status(404).json({ error: 'Grupo não encontrado.' });
+    }
+
+    // Define o status como pendente para o admin aprovar
+    grupo.statusParceria = 'pendente';
+    await grupo.save();
+
+    res.json({ success: true, message: 'Solicitação enviada com sucesso! Aguarde a aprovação.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao processar solicitação de parceria.' });
   }
 });
 
@@ -454,6 +522,55 @@ app.get('/api/usuario/perfil', async (req, res) => {
     res.json({ success: true, usuario });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Erro ao buscar perfil' });
+  }
+});
+
+// Rota para solicitar ou ativar a parceria do grupo (Validade: 10 dias)
+app.post('/api/grupos/solicitar-parceria', async (req, res) => {
+  try {
+    const { grupoId, email } = req.body;
+
+    if (!grupoId || !email) {
+      return res.status(400).json({ error: 'Dados incompletos.' });
+    }
+
+    // Encontra o grupo que quer se tornar parceiro
+    const grupo = await Grupo.findOne({ id: grupoId });
+    if (!grupo) {
+      return res.status(404).json({ error: 'Grupo não encontrado.' });
+    }
+
+    // TRAVA VIP: Impede grupos VIPs de solicitarem parceria
+    if (grupo.isVip) {
+      return res.status(400).json({ error: 'Grupos VIP possuem destaque máximo e não podem solicitar parceria.' });
+    }
+
+    // Busca todos os grupos do usuário para verificar se ele já tem 1 vaga ativa/pendente
+    const gruposDoUsuario = await Grupo.find({ email: new RegExp(`^${email}$`, 'i') });
+
+    const jaTemParceriaAtiva = gruposDoUsuario.some(g =>
+      String(g.id) !== String(grupoId) &&
+      (g.isParceiro || g.statusParceria === 'aprovado' || g.statusParceria === 'pendente') &&
+      (!g.parceriaAte || Date.now() < g.parceriaAte)
+    );
+
+    if (jaTemParceriaAtiva) {
+      return res.status(400).json({ error: 'Você já possui 1 vaga de parceria em uso (limite de 1 por usuário).' });
+    }
+
+    // Define a validade de 10 dias (10 dias * 24h * 60m * 60s * 1000ms)
+    const dezDiasEmMs = 10 * 24 * 60 * 60 * 1000;
+
+    grupo.isParceiro = true;
+    grupo.statusParceria = 'aprovado'; // ou 'pendente' se preferir passar por moderação antes
+    grupo.parceriaAte = Date.now() + dezDiasEmMs;
+
+    await grupo.save();
+                                                                                                                                           
+    res.json({ success: true, message: 'Parceria ativada com sucesso por 10 dias!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao processar parceria.' });
   }
 });
 
@@ -606,7 +723,6 @@ app.delete('/api/meus-grupos/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro interno ao excluir grupo.' });
   }
 });
-
 // ==========================================
 // ROTAS DO PAINEL ADMINISTRATIVO
 // ==========================================
@@ -720,6 +836,95 @@ app.post('/api/admin/remover-vip', async (req, res) => {
     res.status(500).json({ error: 'Erro no servidor' });
   }
 });
+
+app.post('/api/admin/aprovar-parceria/:id', async (req, res) => {
+  try {
+    const { senha } = req.body;
+    if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
+
+    const grupoId = req.params.id;
+    const numericId = isNaN(grupoId) ? grupoId : Number(grupoId);
+    const grupo = await Grupo.findOne({ id: numericId });
+
+    if (!grupo) return res.status(404).json({ error: 'Grupo não encontrado.' });
+
+    const dezDiasEmMs = 10 * 24 * 60 * 60 * 1000;
+    const dataExpiracao = Date.now() + dezDiasEmMs;
+
+    grupo.isParceiro = true;
+    grupo.statusParceria = 'aprovado';
+    grupo.parceriaAte = dataExpiracao;
+    grupo.validadeparceria = dataExpiracao; // Garante compatibilidade se o front usar esse nome
+
+    await grupo.save();
+    res.json({ success: true, message: 'Parceria aprovada com sucesso!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao aprovar parceria.' });
+  }
+});
+
+// Rota para o ADM listar todos os grupos que são parceiros ativos
+app.get('/api/adm/parceiros', async (req, res) => {
+  try {
+    const parceiros = await Grupo.find({ 
+      $or: [{ statusParceria: 'aprovado' }, { isParceiro: true }] 
+    });
+    res.json(parceiros);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao buscar parceiros' });
+  }
+});
+
+app.post('/api/adm/remover-parceria', async (req, res) => {
+  try {
+    const { grupoId } = req.body;
+    if (!grupoId) {
+      return res.status(400).json({ error: 'ID do grupo não fornecido.' });
+    }
+
+    let grupo = null;
+
+    // Tenta atualizar pelo _id do MongoDB se tiver o tamanho correto (24 caracteres)
+    if (grupoId.length === 24) {
+      grupo = await Grupo.findByIdAndUpdate(grupoId, {
+        $set: {
+          statusParceria: 'removido',
+          isParceiro: false,
+          parceriaAte: null,
+          validadeparceria: null
+        }
+      });
+    }
+
+    // Se não achou por _id, tenta buscar pelo campo customizado "id" ou ObjectId como string
+    if (!grupo) {
+      grupo = await Grupo.findOneAndUpdate(
+        { $or: [{ id: grupoId }, { _id: grupoId.length === 24 ? grupoId : null }] },
+        {
+          $set: {
+            statusParceria: 'removido',
+            isParceiro: false,
+            parceriaAte: null,
+            validadeparceria: null
+          }
+        }
+      );
+    }
+
+    if (!grupo) {
+      return res.status(404).json({ error: 'Grupo não encontrado no banco de dados.' });
+    }
+
+    res.json({ success: true, message: 'Parceria removida com sucesso!' });
+  } catch (error) {
+    console.error("Erro ao remover parceria:", error);
+    res.status(500).json({ error: 'Erro interno ao remover parceria.' });
+  }
+});
+
+
 
 app.delete('/api/grupos/:id', async (req, res) => {
   try {

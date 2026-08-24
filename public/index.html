@@ -166,6 +166,52 @@
     letter-spacing: 1px;
 }
 
+/* Estilo profissional para a área de carregamento de grupos */
+.loading-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  gap: 16px;
+}
+
+/* Spinner de carregamento animado com neon */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spinLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.loading-state p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  animation: pulseText 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spinLoading {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
   </style>
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -607,56 +653,6 @@
   </div>
 </main>
 
-<style>
-/* Estilo profissional para a área de carregamento de grupos */
-.loading-state {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 20px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(148, 163, 184, 0.1);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  gap: 16px;
-}
-
-/* Spinner de carregamento animado com neon */
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(59, 130, 246, 0.2);
-  border-top-color: #3b82f6;
-  border-radius: 50%;
-  animation: spinLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
-}
-
-.loading-state p {
-  color: #94a3b8;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-  animation: pulseText 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes spinLoading {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulseText {
-  0% { opacity: 0.6; }
-  100% { opacity: 1; }
-}
-</style>
-
-
     <!-- Paginação (Sempre visível agora) -->
     <div id="paginacao-container" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px;">
       <button id="btn-anterior" onclick="mudarPagina(-1)" style="background: #1e293b; color: #fff; border: 1px solid #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
@@ -844,6 +840,64 @@
   transform: translateY(0);
 }
 </style>
+
+<!-- Card "Seja um Parceiro" Completo e Profissional -->
+<div class="card-parceria-banner" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 32px 24px; margin: 25px 0; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.6);">
+  
+  <!-- Efeitos de brilho de fundo decorativos -->
+  <div style="position: absolute; top: -60px; right: -60px; width: 160px; height: 160px; background: rgba(37, 99, 235, 0.2); filter: blur(60px); border-radius: 50%; pointer-events: none;"></div>
+  <div style="position: absolute; bottom: -60px; left: -60px; width: 160px; height: 160px; background: rgba(2, 132, 199, 0.15); filter: blur(60px); border-radius: 50%; pointer-events: none;"></div>
+
+  <div style="position: relative; z-index: 2; display: flex; flex-direction: column; gap: 20px; text-align: center; align-items: center;">
+    
+    <!-- Ícone de Destaque com Fundo Brilhante -->
+    <div style="width: 60px; height: 60px; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);">
+      <i class="fa-solid fa-handshake"></i>
+    </div>
+
+    <!-- Títulos -->
+    <div style="max-width: 500px;">
+      <span style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3); text-transform: uppercase; letter-spacing: 0.5px;">Programa de Parceria Oficial</span>
+      <h3 style="font-size: 1.4rem; color: #f8fafc; font-weight: 700; margin-top: 10px; margin-bottom: 6px;">Destaque Seu Grupo de WhatsApp Gratuitamente!</h3>
+      <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">Leve seu grupo para o próximo nível. Participe do nosso programa de parcerias e conquistas exclusivas na plataforma.</p>
+    </div>
+
+    <!-- Lista de Benefícios (Mais Informações) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; width: 100%; max-width: 600px; text-align: left; margin: 4px 0;">
+      
+      <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(51, 65, 85, 0.6); padding: 12px 14px; border-radius: 12px; display: flex; align-items: center; gap: 10px;">
+        <i class="fa-solid fa-badge-check" style="color: #38bdf8; font-size: 1.1rem;"></i>
+        <div>
+          <strong style="color: #f8fafc; font-size: 0.8rem; display: block;">Selo Verificado</strong>
+          <span style="color: #94a3b8; font-size: 0.72rem;">Crachá oficial de parceiro no grupo.</span>
+        </div>
+      </div>
+
+      <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(51, 65, 85, 0.6); padding: 12px 14px; border-radius: 12px; display: flex; align-items: center; gap: 10px;">
+        <i class="fa-solid fa-chart-line-up" style="color: #22c55e; font-size: 1.1rem;"></i>
+        <div>
+          <strong style="color: #f8fafc; font-size: 0.8rem; display: block;">Mais Acessos</strong>
+          <span style="color: #94a3b8; font-size: 0.72rem;">Atraia muito mais cliques e membros.</span>
+        </div>
+      </div>
+
+      <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(51, 65, 85, 0.6); padding: 12px 14px; border-radius: 12px; display: flex; align-items: center; gap: 10px; grid-column: 1 / -1; justify-content: center;">
+        <i class="fa-solid fa-clock" style="color: #fbbf24; font-size: 1.1rem;"></i>
+        <div>
+          <strong style="color: #f8fafc; font-size: 0.8rem; display: inline;">Validade de 10 Dias:</strong>
+          <span style="color: #94a3b8; font-size: 0.75rem;"> Benefício renovável para criadores ativos na comunidade.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Botão Seja Parceiro Bem Top -->
+    <button onclick="cliqueSejaParceiro()" style="background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: #ffffff; border: none; padding: 14px 32px; border-radius: 30px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.45); transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.2); margin-top: 6px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 25px rgba(37, 99, 235, 0.65)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(37, 99, 235, 0.45)';">
+      <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Quero Ser Parceiro Agora
+    </button>
+
+  </div>
+</div>
 
 
   <!-- Bloco Oficial RTA Destacado -->
@@ -1126,6 +1180,9 @@
             (g.categoria && g.categoria.includes(termo)) || (g.nome && g.nome.includes(termo))
         );
 
+        // Verifica se é parceiro oficial aprovado
+        const ehParceiro = g.isParceiro || g.statusParceria === 'aprovado';
+
         return `
         <div class="card ${g.isVip ? 'vip' : ''}">
           ${g.isVip ? '<span class="vip-badge"><i class="fa-solid fa-bolt"></i> VIP</span>' : ''}
@@ -1134,6 +1191,10 @@
               <img src="${escapeHtml(g.imagem)}" class="card-img" onerror="this.src='https://via.placeholder.com/100?text=Grupo'">
               <div>
                 <div class="card-title">${escapeHtml(g.nome)}</div>
+                
+                <!-- Selo de Parceiro Oficial -->
+                ${ehParceiro ? '<div style="margin-top: 4px; margin-bottom: 2px;"><span style="background: #2563eb; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-star"></i> Parceiro Oficial</span></div>' : ''}
+
                 <div class="card-members"><i class="fa-solid fa-users"></i> ${escapeHtml(g.membros || '100+')} membros</div>
                 <div class="card-categoria-tag">${escapeHtml(g.categoria || 'Geral')}</div>
               </div>
@@ -1354,6 +1415,20 @@ function gerarBreadcrumbs() {
 }
 
 window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
+
+function cliqueSejaParceiro() {
+  // Pega o e-mail do usuário nas chaves comuns do seu sistema
+  const emailUsuario = localStorage.getItem('userEmail') || localStorage.getItem('usuarioEmail') || '';
+
+  if (emailUsuario && emailUsuario.trim() !== '') {
+    // Se estiver logado, manda direto para o painel (onde ele gerencia os grupos e pede a parceria)
+    window.location.href = '/painel.html'; 
+  } else {
+    // Se não estiver logado, manda para a tela de login/cadastro
+    // (Ajuste '/login.html' para o caminho exato da sua tela de login se for diferente)
+    window.location.href = '/login.html'; 
+  }
+}
 
   </script>
 </body>
