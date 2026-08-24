@@ -983,23 +983,27 @@ app.post('/api/adm/remover-parceria', async (req, res) => {
   }
 });
 
-
-
-app.delete('/api/grupos/:id', async (req, res) => {
+app.post('/api/admin/deletar-grupo/:id', async (req, res) => {
   try {
     const { senha } = req.body;
     if (senha !== getAdminPassword()) return res.status(403).json({ error: 'Não autorizado' });
 
     const idParaDeletar = req.params.id;
     const numericId = isNaN(idParaDeletar) ? idParaDeletar : Number(idParaDeletar);
-
-    await Grupo.deleteOne({ id: numericId });
+    
+    let resultado = await Grupo.deleteOne({ id: numericId });
+    
+    if (resultado.deletedCount === 0 && idParaDeletar.length === 24) {
+      resultado = await Grupo.deleteOne({ _id: idParaDeletar });
+    }
 
     res.json({ success: true });
   } catch (error) {
+    console.error('Erro ao deletar grupo:', error);
     res.status(500).json({ error: 'Erro ao deletar grupo' });
   }
 });
+
 
 // ==========================================
 // INICIALIZAÇÃO DO SERVIDOR

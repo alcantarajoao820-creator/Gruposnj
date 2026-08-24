@@ -717,6 +717,40 @@ document.addEventListener('DOMContentLoaded', () => {
   carregarParceirosAdm();
 });
 
+// Função para deletar o grupo permanentemente do painel ADM
+async function deletarGrupo(grupoId) {
+  if (!confirm('Tem certeza que deseja excluir permanentemente este grupo?')) return;
+
+  const senha = localStorage.getItem('adminPassword');
+  if (!senha) {
+    alert('Senha de administrador não encontrada. Faça login novamente.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/admin/deletar-grupo/${grupoId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert('Grupo deletado com sucesso!');
+      // Atualiza os dados na tela (se a sua função de carregar se chamar diferente, ajuste aqui)
+      if (typeof carregarDados === 'function') {
+        carregarDados();
+      } else {
+        location.reload(); // Recarrega a página se não achar a função de carregar
+      }
+    } else {
+      alert('Erro ao deletar grupo: ' + (data.error || 'Erro desconhecido'));
+    }
+  } catch (err) {
+    console.error('Erro de conexão:', err);
+    alert('Erro de conexão ao tentar deletar o grupo.');
+  }
+}
 
 </script>
 </body>
