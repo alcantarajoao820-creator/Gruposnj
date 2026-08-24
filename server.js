@@ -111,8 +111,16 @@ function salvarJson(filePath, data) {
 }
 
 function getAdminPassword() {
-  const config = lerJson(CONFIG_FILE, { adminPassword: "admin" });
-  return config.adminPassword;
+  // Tenta pegar a senha do Render/dotenv (.env). Se não achar, tenta ler do config.json, e por fim usa "admin"
+  if (process.env.ADMIN_PASSWORD) {
+    return process.env.ADMIN_PASSWORD;
+  }
+  try {
+    const config = lerJson(CONFIG_FILE, { adminPassword: "admin" });
+    return config.adminPassword;
+  } catch (e) {
+    return "admin";
+  }
 }
 
 app.get('/admin.html', (req, res) => {
