@@ -15,9 +15,8 @@ mongoose.connect(MONGO_URI)
   .then(() => console.log('Conectado ao MongoDB Atlas com sucesso!'))
   .catch(err => console.error('Erro ao conectar no MongoDB:', err));
 
-// Definição dos Modelos (Schemas)
 const GrupoSchema = new mongoose.Schema({
-  id: { type: Number, unique: true },
+  id: Number,
   nome: String,
   link: String,
   categoria: String,
@@ -26,14 +25,13 @@ const GrupoSchema = new mongoose.Schema({
   email: String,
   autor: String,
   isVip: { type: Boolean, default: false },
-  vipAte: { type: Number, default: null },
+  diasVip: { type: Number, default: 0 },
   acessos: { type: Number, default: 0 },
   data: { type: Date, default: Date.now },
   isParceiro: { type: Boolean, default: false },
   statusParceria: { type: String, enum: ['nenhum', 'pendente', 'aprovado'], default: 'nenhum' },
   usuarioDonoEmail: { type: String, default: '' }
 });
-
 const Grupo = mongoose.model('Grupo', GrupoSchema);
 
 const SolicitacaoSchema = new mongoose.Schema({
@@ -49,10 +47,11 @@ const SolicitacaoSchema = new mongoose.Schema({
 });
 const Solicitacao = mongoose.model('Solicitacao', SolicitacaoSchema);
 
+// Schema unificado e definitivo do Usuário (sem duplicatas)
 const UsuarioSchema = new mongoose.Schema({
-  email: { type: String, unique: true, lowercase: true },
+  email: { type: String, required: true, unique: true, lowercase: true },
   nomeExibicao: String,
-  foto: String,
+  foto: { type: String, default: '' },
   redeSocial: String
 });
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
@@ -66,6 +65,7 @@ const DenunciaSchema = new mongoose.Schema({
   data: { type: Date, default: Date.now }
 });
 const Denuncia = mongoose.model('Denuncia', DenunciaSchema);
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -271,22 +271,38 @@ app.get('/api/grupos/:id', async (req, res) => {
     }
 
     let grupoObj = grupo.toObject();
-    let usuarios = await Usuario.find();
-    let usuarioPerfil = usuarios.find(u => u.email === grupoObj.email || u.email?.replace(/[@.]/g, '') === String(grupoObj.email).replace(/[@.]/g, ''));
 
-    if (!usuarioPerfil && String(grupoObj.email).includes('manoel153153')) {
-      grupoObj.autor = 'Ninja';
-    } else if (usuarioPerfil && usuarioPerfil.nomeExibicao) {
-      grupoObj.autor = usuarioPerfil.nomeExibicao;
-    } else if (!grupoObj.autor) {
-      grupoObj.autor = grupoObj.email ? grupoObj.email.split('@')[0] : 'Membro / Comunidade';
+    // Mantém o autor original guardado para usar no link do perfil
+    const autorOriginal = grupoObj.autor || 'Comunidade';
+
+    let emailBusca = grupoObj.email || (grupoObj.autor && grupoObj.autor.includes('@') ? grupoObj.autor : null);
+
+    let usuarioMatch = null;
+    if (emailBusca) {
+      usuarioMatch = await Usuario.findOne({ email: new RegExp(`^${emailBusca}$`, 'i') });
     }
+
+    // Define o nome de exibição oficial
+    if (usuarioMatch && usuarioMatch.nomeExibicao) {
+      grupoObj.nomeExibicaoAutor = usuarioMatch.nomeExibicao;
+    } else {
+      if (autorOriginal.includes('@')) {
+        grupoObj.nomeExibicaoAutor = autorOriginal.toLowerCase().includes('manoel153153') ? 'Ninja™' : autorOriginal.split('@')[0];
+      } else {
+        grupoObj.nomeExibicaoAutor = autorOriginal;
+      }
+    }
+
+    // Garante que o .autor continua sendo o valor limpo/original para a URL do perfil
+    grupoObj.autor = autorOriginal;
 
     res.json(grupoObj);
   } catch (error) {
+    console.error("Erro na rota de detalhes:", error);
     res.status(500).json({ success: false, message: 'Erro no servidor' });
   }
 });
+
 
 app.post('/api/grupos/:id/acessar', async (req, res) => {
   try {
@@ -348,14 +364,15 @@ app.get('/api/grupos', async (req, res) => {
         const usuarioMatch = usuarios.find(u => u.email && u.email.toLowerCase() === g.email.toLowerCase());
         if (usuarioMatch && usuarioMatch.nomeExibicao) {
           g.autor = usuarioMatch.nomeExibicao;
-        } else if (g.email.includes('manoel153153')) {
-          g.autor = 'Ninja';
+        } else if (g.email.toLowerCase().includes('manoel153153')) {
+          g.autor = 'Ninja™'; // <--- Agora força com o símbolo certo!
         } else {
           g.autor = g.email.split('@')[0];
         }
       } else if (!g.autor) {
         g.autor = 'Membro';
       }
+
     }
 
     grupos.sort((a, b) => {
@@ -479,60 +496,6 @@ app.get('/api/estatisticas', async (req, res) => {
 app.post('/api/atualizar-senha', express.json(), (req, res) => {
     const { senha } = req.body;
     res.json({ sucesso: true, mensagem: 'Senha alterada com sucesso!' });
-});
-
-app.post('/api/usuario/perfil', async (req, res) => {
-  try {
-    const { email, nomeExibicao, foto, redeSocial } = req.body;
-    if (!email) return res.status(400).json({ success: false, message: 'E-mail obrigatório' });
-
-    let usuario = await Usuario.findOne({ email: email.toLowerCase() });
-
-    if (usuario) {
-      if (nomeExibicao !== undefined) usuario.nomeExibicao = nomeExibicao;
-      if (foto !== undefined) usuario.foto = foto;
-      if (redeSocial !== undefined) usuario.redeSocial = redeSocial;
-      await usuario.save();
-    } else {
-      await Usuario.create({
-        email: email.toLowerCase(),
-        nomeExibicao: nomeExibicao || 'Ninja',
-        foto: foto || '',
-        redeSocial: redeSocial || ''
-      });
-    }
-
-    res.json({ success: true, message: 'Dados salvos com sucesso!' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Erro ao salvar perfil' });
-  }
-});
-
-app.get('/api/usuario/perfil', async (req, res) => {
-  try {
-    const { email, nome } = req.query;
-    let usuario = null;
-
-    if (email) {
-      usuario = await Usuario.findOne({ email: email.toLowerCase() });
-    } else if (nome) {
-      const nomeDecodificado = decodeURIComponent(nome);
-      usuario = await Usuario.findOne({ nomeExibicao: new RegExp(`^${nomeDecodificado}$`, 'i') });
-    }
-
-    if (!usuario) {
-      const nomeDecodificado = nome ? decodeURIComponent(nome) : 'Membro';
-      usuario = {
-        nomeExibicao: nomeDecodificado,
-        foto: '',
-        redeSocial: ''
-      };
-    }
-
-    res.json({ success: true, usuario });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Erro ao buscar perfil' });
-  }
 });
 
 // Rota para solicitar ou ativar a parceria do grupo (Validade: 10 dias)
@@ -745,8 +708,68 @@ app.delete('/api/meus-grupos/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro interno ao excluir grupo.' });
   }
 });
+
+// Rota GET para carregar o perfil do usuário (por nome ou email)
+app.get('/api/usuario/perfil', async (req, res) => {
+  try {
+    const { email, nome } = req.query;
+    const termoBusca = nome || email;
+
+    if (!termoBusca || typeof termoBusca !== 'string' || termoBusca.trim() === '') {
+      return res.status(400).json({ success: false, message: "Nome ou e-mail inválido ou não fornecido." });
+    }
+
+    // Procura o usuário pelo email, pelo nome de exibição ou pelo identificador correspondente
+    const usuario = await Usuario.findOne({
+      $or: [
+        { email: new RegExp(`^${termoBusca.trim()}$`, 'i') },
+        { nomeExibicao: new RegExp(`^${termoBusca.trim()}$`, 'i') },
+        // Se você salvar o nome de usuário em outro campo no schema (ex: username), adicione aqui:
+        // { username: new RegExp(`^${termoBusca.trim()}$`, 'i') }
+      ]
+    });
+
+    if (!usuario) {
+      return res.status(404).json({ success: false, message: "Usuário não encontrado." });
+    }
+
+    res.json({ success: true, usuario });
+  } catch (err) {
+    console.error("ERRO NO GET PERFIL:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Rota POST para salvar/atualizar o avatar do usuário
+app.post('/api/usuario/perfil', async (req, res) => {
+  try {
+    const { email, foto, nomeExibicao } = req.body;
+
+    if (!email || typeof email !== 'string' || email.trim() === '' || !email.includes('@') || email.toLowerCase() === 'null') {
+      console.log("BLOQUEADO: E-mail inválido ->", email);
+      return res.status(400).json({ success: false, message: "E-mail inválido ou não fornecido." });
+    }
+
+    let atualizacao = {};
+    if (foto !== undefined) atualizacao.foto = foto;
+    if (nomeExibicao !== undefined) atualizacao.nomeExibicao = nomeExibicao;
+
+    const usuarioAtualizado = await Usuario.findOneAndUpdate(
+      { email: new RegExp(`^${email.trim()}$`, 'i') },
+      { $set: atualizacao },
+      { upsert: true, new: true }
+    );
+
+    console.log("SUCESSO: Perfil atualizado para o e-mail:", email.trim());
+    res.json({ success: true, message: "Perfil atualizado com sucesso!", usuario: usuarioAtualizado });
+  } catch (err) {
+    console.error("ERRO NO POST PERFIL:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // ==========================================
-// ROTAS DO PAINEL ADMINISTRATIVO
+// yROTAS DO PAINEL ADMINISTRATIVO
 // ==========================================
 app.post('/api/login', (req, res) => {
   const { senha } = req.body;

@@ -311,7 +311,7 @@
       </div>
     </div>
   </div>
-
+</div>
 
   <!-- Footer -->
   <footer>
@@ -332,58 +332,82 @@
     </p>
   </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
   <script>
+// Configuração e inicialização segura do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+  authDomain: "gruposnj-41858.firebaseapp.com",
+  projectId: "gruposnj-41858",
+  storageBucket: "gruposnj-41858.firebasestorage.app",
+  messagingSenderId: "249583894572",
+  appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+};
+
+let auth = null;
+try {
+  if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    auth = firebase.auth();
+  }
+} catch (e) {
+  console.warn("Erro ao iniciar Firebase:", e);
+}
+
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const autorUrl = urlParams.get('autor');
-      const nomeCriador = autorUrl ? decodeURIComponent(autorUrl) : "Ninja";
+  function aplicarFoto(url) {
+    console.log("-> Tentando aplicar a URL da foto:", url); // <--- Adicione isso aqui
+    if (containerAvatar && url) {
+      containerAvatar.innerHTML = `<img src="${url}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+    }
+  }
 
-      const elNome = document.getElementById('perfil-nome');
-      if (elNome) elNome.innerText = nomeCriador;
-      
-      // Foto padrão suave e abstrata (Dark minimalista)
-      let fotoFinal = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop";
+window.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const autorUrl = urlParams.get('autor');
+  
+  const nomeCriador = autorUrl ? decodeURIComponent(autorUrl).trim() : "manoel153153";
 
-      try {
-        const res = await fetch(`/api/usuario/perfil?nome=${encodeURIComponent(nomeCriador)}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && data.usuario) {
-            if (data.usuario.nomeExibicao && elNome) {
-              elNome.innerText = data.usuario.nomeExibicao;
-            }
+  const elNome = document.getElementById('perfil-nome');
+  if (elNome) elNome.innerText = nomeCriador;
 
-            if (data.usuario.foto && data.usuario.foto.startsWith('http')) {
-              fotoFinal = data.usuario.foto;
-            }
+  const containerAvatar = document.getElementById('avatar-container');
 
-            const btnSocial = document.getElementById('perfil-social-link');
-            const containerSocial = document.getElementById('container-social');
+  // CAMINHO DA FOTO PADRÃO NA RAIZ DO PROJETO
+// Cole o link direto da imagem aqui dentro:
+const FOTO_PADRAO = "https://i.postimg.cc/G2hfzxXs/avatar-padrao.png";
 
-            if (data.usuario.redeSocial && data.usuario.redeSocial.startsWith('http')) {
-              if (btnSocial) btnSocial.href = data.usuario.redeSocial;
-              if (containerSocial) containerSocial.style.display = 'block';
-            } else {
-              if (containerSocial) containerSocial.style.display = 'none';
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Erro ao buscar perfil:", e);
-      }
+  function aplicarFoto(url) {
+    if (containerAvatar) {
+      const imgFinal = (url && url.startsWith('http')) ? url : FOTO_PADRAO;
+      containerAvatar.innerHTML = `<img src="${imgFinal}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+    }
+  }
 
-      const containerAvatar = document.getElementById('avatar-container');
-      if (containerAvatar) {
-        containerAvatar.innerHTML = `<img src="${fotoFinal}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">`;
-      }
+  // Verifica se o usuário tem foto personalizada salva localmente
+  let fotoParaExibir = localStorage.getItem(`fotoPerfil_${nomeCriador}`);
+  
+  if (fotoParaExibir) {
+    aplicarFoto(fotoParaExibir);
+  } else {
+    // Se não tiver, aplica a nova imagem padrão da coroa que você acabou de salvar!
+    aplicarFoto(FOTO_PADRAO);
+  }
 
-      await carregarGruposDoPerfil(nomeCriador);
-    });
+  // Carrega os grupos publicados do criador normalmente
+  if (typeof carregarGruposDoPerfil === 'function') {
+    await carregarGruposDoPerfil(nomeCriador);
+  }
+});
+
 
     // Função auxiliar para detectar o ícone da plataforma com base no link
     function obterPlataformaIcone(link) {
@@ -482,6 +506,23 @@
         if (menu) menu.classList.toggle('ativo');
         if (overlay) overlay.classList.toggle('ativo');
     }
+
+// Certifique-se de que o Firebase SDK já foi importado e inicializado na página
+if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged((user) => {
+        const saudacao = document.getElementById('saudacao-usuario');
+        if (saudacao) {
+            if (user) {
+                // Pega o nome cadastrado ou usa a primeira parte do e-mail antes do @
+                const nome = user.displayName || user.email.split('@')[0];
+                saudacao.innerText = `Olá, ${nome}`;
+            } else {
+                saudacao.innerText = 'Olá, Visitante';
+            }
+        }
+    });
+}
+
 
 function gerarBreadcrumbs() {
   const container = document.getElementById('breadcrumb-container');

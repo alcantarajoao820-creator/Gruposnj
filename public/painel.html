@@ -431,25 +431,323 @@
 </div>
 
     <!-- Seção Meu Perfil -->
-    <div class="card">
-      <h3><i class="fa-solid fa-user-gear"></i> Meu Perfil & Dados</h3>
+    <div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+      <h3 style="margin-top: 0; color: #38bdf8; font-size: 1.25rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-user-gear"></i> Meu Perfil & Dados
+      </h3>
 
-      <!-- Área da Foto de Perfil -->
+      <!-- Área da Foto de Perfil com Botão de Lápis -->
       <div style="text-align: center; margin-bottom: 20px;">
-  <div style="position: relative; width: 85px; height: 85px; margin: 0 auto 12px;">
-    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6;">
-  </div>
-</div>
+        <div style="position: relative; width: 85px; height: 85px; margin: 0 auto 12px;">
+          <img id="avatar-atual-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">
+          
+          <!-- Botão de Lápis para abrir a seleção -->
+          <button onclick="abrirModalAvatares()" style="position: absolute; bottom: 0; right: 0; background: #3b82f6; border: 2px solid #0f172a; color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4); transition: transform 0.2s;">
+            <i class="fa-solid fa-pen" style="font-size: 0.8rem;"></i>
+          </button>
+        </div>
+      </div>
 
       <!-- Configuração de Nome -->
       <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Nome de Exibição</label>
-      <input type="text" id="input-nome" placeholder="Seu Nome" style="width: 100%; background: #0f172a; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box;">
-      <button class="btn-blue" onclick="salvarNome()" style="width: 100%; margin-bottom: 20px;"><i class="fa-solid fa-floppy-disk"></i> Salvar Nome</button>
+      <input type="text" id="input-nome" placeholder="Seu Nome" style="width: 100%; background: #0f172a; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 8px; box-sizing: border-box; margin-bottom: 12px;">
+      <button class="btn-blue" onclick="salvarNome()" style="width: 100%; margin-bottom: 20px; padding: 10px; background: #3b82f6; border: none; border-radius: 8px; color: #fff; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-floppy-disk"></i> Salvar Nome</button>
 
       <!-- Configuração de Senha -->
       <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Segurança da Conta</label>
-      <button class="btn-blue" onclick="salvarSenha()" style="width: 100%; margin-bottom: 20px; background: #334155;"><i class="fa-solid fa-key"></i> Enviar E-mail para Alterar Senha</button>
-</div>
+      <button class="btn-blue" onclick="salvarSenha()" style="width: 100%; background: #334155; border: none; border-radius: 8px; color: #fff; padding: 10px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-key"></i> Enviar E-mail para Alterar Senha</button>
+    </div>
+
+    <!-- MODAL / CARD DE SELEÇÃO DE AVATARES EM ESTILO DESENHO -->
+    <div id="modal-avatares" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+      
+      <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center;">
+        
+        <h3 style="color: #38bdf8; margin-top: 0; margin-bottom: 8px; font-size: 1.2rem;">Escolha seu Avatar</h3>
+        <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 20px;">Selecione um dos avatares em estilo desenho abaixo:</p>
+
+        <!-- Grade de Avatares (Estilo Desenho/Robôs/Ilustrações) -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; max-height: 240px; overflow-y: auto; padding: 4px;">
+          
+          <!-- Avatar 1 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Ninja')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 2 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Cyber')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Cyber" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cyber" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 3 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=GruposNJ')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=GruposNJ" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=GruposNJ" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 4 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Hero')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Hero" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Hero" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 5 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Gamer')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Gamer" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Gamer" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 6 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Vip')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Vip" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Vip" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          
+                    <!-- Avatar 7 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Ninjadabodega')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Ninjadabodega" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Ninjadabodega" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 8 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Alpha')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Alpha" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Alpha" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 9 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Shadow')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Shadow" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Shadow" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 10 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Phantom')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Phantom" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Phantom" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 11 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Blaze')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Blaze" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Blaze" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 12 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Storm')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Storm" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Storm" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+        </div>
+
+        <!-- Botões de Ação (Salvar / Voltar) -->
+        <div style="display: flex; gap: 10px;">
+          <button onclick="fecharModalAvatares()" style="flex: 1; padding: 10px; background: #334155; border: none; border-radius: 8px; color: #fff; font-weight: 700; cursor: pointer;">Voltar</button>
+          <button onclick="salvarNovoAvatar()" style="flex: 1; padding: 10px; background: #3b82f6; border: none; border-radius: 8px; color: #fff; font-weight: 700; cursor: pointer;">Salvar</button>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+
+let avatarTemporario = '';
+
+// 1. Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("-> Inicializando painel e carregando avatar...");
+
+  // Aguarda o Firebase carregar o estado do usuário para puxar a foto da nuvem se houver
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user && user.photoURL && user.email) {
+        // CORRIGIDO: Salva APENAS na chave específica do e-mail do usuário atual, sem mexer na global!
+        const chaveStorage = `fotoPerfil_${user.email.trim()}`;
+        localStorage.setItem(chaveStorage, user.photoURL);
+      }
+      carregarAvatarLocal();
+      carregarAvatarGeralDaPagina(user);
+    });
+  } else {
+    carregarAvatarLocal();
+    carregarAvatarGeralDaPagina(null);
+  }
+});
+
+// Função auxiliar para carregar o avatar na página de forma isolada
+function carregarAvatarGeralDaPagina(user) {
+  const imgAvatarEl = document.getElementById('avatar-publico') || document.getElementById('foto-perfil-usuario');
+  if (user && user.email) {
+    const fotoUsuario = user.photoURL || localStorage.getItem(`fotoPerfil_${user.email.trim()}`);
+    if (imgAvatarEl && fotoUsuario) {
+      imgAvatarEl.src = fotoUsuario;
+    }
+  } else {
+    const emailAtual = pegarEmailSalvo();
+    const fotoLocal = emailAtual ? localStorage.getItem(`fotoPerfil_${emailAtual}`) : null;
+    if (imgAvatarEl && fotoLocal) {
+      imgAvatarEl.src = fotoLocal;
+    } else if (imgAvatarEl) {
+      imgAvatarEl.src = 'https://via.placeholder.com/65';
+    }
+  }
+}
+
+// 2. Carrega o avatar do localStorage/cache de forma isolada por e-mail
+function carregarAvatarLocal() {
+  const emailAtual = pegarEmailSalvo() || 'visitante';
+  const chaveStorage = `fotoPerfil_${emailAtual}`;
+
+  // CORRIGIDO: Busca estritamente pela chave da conta atual. Removemos o fallback para a chave global 'fotoPerfil'.
+  const fotoSalva = localStorage.getItem(chaveStorage);
+
+  console.log("-> Buscando foto salva para:", emailAtual, "=>", fotoSalva);
+
+  if (fotoSalva) {
+    const imgPreview = document.getElementById('avatar-atual-preview');
+    if (imgPreview) imgPreview.src = fotoSalva;
+
+    const avatarPublico = document.getElementById('avatar-publico');
+    if (avatarPublico) avatarPublico.src = fotoSalva;
+  }
+}
+
+// 3. Pega o e-mail atual da sessão ou do cache local
+function pegarEmailSalvo() {
+  if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+    const usuarioFirebase = firebase.auth().currentUser;
+    if (usuarioFirebase && usuarioFirebase.email) {
+      return usuarioFirebase.email.trim();
+    }
+  }
+  return localStorage.getItem('email_usuario') || localStorage.getItem('userEmail') || localStorage.getItem('email') || null;
+}
+
+// 4. Controle do Modal de Avatares
+function abrirModalAvatares() {
+  const modal = document.getElementById('modal-avatares');
+  if (modal) modal.style.display = 'flex';
+}
+
+function fecharModalAvatares() {
+  const modal = document.getElementById('modal-avatares');
+  if (modal) modal.style.display = 'none';
+}
+
+function selecionarOpcaoAvatar(url) {
+  if (!url) return;
+  avatarTemporario = url;
+  console.log("-> Avatar selecionado temporariamente:", url);
+
+  document.querySelectorAll('.avatar-opcao').forEach(el => {
+    el.style.borderColor = '#334155';
+    el.style.boxShadow = 'none';
+  });
+
+  const selecionado = document.querySelector(`.avatar-opcao[onclick*="${url}"]`) ||
+                      document.querySelector(`img[src="${url}"]`)?.closest('.avatar-opcao');
+
+  if (selecionado) {
+    selecionado.style.borderColor = '#38bdf8';
+    selecionado.style.boxShadow = '0 0 12px rgba(56, 189, 248, 0.6)';
+  }
+}
+
+// 5. Toast / Aviso Flutuante Estilizado Moderno
+function mostrarAvisoPersonalizado(mensagem) {
+  let toastContainer = document.getElementById('toast-aviso-container');
+  if (!toastContainer) {
+    toastContainer = document.createElement('div');
+    toastContainer.id = 'toast-aviso-container';
+    toastContainer.style.cssText = `
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+    `;
+    document.body.appendChild(toastContainer);
+  }
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    background: #1e293b; color: #f8fafc; padding: 12px 20px; border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid #334155;
+    font-family: sans-serif; font-size: 14px; font-weight: 500; opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease; transform: translateY(-10px); pointer-events: auto;
+  `;
+  toast.innerText = mensagem;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+  }, 10);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-10px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// 6. Salvar no localStorage E na Nuvem do Firebase (Isolado por e-mail e conta)
+async function salvarNovoAvatar() {
+  if (!avatarTemporario) {
+    mostrarAvisoPersonalizado("Por favor, selecione um avatar primeiro!");
+    return;
+  }
+
+  // Pega o nome exato da conta que está visível na URL do painel ou na sessão
+  const urlParams = new URLSearchParams(window.location.search);
+  const nomeUsuario = urlParams.get('usuario') || urlParams.get('autor') || localStorage.getItem('usuario_logado') || '';
+  const emailAtual = pegarEmailSalvo();
+
+  if (!nomeUsuario && !emailAtual) {
+    mostrarAvisoPersonalizado("Erro: Usuário não identificado!");
+    return;
+  }
+
+  // SALVA NA CHAVE EXATA DO NOME DE USUÁRIO (Que é exatamente o que o perfil.html procura)
+  if (nomeUsuario) {
+    localStorage.setItem(`fotoPerfil_${nomeUsuario.trim()}`, avatarTemporario);
+  }
+  if (emailAtual) {
+    localStorage.setItem(`fotoPerfil_${emailAtual.trim()}`, avatarTemporario);
+  }
+
+  // Sincroniza no Firebase se houver
+  try {
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+      const user = firebase.auth().currentUser;
+      await user.updateProfile({ photoURL: avatarTemporario });
+    }
+  } catch (e) {
+    console.error("Erro Firebase:", e);
+  }
+
+  // Atualiza a pré-visualização na hora
+  const imgPreview = document.getElementById('avatar-atual-preview');
+  if (imgPreview) imgPreview.src = avatarTemporario;
+
+  const avatarPublico = document.getElementById('avatar-publico');
+  if (avatarPublico) avatarPublico.src = avatarTemporario;
+
+  mostrarAvisoPersonalizado("Avatar salvo com sucesso!");
+  fecharModalAvatares();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged((user) => {
+      const imgAvatarEl = document.getElementById('avatar-publico') || document.getElementById('foto-perfil-usuario');
+
+      if (user && user.email) {
+        // Pega estritamente do Firebase ou da chave local exclusiva deste e-mail
+        const fotoUsuario = user.photoURL || localStorage.getItem(`fotoPerfil_${user.email.trim()}`);
+
+        if (imgAvatarEl && fotoUsuario) {
+          imgAvatarEl.src = fotoUsuario;
+        }
+      } else {
+        // Visitante / Não logado
+        if (imgAvatarEl) {
+          imgAvatarEl.src = 'https://via.placeholder.com/65';
+        }
+      }
+    });
+  }
+});
+
+   
+    </script>
 
     <!-- Seção Meus Grupos -->
     <div class="card">
@@ -662,6 +960,47 @@
       }
     });
 
+// Função para mostrar uma notificação bonita e moderna no lugar do alert
+function mostrarNotificacao(mensagem, tipo = 'sucesso') {
+  let toast = document.getElementById('toast-notificacao');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast-notificacao';
+    toast.style.cssText = `
+      position: fixed; bottom: 20px; right: 20px; z-index: 10000;
+      padding: 12px 20px; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+      color: #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease; transform: translateY(20px); opacity: 0;
+    `;
+    document.body.appendChild(toast);
+  }
+
+  toast.style.background = tipo === 'sucesso' ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)';
+  toast.innerHTML = `<i class="fa-solid ${tipo === 'sucesso' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${mensagem}`;
+  
+  setTimeout(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; }, 10);
+  
+  setTimeout(() => {
+    toast.style.transform = 'translateY(20px)';
+    toast.style.opacity = '0';
+  }, 3000);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const nomeSalvo = localStorage.getItem('nome_usuario');
+  if (nomeSalvo) {
+    const inputNome = document.getElementById('input-nome');
+    if (inputNome) inputNome.value = nomeSalvo;
+  }
+  
+  // (Opcional) Carregar também o avatar salvo no painel
+  const avatarSalvo = localStorage.getItem('avatar_usuario');
+  if (avatarSalvo) {
+    const preview = document.getElementById('avatar-atual-preview');
+    if (preview) preview.src = avatarSalvo;
+  }
+});
+
     // Funções de Modais Gerais e Alertas
     function mostrarAviso(mensagem) {
       const modal = document.getElementById('custom-alert-modal');
@@ -684,20 +1023,6 @@
       if (checagemInterval) clearInterval(checagemInterval);
       const input = document.getElementById('novo-link-input');
       if (input) input.value = '';
-    }
-
-    // Salvar Nome do Perfil
-    async function salvarNome() {
-      const novoNome = document.getElementById('input-nome').value.trim();
-      if (!novoNome) return mostrarAviso('Digite um nome válido.');
-
-      try {
-        await usuarioAtual.updateProfile({ displayName: novoNome });
-        document.getElementById('display-name').innerText = novoNome;
-        mostrarAviso('Nome alterado com sucesso!');
-      } catch (e) {
-        mostrarAviso('Não foi possível alterar o nome.');
-      }
     }
 
     // Função auxiliar para formatar o tempo restante da parceria
@@ -1005,44 +1330,6 @@ async function carregarMeusGrupos(email) {
       }, 5000);
     }
 
-    // Função de carregar perfil adaptada sem o input de arquivo manual
-   async function salvarSocial() {
-  const linkSocial = document.getElementById('input-social').value.trim();
-
-  if (!linkSocial) {
-    mostrarAviso('Por favor, digite o link da sua rede social.');
-    return;
-  }
-
-  if (!usuarioAtual || !usuarioAtual.email) {
-    mostrarAviso('Erro: Usuário não autenticado.');
-    return;
-  }
-
-  localStorage.setItem('redeSocial_' + usuarioAtual.email, linkSocial);
-
-  try {
-    const res = await fetch('/api/usuario/perfil', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: usuarioAtual.email,
-        nomeExibicao: usuarioAtual.displayName || document.getElementById('input-nome').value,
-        redeSocial: linkSocial
-      })
-    });
-    const data = await res.json();
-    if (data.success) {
-      mostrarAviso('Informações salvas com sucesso!');
-    } else {
-      mostrarAviso('Erro ao salvar no servidor.');
-    }
-  } catch (e) {
-    mostrarAviso('Erro de conexão com o servidor.');
-  }
-}
-
-
     // Função para Alterar Senha (Envia e-mail seguro via Firebase)
     function salvarSenha() {
       const user = firebase.auth().currentUser;
@@ -1240,8 +1527,21 @@ function gerarBreadcrumbs() {
 }
 
 window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
-  </script>
 
+    // Salvar Nome do Perfil
+    async function salvarNome() {
+      const novoNome = document.getElementById('input-nome').value.trim();
+      if (!novoNome) return mostrarAviso('Digite um nome válido.');
+
+      try {
+        await usuarioAtual.updateProfile({ displayName: novoNome });
+        document.getElementById('display-name').innerText = novoNome;
+        mostrarAviso('Nome alterado com sucesso!');
+      } catch (e) {
+        mostrarAviso('Não foi possível alterar o nome.');
+      }
+    }
+  </script>
 
   <!-- Footer Profissional -->
   <footer class="footer-pro">
