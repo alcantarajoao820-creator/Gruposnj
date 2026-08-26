@@ -14,7 +14,6 @@
             margin: 0;
             padding: 0;
         }
-
         body {
             background: #070a12;
             color: #f1f5f9;
@@ -22,16 +21,12 @@
             background-image: radial-gradient(circle at 50% 10%, #111e38 0%, #070a12 70%);
             padding-bottom: 40px;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        
         /* SISTEMA DE TOAST NOTIFICATION */
         #toast-container {
             position: fixed;
@@ -42,7 +37,6 @@
             flex-direction: column;
             gap: 10px;
         }
-
         .toast {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
@@ -58,7 +52,6 @@
             min-width: 280px;
             animation: fadeIn 0.3s ease;
         }
-
         .toast.success { border-color: #22c55e; }
         .toast.success i { color: #22c55e; }
         .toast.error { border-color: #ef4444; }
@@ -76,7 +69,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             text-align: center;
         }
-
         .admin-badge {
             display: inline-flex;
             align-items: center;
@@ -91,22 +83,8 @@
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
             flex-shrink: 0;
         }
-
-        .admin-main-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
-
-        .admin-main-subtitle {
-            font-size: 0.8rem;
-            color: #38bdf8;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 24px;
-            font-weight: 600;
-        }
+        .admin-main-title { font-size: 1.4rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+        .admin-main-subtitle { font-size: 0.8rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px; font-weight: 600; }
 
         /* INPUTS E BOTÕES GLOBAIS */
         input[type="password"], input[type="text"] {
@@ -120,12 +98,10 @@
             outline: none;
             transition: all 0.3s ease;
         }
-
         input[type="password"]:focus, input[type="text"]:focus {
             border-color: #38bdf8;
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
-
         .btn-sistema {
             width: 100%;
             padding: 13px;
@@ -138,12 +114,7 @@
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
         }
-
-        .btn-sistema:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
-        }
-
+        .btn-sistema:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4); }
         .btn-voltar-site {
             display: inline-flex;
             align-items: center;
@@ -161,22 +132,12 @@
             text-decoration: none;
             transition: all 0.2s;
         }
-
-        .btn-voltar-site:hover {
-            background: #1e293b;
-            color: #fff;
-            border-color: #475569;
-        }
+        .btn-voltar-site:hover { background: #1e293b; color: #fff; border-color: #475569; }
 
         /* CONTEÚDO DO PAINEL PRINCIPAL */
-        #admin-content {
-            display: none;
-            max-width: 680px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
+        #admin-content { display: none; max-width: 680px; margin: 30px auto; padding: 0 15px; }
 
-        /* CABEÇALHO CORRIGIDO PARA MOBILE */
+        /* CABEÇALHO MOBILE */
         .admin-header {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(10px);
@@ -191,14 +152,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
             flex-wrap: wrap;
         }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
+        .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .btn-sync, .btn-header-home {
             background: rgba(56, 189, 248, 0.12);
             color: #38bdf8;
@@ -215,12 +169,7 @@
             white-space: nowrap;
             transition: all 0.2s;
         }
-
-        .btn-sync:hover, .btn-header-home:hover {
-            background: rgba(56, 189, 248, 0.25);
-            border-color: #38bdf8;
-            color: #fff;
-        }
+        .btn-sync:hover, .btn-header-home:hover { background: rgba(56, 189, 248, 0.25); border-color: #38bdf8; color: #fff; }
 
         /* SEÇÕES / CARDS DO PAINEL */
         .panel-section, .card, .admin-card, .adm-card {
@@ -232,21 +181,10 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
             transition: border-color 0.2s;
         }
+        .panel-section:hover, .card:hover, .admin-card:hover { border-color: #334155; }
+        h3 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 
-        .panel-section:hover, .card:hover, .admin-card:hover {
-            border-color: #334155;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        /* ITENS INTERNOS DAS LISTAS - ESTRUTURA ROBUSTA E FLEXÍVEL */
+        /* ITENS INTERNOS DAS LISTAS */
         .item-flex-card {
             background: linear-gradient(145deg, #131c31, #101828);
             border: 1px solid #1e293b;
@@ -260,22 +198,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transition: all 0.25s ease;
         }
-
         .item-flex-card:hover {
             border-color: rgba(56, 189, 248, 0.3);
             background: linear-gradient(145deg, #16223b, #121d31);
             transform: translateY(-1px);
         }
-
-        /* CORREÇÃO DO BLOCO DE INFORMAÇÕES (NOME E LINK) */
-        .item-info-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex: 1;
-            min-width: 0;
-        }
-
+        .item-info-wrapper { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
         .item-avatar {
             width: 48px;
             height: 48px;
@@ -285,12 +213,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: #1e293b;
         }
-
-        .item-text-content {
-            flex: 1;
-            min-width: 0;
-        }
-
+        .item-text-content { flex: 1; min-width: 0; }
         .item-title {
             color: #ffffff;
             font-size: 0.95rem;
@@ -301,7 +224,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         .item-link {
             color: #38bdf8 !important;
             font-size: 0.8rem !important;
@@ -314,19 +236,33 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        .item-link:hover { text-decoration: underline !important; }
 
-        .item-link:hover {
-            text-decoration: underline !important;
+        /* ESTILOS PARA AS TAGS DE WHATSAPP / TELEGRAM */
+        .badge-zap, .badge-tg {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 6px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .badge-zap {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .badge-tg {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
         /* BOTÕES DE AÇÕES NAS LISTAS */
-        .item-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
+        .item-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         button.btn-sm {
             border: none;
             padding: 9px 14px;
@@ -341,54 +277,21 @@
             transition: filter 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
+        button.btn-sm:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a) !important; color: #ffffff !important; }
+        .btn-red { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: #ffffff !important; }
+        .btn-yellow { background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; }
 
-        button.btn-sm:hover {
-            filter: brightness(1.15);
-            transform: translateY(-1px);
-        }
-
-        /* CORES ESPECÍFICAS DOS BOTÕES */
-        .btn-green {
-            background: linear-gradient(135deg, #22c55e, #16a34a) !important;
-            color: #ffffff !important;
-        }
-
-        .btn-red {
-            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-            color: #ffffff !important;
-        }
-
-        .btn-yellow {
-            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-            color: #0f172a !important;
-        }
-
-        /* RESPONSIVIDADE PARA TELAS PEQUENAS (MOBILE) */
         @media (max-width: 520px) {
-            .item-flex-card {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-            }
-
-            .item-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .item-actions button {
-                flex: 1;
-                justify-content: center;
-            }
+            .item-flex-card { flex-direction: column; align-items: stretch; gap: 12px; }
+            .item-actions { width: 100%; justify-content: flex-end; }
+            .item-actions button { flex: 1; justify-content: center; }
         }
-
-        /* TEXTOS E CORES GERAIS DE APOIO */
         p { color: #94a3b8; font-size: 0.85rem; }
         strong { color: #f8fafc; }
     </style>
 </head>
 <body>
-
     <!-- CONTÊINER DE NOTIFICAÇÕES -->
     <div id="toast-container"></div>
 
@@ -397,7 +300,6 @@
         <div class="admin-badge">🛡️</div>
         <h2 class="admin-main-title">Painel Administrativo</h2>
         <p class="admin-main-subtitle">GruposNJ Core</p>
-        
         <div style="text-align: left; margin-bottom: 8px;">
             <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 500;">🔒 Autenticação de Segurança</label>
         </div>
@@ -408,7 +310,6 @@
 
     <!-- CONTEÚDO DO ADMIN -->
     <div id="admin-content" class="fade-in">
-        
         <!-- CABEÇALHO PREMIUM DO PAINEL LOGADO -->
         <div class="admin-header">
             <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
@@ -430,7 +331,8 @@
         <div class="panel-section">
             <h3 style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Denúncias Recebidas</h3>
             <div style="margin-bottom: 15px;">
-                <input type="text" id="input-busca-denuncia" placeholder="Pesquisar por nome ou ID do grupo..." oninput="filtrarDenuncias()">
+                <!-- TRUQUE ANTI-AUTOCOMPLETE PARA NAVEGADORES -->
+                <input type="text" id="input-busca-denuncia" name="busca_denuncia_blindada_nj" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" placeholder="Pesquisar por nome ou ID do grupo..." oninput="filtrarDenuncias()">
             </div>
             <div id="lista-denuncias">
                 <p>Carregando denúncias...</p>
@@ -464,15 +366,13 @@
         <!-- SEÇÃO DE GRUPOS / VIPs -->
         <div class="card">
             <h3 style="color: #38bdf8;">
-                <i class="fa-solid fa-globe"></i> Todos os Grupos 
-                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">(Gerenciar VIPs)</span>
+                <i class="fa-solid fa-globe"></i> Todos os Grupos <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">(Gerenciar VIPs)</span>
             </h3>
             <div style="margin-bottom: 15px;">
-                <input type="text" id="input-busca-grupo" placeholder="Pesquisar grupo por nome ou ID..." oninput="filtrarGrupos()">
+                <input type="text" id="input-busca-grupo" name="busca_grupo_blindada_nj" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" placeholder="Pesquisar grupo por nome ou ID..." oninput="filtrarGrupos()">
             </div>
             <div id="lista-todos-grupos">Carregando...</div>
         </div>
-
     </div>
 
     <!-- SCRIPT DE LÓGICA -->
@@ -484,10 +384,8 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${tipo}`;
-            
             const icone = tipo === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
             toast.innerHTML = `${icone} <span>${mensagem}</span>`;
-            
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.opacity = '0';
@@ -497,7 +395,19 @@
             }, 3500);
         }
 
-        let todasAsDenuncias = []; 
+        // FUNÇÃO PARA GERAR A TAG DE WHATSAPP OU TELEGRAM
+        function gerarTagRedeSocial(link) {
+            if (!link) return '';
+            const l = link.toLowerCase();
+            if (l.includes('whatsapp') || l.includes('chat.whatsapp.com') || l.includes('wa.me')) {
+                return `<span class="badge-zap"><i class="fa-brands fa-whatsapp"></i> WhatsApp</span>`;
+            } else if (l.includes('telegram') || l.includes('t.me')) {
+                return `<span class="badge-tg"><i class="fa-brands fa-telegram"></i> Telegram</span>`;
+            }
+            return '';
+        }
+
+        let todasAsDenuncias = [];
         let todosOsGrupos = [];
 
         async function carregarDenunciasAdmin() {
@@ -531,13 +441,13 @@
                 card.style.cssText = 'background: #131c31; padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444; margin-bottom: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%;';
                 card.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; width: 100%;">
-                        <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong> 
+                        <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong>
                         <span style="font-size: 11px; color: #94a3b8;">${new Date(d.data).toLocaleString()}</span>
                     </div>
                     <p style="margin: 2px 0; color: #f1f5f9;"><strong>Motivo:</strong> ${d.motivo}</p>
                     <p style="margin: 2px 0 8px 0; font-size: 13px; color: #cbd5e1;"><strong>Contato:</strong> ${d.usuarioEmail}</p>
-                    <button onclick="apagarDenuncia('${d.id}')" class="btn-sm btn-red"> 
-                        <i class="fa-solid fa-trash"></i> Apagar Denúncia 
+                    <button onclick="apagarDenuncia('${d.id}')" class="btn-sm btn-red">
+                        <i class="fa-solid fa-trash"></i> Apagar Denúncia
                     </button>
                 `;
                 container.appendChild(card);
@@ -625,7 +535,7 @@
                             <img src="${g.imagem || 'https://via.placeholder.com/48'}" class="item-avatar" alt="Grupo">
                             <div class="item-text-content">
                                 <span class="item-title">${g.nome || 'Sem nome'} ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}</span>
-                                <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a>
+                                <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a> ${gerarTagRedeSocial(g.link)}
                             </div>
                         </div>
                         <div class="item-actions">
@@ -670,11 +580,14 @@
                         <img src="${g.imagem || 'https://via.placeholder.com/48'}" class="item-avatar" alt="Grupo">
                         <div class="item-text-content">
                             <span class="item-title">${g.nome || 'Sem nome'} ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}</span>
-                            <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a>
+                            <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a> ${gerarTagRedeSocial(g.link)}
                         </div>
                     </div>
                     <div class="item-actions">
-                        ${g.isVip ? `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` : `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>` }
+                        ${g.isVip ? 
+                            `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` : 
+                            `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>`
+                        }
                         <button class="btn-sm btn-red" onclick="deletarGrupo('${g.id}')"><i class="fa-solid fa-trash"></i> Deletar</button>
                     </div>
                 </div>
@@ -764,6 +677,7 @@
                             <div class="item-text-content">
                                 <span class="item-title">${g.nome || 'Sem nome'}</span>
                                 <span style="color: #94a3b8; font-size: 0.75rem; display: block;"><i class="fa-solid fa-user"></i> Autor: ${g.email || 'N/A'}</span>
+                                <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a> ${gerarTagRedeSocial(g.link)}
                             </div>
                         </div>
                         <div class="item-actions">
@@ -813,10 +727,8 @@
                     return;
                 }
                 container.innerHTML = parceiros.map(g => {
-                    // Correção: Verifica todas as variações possíveis da data de término da parceria
                     const dataTermino = g.parceriaAte || g.validadeparceria || g.parceria_ate || g.dataExpiracao;
                     let tempoStr = 'Tempo não calculado';
-                    
                     if (dataTermino) {
                         const diffMs = new Date(dataTermino).getTime() - Date.now();
                         if (diffMs > 0) {
@@ -834,6 +746,7 @@
                                 <div class="item-text-content">
                                     <span class="item-title">${g.nome || 'Sem nome'}</span>
                                     <span style="font-size: 0.75rem; color: #38bdf8; display: block;"><i class="fa-regular fa-clock"></i> ${tempoStr}</span>
+                                    <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a> ${gerarTagRedeSocial(g.link)}
                                 </div>
                             </div>
                             <div class="item-actions">

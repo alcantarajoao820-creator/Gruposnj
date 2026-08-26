@@ -7,15 +7,6 @@ const { MercadoPagoConfig, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'suporte.gruposnj@gmail.com',
-        pass: 'kwan ezft bxek ogeb'
-    }
-});
 
 // URL do MongoDB Atlas (já com sua chave configurada)
 const MONGO_URI = process.env.MONGO_URI;
@@ -35,6 +26,7 @@ const GrupoSchema = new mongoose.Schema({
   autor: String,
   isVip: { type: Boolean, default: false },
   diasVip: { type: Number, default: 0 },
+  vipAte: { type: Date, default: null }, 
   acessos: { type: Number, default: 0 },
   data: { type: Date, default: Date.now },
   isParceiro: { type: Boolean, default: false },
@@ -356,13 +348,18 @@ app.get('/api/grupos', async (req, res) => {
     const agora = Date.now();
 
     for (let g of grupos) {
-      if (g.isVip && g.vipAte && agora > g.vipAte) {
+      // Converte a data do VIP para milissegundos para comparar corretamente
+      const vipAteTime = g.vipAte ? new Date(g.vipAte).getTime() : 0;
+
+      if (g.isVip && vipAteTime && agora > vipAteTime) {
         g.isVip = false;
+        g.vipAte = null;
         await g.save();
       }
 
       // Expira a parceria automaticamente após 10 dias e libera a vaga
-      if ((g.isParceiro || g.statusParceria === 'aprovado') && g.parceriaAte && agora > g.parceriaAte) {
+      const parceriaAteTime = g.parceriaAte ? new Date(g.parceriaAte).getTime() : 0;
+      if ((g.isParceiro || g.statusParceria === 'aprovado') && parceriaAteTime && agora > parceriaAteTime) {
         g.isParceiro = false;
         g.statusParceria = 'expirado';
         g.parceriaAte = null;
@@ -374,16 +371,16 @@ app.get('/api/grupos', async (req, res) => {
         if (usuarioMatch && usuarioMatch.nomeExibicao) {
           g.autor = usuarioMatch.nomeExibicao;
         } else if (g.email.toLowerCase().includes('manoel153153')) {
-          g.autor = 'Ninja™'; // <--- Agora força com o símbolo certo!
+          g.autor = 'Ninja™';
         } else {
           g.autor = g.email.split('@')[0];
         }
       } else if (!g.autor) {
         g.autor = 'Membro';
       }
-
     }
 
+    // Ordenação: VIPs primeiro, depois parceiros, depois mais recentes
     grupos.sort((a, b) => {
       // 1º: VIPs primeiro
       const vipDiff = (b.isVip ? 1 : 0) - (a.isVip ? 1 : 0);
@@ -401,10 +398,12 @@ app.get('/api/grupos', async (req, res) => {
       return dataB - dataA;
     });
 
-    res.json(grupos);
+    // Retorna a lista organizada para o front-end
+    return res.json(grupos);
+
   } catch (error) {
-    console.error("Erro na rota /api/grupos:", error);
-    res.status(500).json({ error: 'Erro ao buscar grupos' });
+    console.error('ERRO AO BUSCAR GRUPOS:', error);
+    res.status(500).json({ error: 'Erro no servidor: ' + error.message });
   }
 });
 
@@ -556,25 +555,6 @@ app.post('/api/grupos/solicitar-parceria', async (req, res) => {
   }
 });
 
-app.post('/api/cadastrar-grupo', async (req, res) => {
-    try {
-        const novoGrupo = req.body;
-
-        // >>> AQUI JÁ É O SEU CÓDIGO ORIGINAL QUE SALVA NO BANCO (ex: Grupo.create ou new Grupo) <<<
-        // (Deixe exatamente o comando do Mongoose que você já usa para salvar)
-        await Grupo.create(novoGrupo); 
-
-        // 🚨 SÓ ADICIONE ESTA LINHA AQUI LOGO DEPOIS DE SALVAR:
-        await enviarAlertaNovoGrupo(novoGrupo);
-
-        res.status(200).json({ success: true, message: 'Grupo cadastrado com sucesso!' });
-    } catch (error) {
-        console.error("Erro no cadastro:", error);
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-
 // ==========================================
 // ROTAS DE DENÚNCIAS
 // ==========================================
@@ -653,22 +633,50 @@ app.get('/api/meus-grupos', async (req, res) => {
     const email = req.query.email;
     if (!email) return res.json([]);
 
-    const meusAtivos = await Grupo.find({ email: email });
-    const solicitacoes = await Solicitacao.find({ email: email });
+    // Usa .lean() para forçar o Mongoose a retornar objetos JavaScript purões, evitando problemas com vipAte undefined
+    let meusAtivos = await Grupo.find({ email: email }).lean();
+    const solicitacoes = await Solicitacao.find({ email: email }).lean();
+    const agora = Date.now();
 
-    const minhasSolicitacoes = solicitacoes.map(s => {
-      const obj = s.toObject();
-      return { ...obj, status: 'analise', emAnalise: true };
-    });
+    for (let g of meusAtivos) {
+      const vipAteTime = g.vipAte ? new Date(g.vipAte).getTime() : 0;
+
+      if (g.isVip && vipAteTime) {
+        if (agora > vipAteTime) {
+          g.isVip = false;
+          g.vipAte = null;
+          await Grupo.updateOne({ _id: g._id }, { $set: { isVip: false, vipAte: null } });
+        } else {
+          const diff = vipAteTime - agora;
+          const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+          if (dias > 0) {
+            g.vipRestanteStr = `${dias}d ${horas}h restantes`;
+          } else if (horas > 0) {
+            g.vipRestanteStr = `${horas}h ${minutos}m restantes`;
+          } else {
+            g.vipRestanteStr = `${minutos} minutos restantes`;
+          }
+        }
+      }
+    }
+
+    const minhasSolicitacoes = solicitacoes.map(s => ({
+      ...s,
+      status: 'analise',
+      emAnalise: true
+    }));
 
     const todosOsMeusGrupos = [...meusAtivos, ...minhasSolicitacoes];
-
     res.json(todosOsMeusGrupos);
   } catch (error) {
     console.error('Erro ao buscar meus grupos:', error);
     res.status(500).json({ error: 'Erro interno ao buscar grupos.' });
   }
 });
+
 
 app.put('/api/meus-grupos/link', async (req, res) => {
   try {
@@ -874,40 +882,45 @@ app.post('/api/admin/ativar-vip', async (req, res) => {
       return res.status(403).json({ error: 'Não autorizado' });
     }
 
-    // Calcula a data de expiração do VIP somando os dias escolhidos
     const diasNum = parseInt(dias) || 30;
-    const vipAte = new Date();
-    vipAte.setDate(vipAte.getDate() + diasNum);
+    const vipAte = new Date(Date.now() + (diasNum * 24 * 60 * 60 * 1000));
 
-    // Tenta encontrar o grupo pelo ID personalizado ou _id do Mongo
-    let query = { id: grupoId };
-    if (!isNaN(grupoId)) {
-      query = { $or: [{ id: grupoId }, { id: Number(grupoId) }] };
+    let filtro = {
+      $or: [
+        { id: String(grupoId) },
+        { id: Number(grupoId) }
+      ]
+    };
+
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(grupoId)) {
+      filtro.$or.push({ _id: grupoId });
     }
 
-    let grupo = await Grupo.findOne(query);
-    if (!grupo && !isNaN(grupoId)) {
-      try {
-        grupo = await Grupo.findById(grupoId);
-      } catch (e) {}
-    }
-
-    if (!grupo) {
-      return res.status(404).json({ error: 'Grupo não encontrado' });
-    }
-
-    // Atualiza diretamente no banco usando updateOne para evitar erro de validação do schema
-    await Grupo.updateOne(
-      { _id: grupo._id },
-      { $set: { isVip: true, vipAte: vipAte } }
+    // Atualiza o documento
+    const resultado = await Grupo.findOneAndUpdate(
+      filtro,
+      { $set: { isVip: true, vipAte: vipAte } },
+      { new: true } // Retorna o documento já atualizado
     );
 
-    return res.json({ success: true });
+    if (!resultado) {
+      console.log("--> ERRO: Nenhum grupo encontrado com o ID:", grupoId);
+      return res.status(404).json({ error: 'Grupo não encontrado no banco.' });
+    }
+
+    console.log("--> VIP ATIVADO E CONFIRMADO NO BANCO!");
+    console.log("Nome:", resultado.nome);
+    console.log("isVip:", resultado.isVip);
+    console.log("vipAte salvo:", resultado.vipAte);
+
+    return res.json({ success: true, grupo: resultado });
   } catch (error) {
-    console.error('ERRO DETALHADO NO ATIVAR VIP:', error);
+    console.error('ERRO NO ATIVAR VIP:', error);
     res.status(500).json({ error: 'Erro no servidor: ' + error.message });
   }
 });
+
 
 app.post('/api/admin/remover-vip', async (req, res) => {
   try {
@@ -1054,23 +1067,6 @@ app.post('/api/admin/deletar-grupo/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro ao deletar grupo' });
   }
 });
-
-// Função para disparar o aviso de nova solicitação
-async function enviarAlertaNovoGrupo(dadosGrupo) {
-    const mailOptions = {
-        from: 'suporte.gruposnj@gmail.com',
-        to: 'suporte.gruposnj@gmail.com',
-        subject: '🚨 Nova Solicitação de Grupo Registrada!',
-        text: `Olá! Uma nova solicitação de grupo foi enviada no site.\n\nNome do Grupo: ${dadosGrupo.nome}\nLink: ${dadosGrupo.link}\n\nAcesse o painel para aprovar ou recusar!`
-    };
-
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('E-mail de notificação enviado com sucesso!');
-    } catch (error) {
-        console.error('Erro ao enviar e-mail de notificação:', error);
-    }
-}
 
 // ==========================================
 // INICIALIZAÇÃO DO SERVIDOR

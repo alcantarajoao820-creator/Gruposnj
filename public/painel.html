@@ -1083,7 +1083,7 @@ async function carregarMeusGrupos(email) {
       container.innerHTML = grupos.map(g => {
         let statusBadge = `<span class="badge badge-ativo"><i class="fa-solid fa-check"></i> Ativo</span>`;
         if (g.isVip) {
-          const tempoRestante = typeof formatarTempoVip === 'function' ? formatarTempoVip(g.vipAte) : 'VIP Ativo';
+          const tempoRestante = g.vipRestanteStr || 'VIP Ativo';
           statusBadge = `
             <div style="display: flex; flex-direction: column; gap: 4px;">
               <span class="badge badge-vip"><i class="fa-solid fa-crown"></i> VIP ATIVO</span>
@@ -1092,7 +1092,8 @@ async function carregarMeusGrupos(email) {
               </span>
             </div>
           `;
-        } else if (g.status === 'analise' || g.status === 'pendente' || g.emAnalise === true || g.aprovado === false) {
+        }
+          else if (g.status === 'analise' || g.status === 'pendente' || g.emAnalise === true || g.aprovado === false) {
           statusBadge = `<span class="badge badge-analise"><i class="fa-solid fa-clock"></i> Em Análise</span>`;
         }
 
@@ -1365,10 +1366,13 @@ async function carregarMeusGrupos(email) {
       if (overlay) overlay.classList.toggle('ativo');
     }
 
+// Coloque esta função solta no escopo global do painel.html
 function formatarTempoVip(vipAte) {
   if (!vipAte) return '';
+
+  const tempoExpiracao = new Date(vipAte).getTime();
   const agora = Date.now();
-  const diff = vipAte - agora;
+  const diff = tempoExpiracao - agora;
 
   if (diff <= 0) return 'Expirado';
 
