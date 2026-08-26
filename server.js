@@ -7,6 +7,15 @@ const { MercadoPagoConfig, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'suporte.gruposnj@gmail.com',
+        pass: 'kwan ezft bxek ogeb'
+    }
+});
 
 // URL do MongoDB Atlas (já com sua chave configurada)
 const MONGO_URI = process.env.MONGO_URI;
@@ -547,6 +556,25 @@ app.post('/api/grupos/solicitar-parceria', async (req, res) => {
   }
 });
 
+app.post('/api/cadastrar-grupo', async (req, res) => {
+    try {
+        const novoGrupo = req.body;
+
+        // >>> AQUI JÁ É O SEU CÓDIGO ORIGINAL QUE SALVA NO BANCO (ex: Grupo.create ou new Grupo) <<<
+        // (Deixe exatamente o comando do Mongoose que você já usa para salvar)
+        await Grupo.create(novoGrupo); 
+
+        // 🚨 SÓ ADICIONE ESTA LINHA AQUI LOGO DEPOIS DE SALVAR:
+        await enviarAlertaNovoGrupo(novoGrupo);
+
+        res.status(200).json({ success: true, message: 'Grupo cadastrado com sucesso!' });
+    } catch (error) {
+        console.error("Erro no cadastro:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+
 // ==========================================
 // ROTAS DE DENÚNCIAS
 // ==========================================
@@ -1027,6 +1055,22 @@ app.post('/api/admin/deletar-grupo/:id', async (req, res) => {
   }
 });
 
+// Função para disparar o aviso de nova solicitação
+async function enviarAlertaNovoGrupo(dadosGrupo) {
+    const mailOptions = {
+        from: 'suporte.gruposnj@gmail.com',
+        to: 'suporte.gruposnj@gmail.com',
+        subject: '🚨 Nova Solicitação de Grupo Registrada!',
+        text: `Olá! Uma nova solicitação de grupo foi enviada no site.\n\nNome do Grupo: ${dadosGrupo.nome}\nLink: ${dadosGrupo.link}\n\nAcesse o painel para aprovar ou recusar!`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('E-mail de notificação enviado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao enviar e-mail de notificação:', error);
+    }
+}
 
 // ==========================================
 // INICIALIZAÇÃO DO SERVIDOR

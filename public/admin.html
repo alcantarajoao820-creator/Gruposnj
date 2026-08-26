@@ -1,781 +1,901 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Admin - GruposNJ</title>
-  <style>
-    /* CABEÇALHO E DASHBOARD PREMIUM */
-    .admin-header {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-      padding: 22px 15px;
-      text-align: center;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    }
-    .admin-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 12px;
-      font-size: 1.2rem;
-      margin-bottom: 8px;
-    }
-    .admin-main-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin: 0 0 3px 0;
-      letter-spacing: 0.5px;
-    }
-    .admin-main-subtitle {
-      font-size: 0.75rem;
-      color: #38bdf8;
-      margin: 0 0 14px 0;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .btn-sync {
-      background: rgba(56, 189, 248, 0.15);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-#lista-todos-grupos, #lista-todos-grupos * {
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
-  max-width: 100% !important;
-}
-#lista-todos-grupos > div {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid #334155;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-#lista-todos-grupos a {
-  display: block;
-  color: #38bdf8;
-  word-break: break-all;
-  font-size: 0.8rem;
-  margin: 6px 0;
-  text-decoration: underline;
-}
-#lista-todos-grupos div span, 
-#lista-todos-grupos div {
-  word-break: break-all;
-  overflow-wrap: break-word;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - GruposNJ</title>
+    <!-- FontAwesome para Ícones Profissionais -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400,500,600,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-/* Força o link do WhatsApp a ir para a linha de baixo se houver URL */
-#lista-todos-grupos div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-}
-/* AJUSTES FINAIS DOS GRUPOS */
-#lista-todos-grupos > div {
-  background: #0f172a !important;
-  border: 1px solid #334155 !important;
-  padding: 14px !important;
-  border-radius: 10px !important;
-  margin-bottom: 12px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 8px !important;
-}
+        body {
+            background: #070a12;
+            color: #f1f5f9;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 10%, #111e38 0%, #070a12 70%);
+            padding-bottom: 40px;
+        }
 
-/* Deixa o link azul e legível */
-#lista-todos-grupos a {
-  color: #38bdf8 !important;
-  font-size: 0.8rem !important;
-  word-break: break-all !important;
-  text-decoration: underline !important;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* Coloca os botões lado a lado e bonitos */
-#lista-todos-grupos button {
-  border: none !important;
-  padding: 8px 12px !important;
-  border-radius: 6px !important;
-  font-weight: 700 !important;
-  font-size: 0.8rem !important;
-  cursor: pointer !important;
-  margin-right: 6px !important;
-  margin-top: 4px !important;
-}
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
 
-/* Estiliza o botão de Deletar em Vermelho */
-#lista-todos-grupos button:nth-child(2),
-#lista-todos-grupos button:contains("Deletar") {
-  background-color: #ef4444 !important;
-  color: #ffffff !important;
-}
+        /* SISTEMA DE TOAST NOTIFICATION */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-/* Estiliza o botão de VIP em Amarelo/Laranja */
-#lista-todos-grupos button:nth-child(1) {
-  background-color: #f59e0b !important;
-  color: #0f172a !important;
-}
-/* ESTILIZAÇÃO DO CARD DE SOLICITAÇÕES PENDENTES */
-#lista-solicitacoes > div {
-  background: #0f172a !important;
-  border: 1px solid #334155 !important;
-  padding: 14px !important;
-  border-radius: 10px !important;
-  margin-bottom: 12px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 8px !important;
-  word-break: break-word !important;
-  overflow-wrap: break-word !important;
-}
+        .toast {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 280px;
+            animation: fadeIn 0.3s ease;
+        }
 
-/* Link limpo e quebrado na solicitação */
-#lista-solicitacoes a {
-  color: #38bdf8 !important;
-  font-size: 0.8rem !important;
-  word-break: break-all !important;
-  text-decoration: underline !important;
-}
+        .toast.success { border-color: #22c55e; }
+        .toast.success i { color: #22c55e; }
+        .toast.error { border-color: #ef4444; }
+        .toast.error i { color: #ef4444; }
 
-/* Botões da Solicitação (Aceitar e Recusar) */
-#lista-solicitacoes button {
-  border: none !important;
-  padding: 8px 14px !important;
-  border-radius: 6px !important;
-  font-weight: 700 !important;
-  font-size: 0.8rem !important;
-  cursor: pointer !important;
-  margin-right: 6px !important;
-  margin-top: 4px !important;
-}
+        /* TELA DE LOGIN ESTILIZADA */
+        #login-box {
+            max-width: 420px;
+            margin: 60px auto;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
 
-/* Botão Aceitar (Verde) */
-#lista-solicitacoes button:nth-child(1),
-#lista-solicitacoes button:contains("Aceitar") {
-  background-color: #22c55e !important;
-  color: #ffffff !important;
-}
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+            flex-shrink: 0;
+        }
 
-/* Botão Recusar (Vermelho) */
-#lista-solicitacoes button:nth-child(2),
-#lista-solicitacoes button:contains("Recusar") {
-  background-color: #ef4444 !important;
-  color: #ffffff !important;
-}
-/* Deixa o texto principal de todas as listas bem claro e legível */
-#lista-solicitacoes, #lista-solicitacoes *,
-#lista-todos-grupos, #lista-todos-grupos * {
-  color: #f8fafc !important;
-}
+        .admin-main-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
 
-/* Mantém o link do WhatsApp azulzinho e destacado */
-#lista-solicitacoes a, #lista-todos-grupos a {
-  color: #38bdf8 !important;
-}
+        .admin-main-subtitle {
+            font-size: 0.8rem;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
 
-/* Força cor e estilo nos botões de Aceitar/Recusar */
-#lista-solicitacoes button {
-  border: none !important;
-  padding: 8px 14px !important;
-  border-radius: 6px !important;
-  font-weight: 700 !important;
-  font-size: 0.8rem !important;
-  cursor: pointer !important;
-}
+        /* INPUTS E BOTÕES GLOBAIS */
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 13px 16px;
+            background: #161e2e;
+            border: 1px solid #334155;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
 
-/* Botão de Aceitar (Verde) */
-#lista-solicitacoes button:first-child {
-  background-color: #22c55e !important;
-  color: #ffffff !important;
-}
+        input[type="password"]:focus, input[type="text"]:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
 
-/* Botão de Recusar (Vermelho) */
-#lista-solicitacoes button:last-child {
-  background-color: #ef4444 !important;
-  color: #ffffff !important;
-}
+        .btn-sistema {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: #0f172a;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
 
-  </style>
+        .btn-sistema:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-voltar-site {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 12px;
+            padding: 11px;
+            background: rgba(30, 41, 59, 0.7);
+            color: #94a3b8;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-voltar-site:hover {
+            background: #1e293b;
+            color: #fff;
+            border-color: #475569;
+        }
+
+        /* CONTEÚDO DO PAINEL PRINCIPAL */
+        #admin-content {
+            display: none;
+            max-width: 680px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* CABEÇALHO CORRIGIDO PARA MOBILE */
+        .admin-header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 18px 20px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            flex-wrap: wrap;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-sync, .btn-header-home {
+            background: rgba(56, 189, 248, 0.12);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-sync:hover, .btn-header-home:hover {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: #38bdf8;
+            color: #fff;
+        }
+
+        /* SEÇÕES / CARDS DO PAINEL */
+        .panel-section, .card, .admin-card, .adm-card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.2s;
+        }
+
+        .panel-section:hover, .card:hover, .admin-card:hover {
+            border-color: #334155;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        /* ITENS INTERNOS DAS LISTAS - ESTRUTURA ROBUSTA E FLEXÍVEL */
+        .item-flex-card {
+            background: linear-gradient(145deg, #131c31, #101828);
+            border: 1px solid #1e293b;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.25s ease;
+        }
+
+        .item-flex-card:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            background: linear-gradient(145deg, #16223b, #121d31);
+            transform: translateY(-1px);
+        }
+
+        /* CORREÇÃO DO BLOCO DE INFORMAÇÕES (NOME E LINK) */
+        .item-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #1e293b;
+        }
+
+        .item-text-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-title {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-link {
+            color: #38bdf8 !important;
+            font-size: 0.8rem !important;
+            text-decoration: none !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .item-link:hover {
+            text-decoration: underline !important;
+        }
+
+        /* BOTÕES DE AÇÕES NAS LISTAS */
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        button.btn-sm {
+            border: none;
+            padding: 9px 14px;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: filter 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        button.btn-sm:hover {
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+
+        /* CORES ESPECÍFICAS DOS BOTÕES */
+        .btn-green {
+            background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-red {
+            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-yellow {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+            color: #0f172a !important;
+        }
+
+        /* RESPONSIVIDADE PARA TELAS PEQUENAS (MOBILE) */
+        @media (max-width: 520px) {
+            .item-flex-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .item-actions button {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        /* TEXTOS E CORES GERAIS DE APOIO */
+        p { color: #94a3b8; font-size: 0.85rem; }
+        strong { color: #f8fafc; }
+    </style>
 </head>
 <body>
 
-  <!-- TELA DE LOGIN -->
-  <div id="login-box" class="card" style="max-width: 400px; margin: 60px auto; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-    <div style="text-align: center; margin-bottom: 20px;">
-      <div class="admin-badge" style="font-size: 2.2rem; margin-bottom: 5px;">🛡️</div>
-      <h2 class="admin-main-title" style="color: #f8fafc; font-size: 1.2rem; margin: 0;">Painel Administrativo</h2>
-      <p class="admin-main-subtitle" style="color: #38bdf8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin: 5px 0 0 0;">GruposNJ Core</p>
-    </div>
+    <!-- CONTÊINER DE NOTIFICAÇÕES -->
+    <div id="toast-container"></div>
 
-    <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px; font-weight: 500;">🔒 Autenticação de Segurança</p>
-    <input type="password" id="admin-pass" placeholder="Digite a senha master..." style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; outline: none;">
-    <button class="btn" onclick="autenticar()" style="width: 100%; padding: 12px; background: #38bdf8; color: #0f172a; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">Acessar Sistema</button>
-  </div>
-
-  <!-- CONTEÚDO DO ADMIN (Fica oculto inicialmente) -->
-  <div id="admin-content" style="display: none; max-width: 600px; margin: 20px auto; padding: 0 10px;">
-
-    <!-- CABEÇALHO PREMIUM DO PAINEL LOGADO -->
-    <div class="admin-header" style="background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <div class="admin-badge" style="font-size: 1.5rem; margin-bottom: 2px;">🛡️</div>
-        <h1 class="admin-main-title" style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; margin: 0;">Painel Administrativo</h1>
-        <p class="admin-main-subtitle" style="font-size: 0.7rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; margin: 2px 0 0 0;">GruposNJ Core</p>
-      </div>
-      <button class="btn-sync" onclick="carregarDados()">
-        🔄 Sincronizar Dados
-      </button>
-    </div>
-
-    <!-- SEÇÃO DE DENÚNCIAS -->
-    <div class="admin-section" style="margin-bottom: 20px; background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155;">
-      <h3 style="color: #ef4444; margin-top: 0; margin-bottom: 15px;">🚨 Denúncias Recebidas</h3>
-      <div style="margin-bottom: 15px;">
-        <input type="text" id="input-busca-denuncia" placeholder="Pesquisar por nome ou ID do grupo..." oninput="filtrarDenuncias()" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 6px; box-sizing: border-box; outline: none;">
-      </div>
-      <div id="lista-denuncias" style="display: flex; flex-direction: column; gap: 10px;">
-        <p style="color: #94a3b8;">Carregando denúncias...</p>
-      </div>
-    </div>
-
-    <!-- SEÇÃO DE SOLICITAÇÕES -->
-    <div class="card" style="background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155;">
-      <h3 style="color: #f8fafc; margin-top: 0; margin-bottom: 15px;">📋 Solicitações Pendentes</h3>
-      <div id="lista-solicitacoes">Carregando...</div>
-    </div>
-
-    <!-- Seção de Solicitações de Parceria Pendentes -->
-<div class="admin-card" style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-top: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-  <h3 style="color: #f8fafc; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-    <i class="fa-solid fa-handshake" style="color: #38bdf8;"></i> Solicitações de Parceria Pendentes
-  </h3>
-  
-  <div id="lista-parcerias-pendentes" style="display: flex; flex-direction: column; gap: 12px;">
-    <p style="color: #94a3b8; font-size: 0.9rem;">Carregando solicitações...</p>
-  </div>
-</div>
-
-<div class="adm-card" style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.3); padding: 20px; border-radius: 16px; margin-top: 20px;">
-  <h3 style="color: #38bdf8; margin-bottom: 15px;"><i class="fa-solid fa-handshake"></i> Grupos com Parceria Ativa</h3>
-  
-  <!-- Container onde a lista de parceiros será injetada via JavaScript -->
-  <div id="lista-parceiros-adm" style="display: flex; flex-direction: column; gap: 12px;">
-    <p style="color: #94a3b8; font-size: 0.9rem;">Carregando parceiros...</p>
-  </div>
-</div>
-
-
-    <!-- SEÇÃO DE GRUPOS / VIPs -->
-    <div class="card" style="background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; color: #f8fafc;">
-      <h3 style="color: #38bdf8; margin-top: 0; margin-bottom: 15px; line-height: 1.3;">🌐 Todos os Grupos <br><span style="font-size: 0.85rem; color: #94a3b8;">(Gerenciar VIPs)</span></h3>
-      
-      <div style="margin-bottom: 15px;">
-        <input type="text" id="input-busca-grupo" placeholder="Pesquisar grupo por nome ou ID..." oninput="filtrarGrupos()" style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; color: #ffffff; border-radius: 8px; outline: none; box-sizing: border-box; font-size: 0.9rem;">
-      </div>
-      
-      <div id="lista-todos-grupos" style="color: #e2e8f0; font-size: 0.9rem;">Carregando...</div>
-    </div>
-
-  </div>
-</body>
-</html>
-<script>
-let todasAsDenuncias = [];
-
-async function carregarDenunciasAdmin() {
-  const container = document.getElementById('lista-denuncias');
-  if (!container) return;
-
-  try {
-    const res = await fetch('/api/denuncias');
-    const data = await res.json();
-
-    // Como a API retorna um array direto [...]
-    if (!Array.isArray(data) || data.length === 0) {
-      container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia registrada até o momento.</p>';
-      todasAsDenuncias = [];
-      return;
-    }
-
-    todasAsDenuncias = data;
-    exibirDenuncias(todasAsDenuncias);
-
-  } catch (err) {
-    console.error('Erro ao carregar denúncias:', err);
-    container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de denúncias.</p>';
-  }
-}
-
-function exibirDenuncias(lista) {
-  const container = document.getElementById('lista-denuncias');
-  container.innerHTML = '';
-
-  if (lista.length === 0) {
-    container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia encontrada com esse termo.</p>';
-    return;
-  }
-
-  lista.forEach(d => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.style.cssText = 'background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 10px;';
-
-    card.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong>
-        <span style="font-size: 11px; color: #94a3b8;">${new Date(d.data).toLocaleString()}</span>
-      </div>
-      <p style="margin: 5px 0; color: #f1f5f9;"><strong>Motivo:</strong> ${d.motivo}</p>
-      <p style="margin: 5px 0 12px 0; font-size: 13px; color: #cbd5e1;"><strong>Contato:</strong> ${d.usuarioEmail}</p>
-      <button onclick="apagarDenuncia('${d.id}')" style="background: #dc2626; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
-        🗑️ Apagar Denúncia
-      </button>
-    `;
-
-    container.appendChild(card);
-  });
-}
-
-function filtrarDenuncias() {
-  const termo = document.getElementById('input-busca-denuncia').value.toLowerCase().trim();
-
-  const filtradas = todasAsDenuncias.filter(d => {
-    const nome = (d.nomeGrupo || '').toLowerCase();
-    const id = String(d.grupoId || '').toLowerCase();
-    return nome.includes(termo) || id.includes(termo);
-  });
-
-  exibirDenuncias(filtradas);
-}
-
-async function apagarDenuncia(id) {
-  if (!confirm('Tem certeza que deseja apagar esta denúncia?')) return;
-
-  try {
-    const res = await fetch(`/api/denuncias/${encodeURIComponent(id)}`, { method: 'DELETE' });
-    const data = await res.json();
-
-    if (data.success) {
-      carregarDenunciasAdmin();
-    } else {
-      alert(data.error || 'Erro ao apagar denúncia.');
-    }
-  } catch (err) {
-    console.error('Erro ao excluir:', err);
-    alert('Erro de conexão ao tentar apagar a denúncia.');
-  }
-}
-
-async function autenticar() {
-    const senhaInput = document.getElementById('admin-pass').value.trim();
-
-    if (!senhaInput) {
-        alert('Digite a senha!');
-        return;
-    }
-
-    try {
-        // Envia a senha digitada para o servidor validar com a variável de ambiente do Render
-        const resposta = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ senha: senhaInput })
-        });
-
-        const dados = await resposta.json();
-
-        if (resposta.ok && dados.success) {
-            // Sucesso! Esconde o login e mostra o painel
-            document.getElementById('login-box').style.display = 'none';
-            document.getElementById('admin-content').style.display = 'block';
-            
-            // Opcional: em vez de salvar a senha crua, salva só um indicativo de que está logado
-            localStorage.setItem('adminLogado', 'true');
-            
-            carregarDados();
-        } else {
-            alert('Senha incorreta!');
-        }
-    } catch (erro) {
-        console.error('Erro ao tentar fazer login:', erro);
-        alert('Erro ao conectar com o servidor.');
-    }
-}
-
-
-  function carregarDados() {
-    carregarDenunciasAdmin();
-    carregarSolicitacoes();
-    carregarGrupos();
-  }
-
-  async function carregarSolicitacoes() {
-    const container = document.getElementById('lista-solicitacoes');
-    container.innerHTML = '<p style="color:#38bdf8;">Buscando solicitações...</p>';
-    try {
-      const res = await fetch('/api/admin/solicitacoes');
-      if (!res.ok) throw new Error('Status ' + res.status);
-      const sol = await res.json();
-
-      if (!Array.isArray(sol) || sol.length === 0) {
-        container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
-        return;
-      }
-
-      container.innerHTML = sol.map(g => `
-        <div class="item">
-          <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}
-          <span class="item-link">${g.link || ''}</span>
-          <div class="item-actions">
-            <button class="btn-sm btn-green" onclick="decidir('${g.id}', true)">Aceitar</button>
-            <button class="btn-sm btn-red" onclick="decidir('${g.id}', false)">Recusar</button>
-          </div>
+    <!-- TELA DE LOGIN -->
+    <div id="login-box" class="fade-in">
+        <div class="admin-badge">🛡️</div>
+        <h2 class="admin-main-title">Painel Administrativo</h2>
+        <p class="admin-main-subtitle">GruposNJ Core</p>
+        
+        <div style="text-align: left; margin-bottom: 8px;">
+            <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 500;">🔒 Autenticação de Segurança</label>
         </div>
-      `).join('');
+        <input type="password" id="admin-pass" placeholder="Digite a senha master..." style="margin-bottom: 15px;" onkeypress="if(event.key === 'Enter') autenticar()">
+        <button class="btn-sistema" onclick="autenticar()">Acessar Sistema</button>
+        <a href="index.html" class="btn-voltar-site"><i class="fa-solid fa-arrow-left"></i> Voltar para Grupos NJ</a>
+    </div>
 
-    } catch(e) {
-      container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações: ' + e.message + '</p>';
-    }
-  }
-
-  let todosOsGrupos = []; // Variável global que guarda os grupos
-
-  async function carregarGrupos() {
-    const container = document.getElementById('lista-todos-grupos');
-    container.innerHTML = '<p style="color:#38bdf8;">Buscando grupos...</p>';
-    try {
-      const res = await fetch('/api/grupos');
-      if (!res.ok) throw new Error('Status ' + res.status);
-      const grupos = await res.json();
-
-      if (!Array.isArray(grupos) || grupos.length === 0) {
-        container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
-        todosOsGrupos = [];
-        return;
-      }
-
-      todosOsGrupos = grupos; // SALVA OS DADOS AQUI PARA A BUSCA FUNCIONAR
-      exibirGrupos(todosOsGrupos); // Desenha a lista na tela
-
-    } catch(e) {
-      container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
-    }
-  }
-
-  // Função separada apenas para desenhar os grupos
-  function exibirGrupos(grupos) {
-    const container = document.getElementById('lista-todos-grupos');
-
-    if (grupos.length === 0) {
-      container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo encontrado com esse termo.</p>';
-      return;
-    }
-
-    container.innerHTML = grupos.map(g => `
-      <div class="item">
-        <strong>${g.nome || 'Sem nome'}</strong> ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}
-        <span class="item-link">${g.link || ''}</span>
-        <div class="item-actions">
-          ${g.isVip ?
-            `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` :
-            `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>`
-          }
-          <button class="btn-sm btn-red" onclick="deletarGrupo('${g.id}')">🗑️ Deletar</button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // O motor da busca em tempo real
-  function filtrarGrupos() {
-    const termo = document.getElementById('input-busca-grupo').value.toLowerCase().trim();
-    console.log("Termo digitado:", termo);
-    console.log("Total de grupos salvos:", todosOsGrupos.length);
-
-    const filtrados = todosOsGrupos.filter(g => {
-      const nome = (g.nome || '').toLowerCase();
-      const id = String(g.id || '').toLowerCase();
-      return nome.includes(termo) || id.includes(termo);
-    });
-
-    console.log("Grupos filtrados encontrados:", filtrados.length);
-    exibirGrupos(filtrados);
-  }
-
-  async function decidir(id, aceito) {
-    const senha = localStorage.getItem('adminPassword');
-    await fetch('/api/admin/decidir-solicitacao', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha, id, aceito })
-    });
-    carregarDados();
-  }
-
-async function ativarVip(grupoId) {
-  const diasStr = prompt("Quantos dias de VIP deseja dar? (10, 30 ou 60):", "30");
-  if (!diasStr) return; // Se cancelar, não faz nada
-  
-  const dias = parseInt(diasStr);
-
-  const senha = localStorage.getItem('adminPassword');
-  const res = await fetch('/api/admin/ativar-vip', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ senha, grupoId, dias })
-  });
-
-  const data = await res.json();
-  if (data.success) {
-    alert(`VIP ativado com sucesso por ${dias} dias!`);
-    carregarDados();
-  } else {
-    alert('Erro ao ativar VIP: ' + (data.error || 'Erro desconhecido'));
-  }
-}
-
-  async function removerVip(grupoId) {
-    const senha = localStorage.getItem('adminPassword');
-    
-    if (!senha) {
-      alert('Senha de administrador não encontrada. Faça login novamente no painel ADM.');
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/admin/remover-vip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha, grupoId })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Erro ao remover VIP');
-      }
-
-      // Sucesso: recarrega os dados na tela
-      carregarDados();
-    } catch (err) {
-      console.error('Erro ao remover VIP:', err);
-      alert('Não foi possível remover o VIP: ' + err.message);
-    }
-  }
-
-// Função completa para carregar e exibir as solicitações de parceria pendentes no painel admin
-// Função completa para carregar e exibir as solicitações de parceria pendentes no painel admin
-async function carregarParceriasPendentes() {
-  const container = document.getElementById('lista-parcerias-pendentes');
-  if (!container) return;
-
-  container.innerHTML = '<p style="color: #38bdf8; font-size: 0.85rem; text-align: center; padding: 10px;">Carregando solicitações...</p>';
-
-  try {
-    const res = await fetch('/api/grupos');
-    if (!res.ok) {
-      throw new Error(`Erro HTTP: ${res.status} (${res.statusText})`);
-    }
-
-    const grupos = await res.json();
-
-    if (!Array.isArray(grupos)) {
-      throw new Error('O servidor não retornou uma lista válida de grupos.');
-    }
-
-    const pendentes = grupos.filter(g => g.statusParceria === 'pendente');
-
-    if (pendentes.length === 0) {
-      container.innerHTML = '<p style="color: #64748b; font-size: 0.85rem; text-align: center; padding: 10px;">Nenhuma solicitação de parceria pendente.</p>';
-      return;
-    }
-
-    container.innerHTML = pendentes.map(g => `
-      <div style="background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <img src="${g.imagem || 'https://via.placeholder.com/50'}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;" alt="Grupo">
-          <div>
-            <strong style="color: #fff; font-size: 0.95rem; display: block;">${typeof escapeHtml === 'function' ? escapeHtml(g.nome) : g.nome}</strong>
-            <span style="color: #94a3b8; font-size: 0.8rem;"><i class="fa-solid fa-user"></i> Autor: ${typeof escapeHtml === 'function' ? escapeHtml(g.email || 'N/A') : (g.email || 'N/A')}</span>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <button onclick="responderParceria('${g.id}', 'aprovar')" style="background: #22c55e; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem;">
-            <i class="fa-solid fa-check"></i> Aprovar (10d)
-          </button>
-        </div>
-      </div>
-    `).join('');
-
-  } catch (err) {
-    console.error('Erro detalhado ao carregar parcerias:', err);
-    container.innerHTML = `<p style="color: #ef4444; font-size: 0.85rem; text-align: center; padding: 10px;">Erro: ${err.message}</p>`;
-  }
-}
-
-// Função para responder (aprovar/rejeitar) a solicitação enviando a senha de admin
-async function responderParceria(id, acao) {
-  const senha = localStorage.getItem('adminPassword') || prompt('Digite a senha de Administrador:');
-  if (!senha) return;
-
-  const endpoint = acao === 'aprovar' ? `/api/admin/aprovar-parceria/${id}` : `/api/admin/rejeitar-parceria/${id}`;
-
-  try {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha })
-    });
-    const data = await res.json();
-
-    if (res.ok) {
-      alert(data.message || 'Ação realizada com sucesso!');
-      carregarParceriasPendentes(); 
-      carregarParceirosAdm(); // Atualiza a lista de parceiros ativos também
-      if (typeof carregarGrupos === 'function') carregarGrupos();
-    } else {
-      alert(data.error || 'Erro ao processar ação.');
-    }
-  } catch (e) {
-    console.error(e);
-    alert('Erro de conexão com o servidor.');
-  }
-}
-
-// Função para carregar os parceiros ativos no painel do ADM
-async function carregarParceirosAdm() {
-  const container = document.getElementById('lista-parceiros-adm');
-  if (!container) return;
-
-  try {
-    const res = await fetch('/api/adm/parceiros');
-    const parceiros = await res.json();
-
-    if (parceiros.length === 0) {
-      container.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">Nenhum grupo com parceria ativa no momento.</p>';
-      return;
-    }
-
-    container.innerHTML = parceiros.map(g => {
-      const dataTermino = g.parceriaAte || g.validadeparceria;
-      let tempoStr = 'Tempo não calculado';
-
-      if (dataTermino) {
-        const diffMs = new Date(dataTermino).getTime() - Date.now();
-        if (diffMs > 0) {
-          const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-          const horas = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          tempoStr = `${dias}d ${horas}h restantes`;
-        } else {
-          tempoStr = 'Expirado';
-        }
-      }
-
-      return `
-        <div style="background: rgba(30, 41, 59, 0.6); padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <img src="${g.imagem || 'https://via.placeholder.com/40'}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;" alt="Grupo">
-            <div>
-              <strong style="color: #fff; font-size: 0.95rem; display: block;">${typeof escapeHtml === 'function' ? escapeHtml(g.nome) : g.nome}</strong>
-              <span style="font-size: 0.75rem; color: #38bdf8;"><i class="fa-regular fa-clock"></i> ${tempoStr}</span>
+    <!-- CONTEÚDO DO ADMIN -->
+    <div id="admin-content" class="fade-in">
+        
+        <!-- CABEÇALHO PREMIUM DO PAINEL LOGADO -->
+        <div class="admin-header">
+            <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+                <div class="admin-badge" style="width: 40px; height: 40px; font-size: 1.2rem; margin-bottom: 0;">🛡️</div>
+                <div style="min-width: 0;">
+                    <h1 class="admin-main-title" style="font-size: 1rem; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Painel Administrativo</h1>
+                    <p class="admin-main-subtitle" style="margin: 2px 0 0 0; font-size: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">suporte.gruposnj@gmail.com</p>
+                </div>
             </div>
-          </div>
-          <button onclick="removerParceriaAdm('${g.id || g._id}')" style="background: #ef4444; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem;">
-  <i class="fa-solid fa-trash"></i> Remover
-</button>
+            <div class="header-actions">
+                <a href="index.html" class="btn-header-home" title="Ir para o Site"><i class="fa-solid fa-house"></i> Site</a>
+                <button class="btn-sync" onclick="carregarDados()">
+                    <i class="fa-solid fa-rotate"></i> Sincronizar
+                </button>
+            </div>
+        </div>
 
-      `;
-    }).join('');
+        <!-- SEÇÃO DE DENÚNCIAS -->
+        <div class="panel-section">
+            <h3 style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Denúncias Recebidas</h3>
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="input-busca-denuncia" placeholder="Pesquisar por nome ou ID do grupo..." oninput="filtrarDenuncias()">
+            </div>
+            <div id="lista-denuncias">
+                <p>Carregando denúncias...</p>
+            </div>
+        </div>
 
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de parceiros.</p>';
-  }
-}
+        <!-- SEÇÃO DE SOLICITAÇÕES -->
+        <div class="card">
+            <h3 style="color: #f8fafc;"><i class="fa-solid fa-clipboard-list"></i> Solicitações Pendentes</h3>
+            <div id="lista-solicitacoes">Carregando...</div>
+        </div>
 
-// Função para remover a parceria direto pelo ADM
-async function removerParceriaAdm(grupoId) {
-  if (!confirm('Tem certeza que deseja remover a parceria deste grupo?')) return;
+        <!-- SEÇÃO DE SOLICITAÇÕES DE PARCERIA PENDENTES -->
+        <div class="admin-card">
+            <h3 style="color: #f8fafc; font-size: 1.1rem;">
+                <i class="fa-solid fa-handshake" style="color: #38bdf8;"></i> Solicitações de Parceria Pendentes
+            </h3>
+            <div id="lista-parcerias-pendentes">
+                <p>Carregando solicitações...</p>
+            </div>
+        </div>
 
-  try {
-    const res = await fetch('/api/adm/remover-parceria', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ grupoId })
-    });
+        <!-- SEÇÃO DE PARCEIROS ATIVOS -->
+        <div class="adm-card">
+            <h3 style="color: #38bdf8;"><i class="fa-solid fa-award"></i> Grupos com Parceria Ativa</h3>
+            <div id="lista-parceiros-adm">
+                <p>Carregando parceiros...</p>
+            </div>
+        </div>
 
-    const data = await res.json();
-    if (data.success) {
-      alert('Parceria removida com sucesso!');
-      carregarParceirosAdm(); 
-      carregarParceriasPendentes();
-    } else {
-      alert('Erro ao remover parceria.');
-    }
-  } catch (err) {
-    console.error(err);
-    alert('Erro de conexão.');
-  }
-}
+        <!-- SEÇÃO DE GRUPOS / VIPs -->
+        <div class="card">
+            <h3 style="color: #38bdf8;">
+                <i class="fa-solid fa-globe"></i> Todos os Grupos 
+                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">(Gerenciar VIPs)</span>
+            </h3>
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="input-busca-grupo" placeholder="Pesquisar grupo por nome ou ID..." oninput="filtrarGrupos()">
+            </div>
+            <div id="lista-todos-grupos">Carregando...</div>
+        </div>
 
-// Executa automaticamente ao carregar a página do admin
-document.addEventListener('DOMContentLoaded', () => {
-  carregarParceriasPendentes();
-  carregarParceirosAdm();
-});
+    </div>
 
-// Função para deletar o grupo permanentemente do painel ADM
-async function deletarGrupo(grupoId) {
-  if (!confirm('Tem certeza que deseja excluir permanentemente este grupo?')) return;
+    <!-- SCRIPT DE LÓGICA -->
+    <script>
+        const SUPORTE_EMAIL = "suporte.gruposnj@gmail.com";
+        const SENHA_SUPORTE = "kwan ezft bxek ogeb";
 
-  const senha = localStorage.getItem('adminPassword');
-  if (!senha) {
-    alert('Senha de administrador não encontrada. Faça login novamente.');
-    return;
-  }
+        function mostrarToast(mensagem, tipo = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipo}`;
+            
+            const icone = tipo === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
+            toast.innerHTML = `${icone} <span>${mensagem}</span>`;
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
 
-  try {
-    const res = await fetch(`/api/admin/deletar-grupo/${grupoId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha })
-    });
+        let todasAsDenuncias = []; 
+        let todosOsGrupos = [];
 
-    const data = await res.json();
-    if (data.success) {
-      alert('Grupo deletado com sucesso!');
-      // Atualiza os dados na tela (se a sua função de carregar se chamar diferente, ajuste aqui)
-      if (typeof carregarDados === 'function') {
-        carregarDados();
-      } else {
-        location.reload(); // Recarrega a página se não achar a função de carregar
-      }
-    } else {
-      alert('Erro ao deletar grupo: ' + (data.error || 'Erro desconhecido'));
-    }
-  } catch (err) {
-    console.error('Erro de conexão:', err);
-    alert('Erro de conexão ao tentar deletar o grupo.');
-  }
-}
+        async function carregarDenunciasAdmin() {
+            const container = document.getElementById('lista-denuncias');
+            if (!container) return;
+            try {
+                const res = await fetch('/api/denuncias');
+                const data = await res.json();
+                if (!Array.isArray(data) || data.length === 0) {
+                    container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia registrada até o momento.</p>';
+                    todasAsDenuncias = [];
+                    return;
+                }
+                todasAsDenuncias = data;
+                exibirDenuncias(todasAsDenuncias);
+            } catch (err) {
+                console.error('Erro ao carregar denúncias:', err);
+                container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de denúncias.</p>';
+            }
+        }
 
-</script>
+        function exibirDenuncias(lista) {
+            const container = document.getElementById('lista-denuncias');
+            container.innerHTML = '';
+            if (lista.length === 0) {
+                container.innerHTML = '<p style="color: #94a3b8;">Nenhuma denúncia encontrada com esse termo.</p>';
+                return;
+            }
+            lista.forEach(d => {
+                const card = document.createElement('div');
+                card.style.cssText = 'background: #131c31; padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444; margin-bottom: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%;';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; width: 100%;">
+                        <strong style="color: #38bdf8;">Grupo: ${d.nomeGrupo || 'Sem nome'} (ID: ${d.grupoId})</strong> 
+                        <span style="font-size: 11px; color: #94a3b8;">${new Date(d.data).toLocaleString()}</span>
+                    </div>
+                    <p style="margin: 2px 0; color: #f1f5f9;"><strong>Motivo:</strong> ${d.motivo}</p>
+                    <p style="margin: 2px 0 8px 0; font-size: 13px; color: #cbd5e1;"><strong>Contato:</strong> ${d.usuarioEmail}</p>
+                    <button onclick="apagarDenuncia('${d.id}')" class="btn-sm btn-red"> 
+                        <i class="fa-solid fa-trash"></i> Apagar Denúncia 
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filtrarDenuncias() {
+            const termo = document.getElementById('input-busca-denuncia').value.toLowerCase().trim();
+            const filtradas = todasAsDenuncias.filter(d => {
+                const nome = (d.nomeGrupo || '').toLowerCase();
+                const id = String(d.grupoId || '').toLowerCase();
+                return nome.includes(termo) || id.includes(termo);
+            });
+            exibirDenuncias(filtradas);
+        }
+
+        async function apagarDenuncia(id) {
+            if (!confirm('Tem certeza que deseja apagar esta denúncia?')) return;
+            try {
+                const res = await fetch(`/api/denuncias/${encodeURIComponent(id)}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    mostrarToast('Denúncia apagada com sucesso!', 'success');
+                    carregarDenunciasAdmin();
+                } else {
+                    mostrarToast(data.error || 'Erro ao apagar denúncia.', 'error');
+                }
+            } catch (err) {
+                console.error('Erro ao excluir:', err);
+                mostrarToast('Erro de conexão ao tentar apagar a denúncia.', 'error');
+            }
+        }
+
+        async function autenticar() {
+            const senhaInput = document.getElementById('admin-pass').value.trim();
+            if (!senhaInput) {
+                mostrarToast('Digite a senha de acesso!', 'error');
+                return;
+            }
+            try {
+                const resposta = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha: senhaInput })
+                });
+                const dados = await resposta.json();
+                if (resposta.ok && dados.success) {
+                    localStorage.setItem('adminPassword', senhaInput);
+                    document.getElementById('login-box').style.display = 'none';
+                    document.getElementById('admin-content').style.display = 'block';
+                    localStorage.setItem('adminLogado', 'true');
+                    mostrarToast('Painel acessado com sucesso!', 'success');
+                    carregarDados();
+                } else {
+                    mostrarToast('Senha incorreta!', 'error');
+                }
+            } catch (erro) {
+                console.error('Erro ao tentar fazer login:', erro);
+                mostrarToast('Erro ao conectar com o servidor.', 'error');
+            }
+        }
+
+        function carregarDados() {
+            carregarDenunciasAdmin();
+            carregarSolicitacoes();
+            carregarGrupos();
+            carregarParceriasPendentes();
+            carregarParceirosAdm();
+        }
+
+        async function carregarSolicitacoes() {
+            const container = document.getElementById('lista-solicitacoes');
+            container.innerHTML = '<p style="color:#38bdf8;">Buscando solicitações...</p>';
+            try {
+                const res = await fetch('/api/admin/solicitacoes');
+                if (!res.ok) throw new Error('Status ' + res.status);
+                const sol = await res.json();
+                if (!Array.isArray(sol) || sol.length === 0) {
+                    container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhuma solicitação pendente.</p>';
+                    return;
+                }
+                container.innerHTML = sol.map(g => `
+                    <div class="item-flex-card">
+                        <div class="item-info-wrapper">
+                            <img src="${g.imagem || 'https://via.placeholder.com/48'}" class="item-avatar" alt="Grupo">
+                            <div class="item-text-content">
+                                <span class="item-title">${g.nome || 'Sem nome'} ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}</span>
+                                <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-sm btn-green" onclick="decidir('${g.id}', true)"><i class="fa-solid fa-check"></i> Aceitar</button>
+                            <button class="btn-sm btn-red" onclick="decidir('${g.id}', false)"><i class="fa-solid fa-xmark"></i> Recusar</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar solicitações: ' + e.message + '</p>';
+            }
+        }
+
+        async function carregarGrupos() {
+            const container = document.getElementById('lista-todos-grupos');
+            container.innerHTML = '<p style="color:#38bdf8;">Buscando grupos...</p>';
+            try {
+                const res = await fetch('/api/grupos');
+                if (!res.ok) throw new Error('Status ' + res.status);
+                const grupos = await res.json();
+                if (!Array.isArray(grupos) || grupos.length === 0) {
+                    container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo cadastrado.</p>';
+                    todosOsGrupos = [];
+                    return;
+                }
+                todosOsGrupos = grupos;
+                exibirGrupos(todosOsGrupos);
+            } catch(e) {
+                container.innerHTML = '<p style="color:#ef4444;">Erro ao carregar grupos: ' + e.message + '</p>';
+            }
+        }
+
+        function exibirGrupos(grupos) {
+            const container = document.getElementById('lista-todos-grupos');
+            if (grupos.length === 0) {
+                container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Nenhum grupo encontrado com esse termo.</p>';
+                return;
+            }
+            container.innerHTML = grupos.map(g => `
+                <div class="item-flex-card">
+                    <div class="item-info-wrapper">
+                        <img src="${g.imagem || 'https://via.placeholder.com/48'}" class="item-avatar" alt="Grupo">
+                        <div class="item-text-content">
+                            <span class="item-title">${g.nome || 'Sem nome'} ${g.isVip ? '<span style="color:#eab308; font-size:0.75rem;">[VIP]</span>' : ''}</span>
+                            <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        ${g.isVip ? `<button class="btn-sm btn-red" onclick="removerVip('${g.id}')">Remover VIP</button>` : `<button class="btn-sm btn-yellow" onclick="ativarVip('${g.id}')">Dar VIP</button>` }
+                        <button class="btn-sm btn-red" onclick="deletarGrupo('${g.id}')"><i class="fa-solid fa-trash"></i> Deletar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filtrarGrupos() {
+            const termo = document.getElementById('input-busca-grupo').value.toLowerCase().trim();
+            const filtrados = todosOsGrupos.filter(g => {
+                const nome = (g.nome || '').toLowerCase();
+                const id = String(g.id || '').toLowerCase();
+                return nome.includes(termo) || id.includes(termo);
+            });
+            exibirGrupos(filtrados);
+        }
+
+        async function decidir(id, aceito) {
+            const senha = localStorage.getItem('adminPassword');
+            await fetch('/api/admin/decidir-solicitacao', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ senha, id, aceito })
+            });
+            mostrarToast('Solicitação processada com sucesso!', 'success');
+            carregarDados();
+        }
+
+        async function ativarVip(grupoId) {
+            const diasStr = prompt("Quantos dias de VIP deseja dar? (10, 30 ou 60):", "30");
+            if (!diasStr) return;
+            const dias = parseInt(diasStr);
+            const senha = localStorage.getItem('adminPassword');
+            const res = await fetch('/api/admin/ativar-vip', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ senha, grupoId, dias })
+            });
+            const data = await res.json();
+            if (data.success) {
+                mostrarToast(`VIP ativado com sucesso por ${dias} dias!`, 'success');
+                carregarDados();
+            } else {
+                mostrarToast('Erro ao ativar VIP: ' + (data.error || 'Erro desconhecido'), 'error');
+            }
+        }
+
+        async function removerVip(grupoId) {
+            const senha = localStorage.getItem('adminPassword');
+            if (!senha) {
+                mostrarToast('Senha de administrador não encontrada. Faça login novamente.', 'error');
+                return;
+            }
+            try {
+                const res = await fetch('/api/admin/remover-vip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha, grupoId })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Erro ao remover VIP');
+                mostrarToast('VIP removido com sucesso!', 'success');
+                carregarDados();
+            } catch (err) {
+                console.error('Erro ao remover VIP:', err);
+                mostrarToast('Não foi possível remover o VIP: ' + err.message, 'error');
+            }
+        }
+
+        async function carregarParceriasPendentes() {
+            const container = document.getElementById('lista-parcerias-pendentes');
+            if (!container) return;
+            container.innerHTML = '<p style="color: #38bdf8; font-size: 0.85rem; text-align: center; padding: 10px;">Carregando solicitações...</p>';
+            try {
+                const res = await fetch('/api/grupos');
+                if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+                const grupos = await res.json();
+                if (!Array.isArray(grupos)) throw new Error('O servidor não retornou uma lista válida.');
+                const pendentes = grupos.filter(g => g.statusParceria === 'pendente');
+                if (pendentes.length === 0) {
+                    container.innerHTML = '<p style="color: #64748b; font-size: 0.85rem; text-align: center; padding: 10px;">Nenhuma solicitação de parceria pendente.</p>';
+                    return;
+                }
+                container.innerHTML = pendentes.map(g => `
+                    <div class="item-flex-card">
+                        <div class="item-info-wrapper">
+                            <img src="${g.imagem || 'https://via.placeholder.com/50'}" class="item-avatar" alt="Grupo">
+                            <div class="item-text-content">
+                                <span class="item-title">${g.nome || 'Sem nome'}</span>
+                                <span style="color: #94a3b8; font-size: 0.75rem; display: block;"><i class="fa-solid fa-user"></i> Autor: ${g.email || 'N/A'}</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="responderParceria('${g.id}', 'aprovar')" class="btn-sm btn-green">
+                                <i class="fa-solid fa-check"></i> Aprovar (10d)
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<p style="color: #ef4444; font-size: 0.85rem; text-align: center; padding: 10px;">Erro: ${err.message}</p>`;
+            }
+        }
+
+        async function responderParceria(id, acao) {
+            const senha = localStorage.getItem('adminPassword') || prompt('Digite a senha de Administrador:');
+            if (!senha) return;
+            const endpoint = acao === 'aprovar' ? `/api/admin/aprovar-parceria/${id}` : `/api/admin/rejeitar-parceria/${id}`;
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    mostrarToast(data.message || 'Ação realizada com sucesso!', 'success');
+                    carregarDados();
+                } else {
+                    mostrarToast(data.error || 'Erro ao processar ação.', 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                mostrarToast('Erro de conexão com o servidor.', 'error');
+            }
+        }
+
+        async function carregarParceirosAdm() {
+            const container = document.getElementById('lista-parceiros-adm');
+            if (!container) return;
+            try {
+                const res = await fetch('/api/adm/parceiros');
+                const parceiros = await res.json();
+                if (parceiros.length === 0) {
+                    container.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">Nenhum grupo com parceria ativa no momento.</p>';
+                    return;
+                }
+                container.innerHTML = parceiros.map(g => {
+                    // Correção: Verifica todas as variações possíveis da data de término da parceria
+                    const dataTermino = g.parceriaAte || g.validadeparceria || g.parceria_ate || g.dataExpiracao;
+                    let tempoStr = 'Tempo não calculado';
+                    
+                    if (dataTermino) {
+                        const diffMs = new Date(dataTermino).getTime() - Date.now();
+                        if (diffMs > 0) {
+                            const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                            const horas = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            tempoStr = `${dias}d ${horas}h restantes`;
+                        } else {
+                            tempoStr = 'Expirado';
+                        }
+                    }
+                    return `
+                        <div class="item-flex-card">
+                            <div class="item-info-wrapper">
+                                <img src="${g.imagem || 'https://via.placeholder.com/40'}" class="item-avatar" alt="Grupo">
+                                <div class="item-text-content">
+                                    <span class="item-title">${g.nome || 'Sem nome'}</span>
+                                    <span style="font-size: 0.75rem; color: #38bdf8; display: block;"><i class="fa-regular fa-clock"></i> ${tempoStr}</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button onclick="removerParceriaAdm('${g.id || g._id}')" class="btn-sm btn-red">
+                                    <i class="fa-solid fa-trash"></i> Remover
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de parceiros.</p>';
+            }
+        }
+
+        async function removerParceriaAdm(grupoId) {
+            if (!confirm('Tem certeza que deseja remover a parceria deste grupo?')) return;
+            try {
+                const res = await fetch('/api/adm/remover-parceria', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ grupoId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    mostrarToast('Parceria removida com sucesso!', 'success');
+                    carregarDados();
+                } else {
+                    mostrarToast('Erro ao remover parceria.', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                mostrarToast('Erro de conexão.', 'error');
+            }
+        }
+
+        async function deletarGrupo(grupoId) {
+            if (!confirm('Tem certeza que deseja excluir permanentemente este grupo?')) return;
+            const senha = localStorage.getItem('adminPassword');
+            if (!senha) {
+                mostrarToast('Senha de administrador não encontrada. Faça login novamente.', 'error');
+                return;
+            }
+            try {
+                const res = await fetch(`/api/admin/deletar-grupo/${grupoId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    mostrarToast('Grupo deletado com sucesso!', 'success');
+                    carregarDados();
+                } else {
+                    mostrarToast('Erro ao deletar grupo: ' + (data.error || 'Erro desconhecido'), 'error');
+                }
+            } catch (err) {
+                console.error('Erro de conexão:', err);
+                mostrarToast('Erro de conexão ao tentar deletar o grupo.', 'error');
+            }
+        }
+    </script>
 </body>
 </html>
-
