@@ -381,19 +381,42 @@ async function apagarDenuncia(id) {
   }
 }
 
-  async function autenticar() {
+async function autenticar() {
     const senhaInput = document.getElementById('admin-pass').value.trim();
-    const senhaCorreta = "Joao153153*";
 
-    if (senhaInput === senhaCorreta) {
-      localStorage.setItem('adminPassword', senhaInput);
-      document.getElementById('login-box').style.display = 'none';
-      document.getElementById('admin-content').style.display = 'block';
-      carregarDados();
-    } else {
-      alert('Senha incorreta!');
+    if (!senhaInput) {
+        alert('Digite a senha!');
+        return;
     }
-  }
+
+    try {
+        // Envia a senha digitada para o servidor validar com a variável de ambiente do Render
+        const resposta = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ senha: senhaInput })
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok && dados.success) {
+            // Sucesso! Esconde o login e mostra o painel
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('admin-content').style.display = 'block';
+            
+            // Opcional: em vez de salvar a senha crua, salva só um indicativo de que está logado
+            localStorage.setItem('adminLogado', 'true');
+            
+            carregarDados();
+        } else {
+            alert('Senha incorreta!');
+        }
+    } catch (erro) {
+        console.error('Erro ao tentar fazer login:', erro);
+        alert('Erro ao conectar com o servidor.');
+    }
+}
+
 
   function carregarDados() {
     carregarDenunciasAdmin();
