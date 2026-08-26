@@ -177,29 +177,29 @@ app.post('/api/pix/gerar', async (req, res) => {
 app.get('/api/pix/status/:paymentId', async (req, res) => {
   try {
     const { paymentId } = req.params;
-    const response = await paymentClient.get({ id: paymentId });                                                                                          
-    
+    const response = await paymentClient.get({ id: paymentId });
+
     if (response.status === 'approved') {
       const grupoId = response.metadata?.grupo_id || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].grupoId);
       const dias = Number(response.metadata?.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
 
       if (grupoId) {
-        let grupos = lerJson(DATA_FILE, []);
-        const idx = grupos.findIndex(g => String(g.id) === String(grupoId));
+        // Busca o grupo no MongoDB (substitua 'Grupo' pelo nome do seu Model do Mongoose)
+        const grupo = await Grupo.findOne({ id: grupoId }); // ou { _id: grupoId } dependendo de como salva o ID
 
-        if (idx !== -1) {
+        if (grupo) {
           const tempoMs = dias * 24 * 60 * 60 * 1000;
           const agora = Date.now();
 
-          const baseTempo = (grupos[idx].isVip && grupos[idx].vipAte && grupos[idx].vipAte > agora)
-            ? grupos[idx].vipAte
+          const baseTempo = (grupo.isVip && grupo.vipAte && grupo.vipAte > agora)
+            ? grupo.vipAte
             : agora;
 
-          grupos[idx].isVip = true;
-          grupos[idx].vipAte = baseTempo + tempoMs;
+          grupo.isVip = true;
+          grupo.vipAte = baseTempo + tempoMs;
 
-          salvarJson(DATA_FILE, grupos);
-          console.log(`[STATUS PIX] VIP ativado com sucesso para o grupo ${grupoId} por ${dias} dias.`);
+          await grupo.save(); // Salva as alterações no MongoDB
+          console.log(`[STATUS PIX - MONGO] VIP ativado com sucesso para o grupo ${grupoId} por ${dias} dias.`);
         }
       }
     }
@@ -224,22 +224,22 @@ app.post('/api/webhook', async (req, res) => {
         const dias = Number(response.metadata?.vip_days || response.metadata?.dias_vip || (cobrancasPixMemoria[paymentId] && cobrancasPixMemoria[paymentId].dias) || 7);
 
         if (grupoId) {
-          let grupos = lerJson(DATA_FILE, []);
-          const idx = grupos.findIndex(g => String(g.id) === String(grupoId));
+          // Busca o grupo no MongoDB
+          const grupo = await Grupo.findOne({ id: grupoId }); // Ajuste para { _id: grupoId } se o ID for do Mongo
 
-          if (idx !== -1) {
+          if (grupo) {
             const tempoMs = dias * 24 * 60 * 60 * 1000;
             const agora = Date.now();
 
-            const baseTempo = (grupos[idx].isVip && grupos[idx].vipAte && grupos[idx].vipAte > agora)
-              ? grupos[idx].vipAte
+            const baseTempo = (grupo.isVip && grupo.vipAte && grupo.vipAte > agora)
+              ? grupo.vipAte
               : agora;
 
-            grupos[idx].isVip = true;
-            grupos[idx].vipAte = baseTempo + tempoMs;
+            grupo.isVip = true;
+            grupo.vipAte = baseTempo + tempoMs;
 
-            salvarJson(DATA_FILE, grupos);
-            console.log(`[WEBHOOK] VIP ativado com sucesso para o grupo ${grupoId} por ${dias} dias.`);
+            await grupo.save(); // Salva as alterações no MongoDB
+            console.log(`[WEBHOOK - MONGO] VIP ativado com sucesso para o grupo ${grupoId} por ${dias} dias.`);
           }
         }
       }
