@@ -1245,23 +1245,56 @@
       const container = document.getElementById('lista-grupos');
       if (!container) return;
 
-      // Injeta a animação de brilho pulsante no documento se ainda não existir
+      // Injeta os estilos modernos, animação do VIP e efeitos profissionais de hover
       if (!document.getElementById('estilo-animacao-vip')) {
         const styleAnim = document.createElement('style');
         styleAnim.id = 'estilo-animacao-vip';
         styleAnim.innerHTML = `
           @keyframes pulseVip {
-            0% { box-shadow: 0 0 8px rgba(234, 179, 8, 0.3), inset 0 0 4px rgba(234, 179, 8, 0.1); }
-            50% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.7), inset 0 0 8px rgba(234, 179, 8, 0.3); }
-            100% { box-shadow: 0 0 8px rgba(234, 179, 8, 0.3), inset 0 0 4px rgba(234, 179, 8, 0.1); }
+            0% { box-shadow: 0 0 12px rgba(234, 179, 8, 0.2), inset 0 0 8px rgba(234, 179, 8, 0.08); }
+            50% { box-shadow: 0 0 24px rgba(234, 179, 8, 0.55), inset 0 0 12px rgba(234, 179, 8, 0.2); }
+            100% { box-shadow: 0 0 12px rgba(234, 179, 8, 0.2), inset 0 0 8px rgba(234, 179, 8, 0.08); }
           }
           .card-vip-animado {
-            animation: pulseVip 2.5s infinite ease-in-out;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: pulseVip 3.5s infinite ease-in-out;
+            border: 1.5px solid rgba(234, 179, 8, 0.75) !important;
+            background: linear-gradient(145deg, #1e293b, #172136) !important;
+            position: relative;
+            overflow: hidden;
           }
           .card-vip-animado:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(234, 179, 8, 0.9) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(234, 179, 8, 0.35) !important;
+          }
+          .card-parceiro-borda {
+            border: 1.5px solid rgba(59, 130, 246, 0.6) !important;
+            background: linear-gradient(145deg, #1e293b, #172136) !important;
+            position: relative;
+            overflow: hidden;
+          }
+          .card-parceiro-borda:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.25) !important;
+          }
+          .card-comum-pro {
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            background: #1e293b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .card-comum-pro:hover {
+            transform: translateY(-4px);
+            border-color: rgba(71, 85, 105, 1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+          }
+          .btn-entrar-pro {
+            transition: all 0.2s ease;
+          }
+          .btn-entrar-pro:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4) !important;
+          }
+          .btn-entrar-pro:active {
+            transform: scale(0.97);
           }
         `;
         document.head.appendChild(styleAnim);
@@ -1270,11 +1303,11 @@
       // Configuração visual do grid
       container.style.display = 'grid';
       container.style.gridTemplateColumns = 'repeat(2, 1fr)';
-      container.style.gap = '12px';
+      container.style.gap = '16px';
 
       // Validação de segurança para garantir que a lista existe
       if (!lista || !Array.isArray(lista) || lista.length === 0) {
-        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8; padding: 20px;">Nenhum grupo encontrado no momento.</p>';
+        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8; padding: 35px; font-size: 0.85rem; background: #1e293b; border-radius: 14px; border: 1px solid #334155;">Nenhum grupo encontrado no momento.</p>';
         if (typeof atualizarControlesPaginacao === 'function') atualizarControlesPaginacao(1);
         return;
       }
@@ -1286,21 +1319,20 @@
       const listaFiltrada = lista.filter(g => {
         const link = (g.link || '').toLowerCase();
         const plataforma = (g.plataforma || '').toLowerCase();
-        
-        // Identifica se é do Telegram com base no link ou na propriedade salva
+
         const éDoTelegram = link.includes('t.me') || link.includes('telegram.me') || plataforma === 'telegram';
 
         if (ehPaginaTelegram) {
-          return éDoTelegram; // Na página do Telegram, mantém apenas Telegram
+          return éDoTelegram;
         } else {
-          return !éDoTelegram; // Na página principal (Index), oculta o Telegram e mostra o resto
+          return !éDoTelegram;
         }
       });
 
       // Se após o filtro a lista ficar vazia
       if (listaFiltrada.length === 0) {
         const nomePlataforma = ehPaginaTelegram ? 'Telegram' : 'WhatsApp';
-        container.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: #94a3b8; padding: 20px;">Nenhum grupo de ${nomePlataforma} encontrado.</p>`;
+        container.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: #94a3b8; padding: 35px; font-size: 0.85rem; background: #1e293b; border-radius: 14px; border: 1px solid #334155;">Nenhum grupo de ${nomePlataforma} encontrado.</p>`;
         if (typeof atualizarControlesPaginacao === 'function') atualizarControlesPaginacao(1);
         return;
       }
@@ -1332,10 +1364,10 @@
         // Montagem das Badges
         let badgeHtml = '';
         if (g.isVip) {
-          badgeHtml += '<span style="background: linear-gradient(135deg, #f59e0b, #eab308); color: #0f172a; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(234, 179, 8, 0.3);"><i class="fa-solid fa-crown" style="margin-right: 3px;"></i> VIP</span>';
+          badgeHtml += '<span style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);">⭐ VIP</span>';
         }
         if (ehParceiro) {
-          badgeHtml += '<span style="background: #2563eb; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: bold;">Parceiro</span>';
+          badgeHtml += '<span style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);">🤝 PARCEIRO</span>';
         }
 
         const imagemGrupo = g.imagem && g.imagem.trim() !== '' ? escapeHtml(g.imagem) : 'https://via.placeholder.com/65';
@@ -1344,40 +1376,46 @@
         const categoriaGrupo = escapeHtml(g.categoria || 'Geral');
         const descricaoGrupo = escapeHtml(g.descricao || 'Sem descrição informada.');
 
-        // 🌟 Estilo e classes condicionais (Com animação pulsante se for VIP)
-        const classeCard = g.isVip ? 'card vip card-vip-animado' : 'card';
-        const estiloCard = g.isVip 
-          ? 'display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; background: #1e293b; border-radius: 12px; padding: 12px; border: 2px solid #eab308;' 
-          : 'display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; background: #1e293b; border-radius: 12px; padding: 12px; border: 1px solid #334155;';
+        // 🌟 Seleção limpa das classes e estilos do Card
+        let classeCard = 'card card-comum-pro';
+        if (g.isVip) {
+          classeCard = 'card vip card-vip-animado';
+        } else if (ehParceiro) {
+          classeCard = 'card parceiro card-parceiro-borda';
+        }
+
+        const estiloCard = 'display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; border-radius: 16px; padding: 16px;';
 
         return `
         <div class="${classeCard}" style="${estiloCard}">
           <div>
-            <!-- Foto do grupo no topo centralizada -->
-            <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-              <img src="${imagemGrupo}" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 1px solid #334155;" alt="Ícone">
+            <!-- Foto do grupo no topo centralizada com acabamento profissional -->
+            <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+              <div style="position: relative; width: 64px; height: 64px;">
+                <img src="${imagemGrupo}" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 6px 16px rgba(0,0,0,0.3);" alt="Ícone">
+              </div>
             </div>
 
             <!-- Nome do Grupo -->
-            <div class="card-title" style="font-size: 0.9rem; font-weight: bold; color: #fff; margin-bottom: 6px; text-align: center; word-break: break-word;">${nomeGrupo}</div>
+            <div class="card-title" style="font-size: 0.88rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px; text-align: center; word-break: break-word; line-height: 1.3;">${nomeGrupo}</div>
 
             <!-- Tags VIP / Parceiro -->
-            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
               ${badgeHtml}
             </div>
 
             <!-- Informações (Membros e Categoria) -->
-            <div style="display: flex; justify-content: center; gap: 8px; align-items: center; font-size: 0.7rem; color: #94a3b8; margin-bottom: 8px;">
-              <span><i class="fa-solid fa-users"></i> ${membrosGrupo}</span>
-              <span>•</span>
-              <span style="color: #38bdf8;"><i class="fa-solid fa-tag"></i> ${categoriaGrupo}</span>
+            <div style="display: flex; justify-content: center; gap: 8px; align-items: center; font-size: 0.7rem; color: #94a3b8; margin-bottom: 10px;">
+              <span style="display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-users" style="font-size: 0.65rem; color: #64748b;"></i> ${membrosGrupo}</span>
+              <span style="color: #475569;">•</span>
+              <span style="color: #38bdf8; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-tag" style="font-size: 0.65rem;"></i> ${categoriaGrupo}</span>
             </div>
 
             <!-- Descrição -->
-            <div class="card-desc" style="font-size: 0.75rem; color: #cbd5e1; text-align: center; line-height: 1.3; margin-bottom: 10px;">${descricaoGrupo}</div>
+            <div class="card-desc" style="font-size: 0.74rem; color: #cbd5e1; text-align: center; line-height: 1.4; margin-bottom: 14px; opacity: 0.95;">${descricaoGrupo}</div>
           </div>
 
-          <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; display: inline-block; padding: 8px; background: #2563eb; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.8rem;">Ver Grupo</a>
+          <a href="/grupo/${g.id}" class="btn-card btn-entrar btn-entrar-pro" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; display: inline-block; padding: 9px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border-radius: 9px; font-size: 0.75rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);">Ver Detalhes/Entrar</a>
         </div>
         `;
       }).join('');
@@ -1386,6 +1424,7 @@
         atualizarControlesPaginacao(totalPaginas);
       }
     }
+
 
     function atualizarControlesPaginacao(totalPaginas) {
         const spanInfo = document.getElementById('info-pagina');

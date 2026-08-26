@@ -789,13 +789,12 @@ async function carregarDetalhes() {
     if (autorElemento) {
       autorElemento.href = `/perfil.html?autor=${encodeURIComponent(nomeAutor)}`;
 
-      // Atualiza o HTML interno para respeitar a estrutura com o ícone e o texto em negrito
+      // Atualiza o HTML interno mantendo a estrutura limpa e profissional
       autorElemento.innerHTML = `
         <i class="fa-solid fa-user-astronaut" style="color: #60a5fa;"></i>
         <span>Publicado por: <strong id="nome-autor-texto" style="color: #fff;">${nomeParaExibir}</strong></span>
       `;
     }
-
 
     document.getElementById('desc-grupo').innerText = grupo.descricao || 'Sem descrição.';
     document.getElementById('foto-grupo').src = grupo.imagem || '';
@@ -805,15 +804,15 @@ async function carregarDetalhes() {
       badgeVip.style.display = grupo.isVip ? 'block' : 'none';
     }
 
-    // Mostra ou esconde a tag de Parceiro Oficial (Corrigido o erro de sintaxe aqui!)
+    // 🔥 Badge de Parceiro Oficial corrigida e com visual super profissional (Pill Style)
     const badgeParceiro = document.getElementById('badge-parceiro');
     if (badgeParceiro) {
       const ehParceiro = grupo.isParceiro || grupo.statusParceria === 'aprovado';
       badgeParceiro.style.display = ehParceiro ? 'inline-flex' : 'none';
       if (ehParceiro) {
         badgeParceiro.innerHTML = `
-          <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; background: linear-gradient(135deg, #1e293b, #0f172a); pad>
-            <i class="fa-solid fa-handshake" style="color: #fbbf24;"></i> Parceiro Oficial
+          <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 800; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; padding: 4px 12px; border-radius: 20px; box-shadow: 0 3px 10px rgba(59, 130, 246, 0.4); letter-spacing: 0.5px;">
+            <i class="fa-solid fa-handshake" style="color: #fff;"></i> PARCEIRO OFICIAL
           </div>
         `;
       }
@@ -846,6 +845,7 @@ function avaliar(nota) {
     marcarEstrelas(nota);
   }
 }
+
 
 function obterPlataforma(link) {
   const l = (link || '').toLowerCase();

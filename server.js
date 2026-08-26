@@ -26,11 +26,12 @@ const GrupoSchema = new mongoose.Schema({
   autor: String,
   isVip: { type: Boolean, default: false },
   diasVip: { type: Number, default: 0 },
-  vipAte: { type: Date, default: null }, 
+  vipAte: { type: Date, default: null },
   acessos: { type: Number, default: 0 },
   data: { type: Date, default: Date.now },
   isParceiro: { type: Boolean, default: false },
   statusParceria: { type: String, enum: ['nenhum', 'pendente', 'aprovado'], default: 'nenhum' },
+  parceriaAte: { type: Date, default: null }, // <--- Adicione este campo aqui!
   usuarioDonoEmail: { type: String, default: '' }
 });
 const Grupo = mongoose.model('Grupo', GrupoSchema);
@@ -380,11 +381,20 @@ app.get('/api/grupos', async (req, res) => {
       }
     }
 
-    // Ordenação: VIPs primeiro, depois parceiros, depois mais recentes
+    // Ordenação: VIPs mais recentes no topo absoluto, depois parceiros, depois mais recentes
     grupos.sort((a, b) => {
       // 1º: VIPs primeiro
       const vipDiff = (b.isVip ? 1 : 0) - (a.isVip ? 1 : 0);
       if (vipDiff !== 0) return vipDiff;
+
+      // 1.1º: Se AMBOS forem VIPs, o que tem a data de término (vipAte) mais distante/recente sobe para o topo!
+      if (a.isVip && b.isVip) {
+        const timeA = a.vipAte ? new Date(a.vipAte).getTime() : 0;
+        const timeB = b.vipAte ? new Date(b.vipAte).getTime() : 0;
+        if (timeA !== timeB) {
+          return timeB - timeA; // O maior tempo (mais recente/futuro) fica em primeiro
+        }
+      }
 
       // 2º: Parceiros aprovados logo depois dos VIPs
       const aParceiro = (a.isParceiro || a.statusParceria === 'aprovado') ? 1 : 0;

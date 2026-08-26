@@ -615,7 +615,7 @@
             carregarDados();
         }
 
-        async function ativarVip(grupoId) {
+async function ativarVip(grupoId) {
             const diasStr = prompt("Quantos dias de VIP deseja dar? (10, 30 ou 60):", "30");
             if (!diasStr) return;
             const dias = parseInt(diasStr);
@@ -716,52 +716,53 @@
             }
         }
 
-        async function carregarParceirosAdm() {
-            const container = document.getElementById('lista-parceiros-adm');
-            if (!container) return;
-            try {
-                const res = await fetch('/api/adm/parceiros');
-                const parceiros = await res.json();
-                if (parceiros.length === 0) {
-                    container.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">Nenhum grupo com parceria ativa no momento.</p>';
-                    return;
-                }
-                container.innerHTML = parceiros.map(g => {
-                    const dataTermino = g.parceriaAte || g.validadeparceria || g.parceria_ate || g.dataExpiracao;
-                    let tempoStr = 'Tempo não calculado';
-                    if (dataTermino) {
-                        const diffMs = new Date(dataTermino).getTime() - Date.now();
-                        if (diffMs > 0) {
-                            const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                            const horas = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            tempoStr = `${dias}d ${horas}h restantes`;
-                        } else {
-                            tempoStr = 'Expirado';
-                        }
-                    }
-                    return `
-                        <div class="item-flex-card">
-                            <div class="item-info-wrapper">
-                                <img src="${g.imagem || 'https://via.placeholder.com/40'}" class="item-avatar" alt="Grupo">
-                                <div class="item-text-content">
-                                    <span class="item-title">${g.nome || 'Sem nome'}</span>
-                                    <span style="font-size: 0.75rem; color: #38bdf8; display: block;"><i class="fa-regular fa-clock"></i> ${tempoStr}</span>
-                                    <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a> ${gerarTagRedeSocial(g.link)}
-                                </div>
-                            </div>
-                            <div class="item-actions">
-                                <button onclick="removerParceriaAdm('${g.id || g._id}')" class="btn-sm btn-red">
-                                    <i class="fa-solid fa-trash"></i> Remover
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de parceiros.</p>';
-            }
+async function carregarParceirosAdm() {
+    const container = document.getElementById('lista-parceiros-adm');
+    if (!container) return;
+    try {
+        const res = await fetch('/api/adm/parceiros');
+        const parceiros = await res.json();
+        if (parceiros.length === 0) {
+            container.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">Nenhum grupo com parceria ativa no momento.</p>';
+            return;
         }
+        container.innerHTML = parceiros.map(g => {
+            const dataTermino = g.parceriaAte || g.validadeparceria || g.parceria_ate || g.dataExpiracao;
+            let tempoStr = 'Tempo não calculado';
+            if (dataTermino) {
+                const diffMs = new Date(dataTermino).getTime() - Date.now();
+                if (diffMs > 0) {
+                    const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    const horas = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    tempoStr = `${dias}d ${horas}h restantes`;
+                } else {
+                    tempoStr = 'Expirado';
+                }
+            }
+            return `
+                <div class="item-flex-card">
+                    <div class="item-info-wrapper">
+                        <img src="${g.imagem || 'https://via.placeholder.com/40'}" class="item-avatar" alt="Grupo">
+                        <div class="item-text-content">
+                            <span class="item-title">${g.nome || 'Sem nome'}</span>
+                            <span style="font-size: 0.75rem; color: #38bdf8; display: block;"><i class="fa-regular fa-clock"></i> ${tempoStr}</span>
+                            <a href="${g.link || '#'}" target="_blank" class="item-link"><i class="fa-solid fa-link"></i> ${g.link || 'Sem link'}</a>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button onclick="removerParceriaAdm('${g.id || g._id}')" class="btn-sm btn-red">
+                            <i class="fa-solid fa-trash"></i> Remover
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color: #ef4444;">Erro ao carregar a lista de parceiros.</p>';
+    }
+}
+
 
         async function removerParceriaAdm(grupoId) {
             if (!confirm('Tem certeza que deseja remover a parceria deste grupo?')) return;

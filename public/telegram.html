@@ -556,6 +556,69 @@
 }
 </style>
 
+<!-- SEÇÃO DE DUVIDAS / CHAMADA PARA PLANOS -->
+<div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 12px; padding: 25px 20px; margin-top: 30px; margin-bottom: 30px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+  <div style="font-size: 1.8rem; color: #eab008;">
+    <i class="fa-solid fa-circle-question"></i>
+  </div>
+  <h3 style="color: #f8fafc; font-size: 1.2rem; font-weight: 700; margin: 0;">Dúvidas sobre os planos?</h3>
+  <p style="color: #94a3b8; font-size: 0.9rem; max-width: 500px; margin: 0; line-height: 1.5;">
+    Conheça todas as vantagens detalhadas, veja avaliações de outros criadores e tire todas as suas dúvidas antes de impulsionar.
+  </p>
+  <a href="planos.html" class="btn-planos-pro">
+  <i class="fa-solid fa-arrow-right icon-arrow"></i>
+  <span>Acesse nossa página de planos detalhados</span>
+</a>
+ </div>
+<style>
+/* Estilo profissional para o link/botão de planos detalhados */
+.btn-planos-pro {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08));
+  color: #eab008 !important;
+  border: 1px solid rgba(234, 176, 8, 0.5);
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(234, 176, 8, 0.15), inset 0 0 10px rgba(234, 176, 8, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Efeito ao passar o mouse ou tocar */
+.btn-planos-pro:hover {
+  background: linear-gradient(135deg, rgba(234, 176, 8, 0.25), rgba(202, 138, 4, 0.18));
+  border-color: #eab008;
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(234, 176, 8, 0.35), inset 0 0 15px rgba(234, 176, 8, 0.2);
+}
+
+/* Animação sutil da setinha para a direita no hover */
+.btn-planos-pro:hover .icon-arrow {
+  transform: translateX(4px);
+}
+
+.icon-arrow {
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 4px rgba(234, 176, 8, 0.6));
+}
+
+.btn-planos-pro:active {
+  transform: translateY(0);
+}
+</style>
+
 <!-- Início do Card de Promoção do WhatsApp (para colocar na telegram.html) -->
 <div class="card-whatsapp-pro">
   <div class="card-whatsapp-glow"></div>
@@ -930,7 +993,7 @@
             </div>
             <div class="card-desc" style="font-size: 0.75rem; color: #cbd5e1; text-align: center; line-height: 1.3; margin-bottom: 10px;">${descricaoGrupo}</div>
           </div>
-          <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; display: inline-block; padding: 8px; background: #0284c7; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.8rem;"><i class="fa-brands fa-telegram"></i> Acessar Canal</a>
+          <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; display: inline-block; padding: 8px; background: #0284c7; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.8rem;"><i class="fa-brands fa-telegram"></i> Ver Detalhes/Entrar</a>
         </div>
         `;
       }).join('');

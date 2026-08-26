@@ -415,7 +415,7 @@
     <div class="hero-vip-badge">
       <i class="fa-solid fa-crown"></i> <span>Área Exclusiva de Crescimento</span>
     </div>
-    <h1 class="hero-title-neon">Impulsione seu Grupo com VIP</h1>
+    <h1 class="hero-title-neon">Impulsione seu Grupo/Canal com VIP Premium</h1>
     <p class="subtitle">Garanta o topo das buscas, receba tráfego 24 horas por dia e multiplique o número de membros ativos na sua comunidade de forma explosiva.</p>
   </div>
 
@@ -559,6 +559,283 @@
       </div>
 
     </div>
+
+<style>
+  .painel-planos-pro {
+    background: linear-gradient(135deg, #090d16 0%, #0f172a 100%);
+    padding: 24px;
+    border-radius: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #1e293b;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .planos-grid-container {
+    display: flex;
+    gap: 18px;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  /* Card Principal de Explicação com Efeito Profissional */
+  .plano-card-box {
+    flex: 1;
+    min-width: 260px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .plano-card-box:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Efeitos e destaques específicos de cada card principal */
+  .plano-card-box.vip-box {
+    border-color: rgba(245, 158, 11, 0.4);
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.1);
+  }
+  .plano-card-box.vip-box:hover {
+    box-shadow: 0 15px 35px rgba(245, 158, 11, 0.2);
+    border-color: #f59e0b;
+  }
+
+  .plano-card-box.parceiro-box {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1);
+  }
+  .plano-card-box.parceiro-box:hover {
+    box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);
+    border-color: #38bdf8;
+  }
+
+  .plano-card-box.comum-box {
+    border-color: rgba(148, 163, 184, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  .plano-card-box.comum-box:hover {
+    box-shadow: 0 15px 35px rgba(148, 163, 184, 0.1);
+    border-color: #94a3b8;
+  }
+
+  /* Estilo do aviso de exemplo no topo do card principal */
+  .tag-aviso-topo {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .vip-box .tag-aviso-topo { color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+  .parceiro-box .tag-aviso-topo { color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); }
+  .comum-box .tag-aviso-topo { color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.2); }
+
+  /* Cabeçalho da Explicação */
+  .plano-header-info {
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 12px;
+  }
+
+  .plano-header-info h3 {
+    margin: 0 0 6px 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+  }
+  .vip-box h3 { color: #f59e0b; }
+  .parceiro-box h3 { color: #38bdf8; }
+  .comum-box h3 { color: #f8fafc; }
+
+  .plano-header-info p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  /* Lista de Vantagens */
+  .vantagens-list {
+    margin: 0 0 16px 0;
+    padding-left: 16px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+  .vantagens-list li strong {
+    color: #e2e8f0;
+  }
+
+  /* Card de Exemplo Real (Idêntico ao Index) alinhado embaixo */
+  .exemplo-card-real {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 14px;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    margin-top: auto;
+  }
+  .exemplo-card-real.vip {
+    border-color: #f59e0b;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
+  }
+  .exemplo-card-real.parceiro {
+    border-color: #38bdf8;
+    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.15);
+  }
+
+  .card-avatar-cinza {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #475569;
+    margin: 0 auto 8px auto;
+  }
+  .card-title-placeholder {
+    width: 85px;
+    height: 11px;
+    background: #475569;
+    border-radius: 4px;
+    margin: 0 auto 6px auto;
+  }
+  .tag-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  .badge-vip { background: #f59e0b; color: #000; }
+  .badge-parceiro { background: #2563eb; color: #fff; }
+  
+  .card-info {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-bottom: 6px;
+  }
+  .card-desc {
+    font-size: 0.73rem;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    text-align: left;
+  }
+  .card-btn {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    font-size: 0.72rem;
+  }
+</style>
+
+<div class="painel-planos-pro">
+  <div class="planos-grid-container">
+
+    <!-- 🌟 CARD PRINCIPAL VIP -->
+    <div class="plano-card-box vip-box">
+      <div class="tag-aviso-topo">⭐ Veja o exemplo da tag VIP</div>
+      <div class="plano-header-info">
+        <h3>⭐ Destaque VIP</h3>
+        <p>Posicionamento de máxima autoridade fixado no topo absoluto da plataforma.</p>
+      </div>
+      <ul class="vantagens-list">
+        <li><b>Prioridade Máxima:</b> Fica sempre visível em primeiro lugar.</li>
+        <li><b>Exclusividade:</b> Moldura dourada de alto impacto visual.</li>
+        <li><b>Retorno:</b> Taxa de cliques e conversão muito superior.</li>
+      </ul>
+
+      <!-- Exemplo Visual Real -->
+      <div class="exemplo-card-real vip">
+        <div class="card-avatar-cinza"></div>
+        <div class="card-title-placeholder"></div>
+        <div><span class="tag-badge badge-vip">⭐ VIP</span></div>
+        <div class="card-info">👥 100+ • 🏷️ Categoria</div>
+        <div class="card-desc">Exemplo prático de exibição do card VIP.</div>
+        <div class="card-btn">Entrar no Grupo</div>
+      </div>
+    </div>
+
+    <!-- 👑 CARD PRINCIPAL PARCEIRO -->
+    <div class="plano-card-box parceiro-box">
+      <div class="tag-aviso-topo">👑 Veja o exemplo da tag Parceiro</div>
+      <div class="plano-header-info">
+        <h3>👑 Parceiro Oficial</h3>
+        <p>Destinado a parcerias estratégicas com selo distintivo elegante em azul.</p>
+      </div>
+      <ul class="vantagens-list">
+        <li><b>Posição Privilegiada:</b> Organizado logo abaixo da categoria VIP.</li>
+        <li><b>Autoridade:</b> Selo oficial que transmite muita confiança.</li>
+        <li><b>Destaque Limpo:</b> Visual moderno sem poluição de informações.</li>
+      </ul>
+
+      <!-- Exemplo Visual Real -->
+      <div class="exemplo-card-real parceiro">
+        <div class="card-avatar-cinza"></div>
+        <div class="card-title-placeholder"></div>
+        <div><span class="tag-badge badge-parceiro">PARCEIRO</span></div>
+        <div class="card-info">👥 100+ • 🏷️ Categoria</div>
+        <div class="card-desc">Exemplo prático de exibição do card Parceiro.</div>
+        <div class="card-btn">Entrar no Grupo</div>
+      </div>
+    </div>
+
+    <!-- 👤 CARD PRINCIPAL COMUM -->
+    <div class="plano-card-box comum-box">
+      <div class="tag-aviso-topo">👤 Veja o exemplo do card Comum</div>
+      <div class="plano-header-info">
+        <h3>👤 Membro Comum</h3>
+        <p>Listagem orgânica padrão integrada de forma fluida ao diretório principal.</p>
+      </div>
+      <ul class="vantagens-list">
+        <li><b>Acesso Livre:</b> Disponível para todos os membros da comunidade.</li>
+        <li><b>Organização:</b> Listagem cronológica justa e estruturada.</li>
+        <li><b>Visibilidade:</b> Participação ativa sem custos adicionais.</li>
+      </ul>
+
+      <!-- Exemplo Visual Real -->
+      <div class="exemplo-card-real">
+        <div class="card-avatar-cinza" style="margin-bottom: 18px;"></div>
+        <div class="card-title-placeholder"></div>
+        <div class="card-info" style="margin-top: 8px;">👥 50+ • 🏷️ Categoria</div>
+        <div class="card-desc">Exemplo prático de exibição do card Comum.</div>
+        <div class="card-btn">Entrar no Grupo</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
     <!-- Seção de Avaliações / Depoimentos Expandida -->
     <div class="reviews-section">
