@@ -388,16 +388,19 @@
             if (user) {
                 // Usuários que entram pelo Google já costumam vir verificados. Contas de e-mail/senha precisam do clique.
                 if (user.emailVerified || user.providerData.some(p => p.providerId === 'google.com')) {
+                    // ⬇️ REGISTRA O HORÁRIO DA SESSÃO AQUI
+                    localStorage.setItem('loginTimestamp', new Date().getTime());
+                    
                     registrarNoServidorLocal(user.email);
                     window.location.replace('/painel.html');
                 } else {
                     // Se não verificou, desconecta imediatamente e avisa
                     const emailUser = user.email;
                     await auth.signOut();
-                    
+
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('container-login').style.display = 'block';
-                    
+
                     abrirModalVerificacaoPendente(emailUser);
                 }
             } else {
@@ -436,7 +439,7 @@
             campoExtra.type = 'email';
             campoExtra.placeholder = 'seuemail@exemplo.com';
             campoExtra.value = document.getElementById('email').value;
-            
+
             document.getElementById('modal-extra').style.display = 'block';
             document.getElementById('btn-cancelar').style.display = 'block';
             document.getElementById('btn-cancelar').innerText = 'Cancelar';
@@ -501,7 +504,7 @@
                 try {
                     const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
                     await userCredential.user.sendEmailVerification();
-                    
+
                     // Desloga imediatamente para forçar o usuário a confirmar antes de entrar
                     await auth.signOut();
 
@@ -524,7 +527,6 @@
             // Fluxo padrão de Login
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, senha);
-                
                 // Verifica se o e-mail foi validado ao tentar logar
                 if (!userCredential.user.emailVerified) {
                     await auth.signOut();
@@ -532,6 +534,7 @@
                 }
             } catch (err) {
                 if (err.code === 'auth/wrong-password') {
+                    mostrarAseo = 'Senha incorreta. Verifique sua senha e tente novamente.';
                     mostrarAviso('Senha incorreta. Verifique sua senha e tente novamente.', 'Atenção');
                 } else if (err.code === 'auth/user-not-found') {
                     mostrarAviso('Não encontramos nenhuma conta com este e-mail.', 'Atenção');
@@ -546,6 +549,7 @@
                 }
             }
         });
+
     </script>
 </body>
 </html>

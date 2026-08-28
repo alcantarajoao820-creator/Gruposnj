@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -270,99 +271,231 @@ body {
       transform: translateY(-2px);
     }
 
-    .menu-lateral-pro {
+    /* Menu Retangular Flutuante Centralizado */
+    .menu-retangulo-flutuante {
       position: fixed;
-      top: 0;
-      right: -300px;
-      width: 280px;
-      height: 100dvh;
-      background: rgba(15, 23, 42, 0.98);
-      backdrop-filter: blur(20px);
-      border-left: 1px solid rgba(148, 163, 184, 0.15);
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 90%;
+      max-width: 340px;
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
       z-index: 9999;
       display: flex;
       flex-direction: column;
-      padding: 16px;
+      padding: 20px;
       box-sizing: border-box;
+      
+      /* Animação suave de abertura ao centro */
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .menu-lateral-pro.ativo { right: 0; }
+    .menu-retangulo-flutuante.ativo {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
 
-    .menu-header-pro {
+    /* Cabeçalho do Card */
+    .menu-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
       margin-bottom: 12px;
+    }
+
+    .menu-user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .menu-avatar-box {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: #fff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
       flex-shrink: 0;
     }
 
-    .menu-user-info { display: flex; align-items: center; gap: 10px; color: #f8fafc; font-weight: 600; font-size: 0.9rem; overflow: hidden; }
-    .menu-avatar-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3); flex-shrink: 0; }
-    .close-menu-pro { background: transparent; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; flex-shrink: 0; }
-    .close-menu-pro:hover { color: #fff; }
-
-    .menu-links-pro { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 8px; 
-      overflow-y: auto; 
-      flex: 1; 
-      padding-right: 2px;
+    .menu-user-texts {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .menu-item-pro { display: flex; align-items: center; gap: 12px; padding: 10px 14px; color: #cbd5e1; text-decoration: none; font-size: 0.9rem; font-weight: 500; border-radius: 10px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(148, 163, 184, 0.08); transition: all 0.25s ease; flex-shrink: 0; }
-    .menu-item-pro i { color: #64748b; font-size: 1rem; }
-    .menu-item-pro:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: #fff; }
-    .menu-item-pro.vip-item { background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08)); border-color: rgba(234, 176, 8, 0.4); color: #eab008; font-weight: 600; }
-    
-    .menu-footer-pro {
-      margin-top: 10px;
+    .menu-status-tag {
+      font-size: 0.68rem;
+      color: #60a5fa;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+    }
+
+    #saudacao-usuario {
+      color: #f8fafc;
+      font-weight: 600;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+    }
+
+    .close-card-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .close-card-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+
+    /* Links do Card */
+    .menu-card-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .menu-card-links::-webkit-scrollbar { width: 3px; }
+    .menu-card-links::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+
+    .menu-card-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 10px;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .menu-card-item i {
+      color: #64748b;
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      transition: color 0.2s ease;
+    }
+
+    .menu-card-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .menu-card-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #f1f5f9;
+    }
+
+    .menu-card-item:hover i {
+      color: #cbd5e1;
+    }
+
+    .menu-card-item.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .menu-card-item.active i {
+      color: #60a5fa;
+    }
+
+    /* Item VIP */
+    .menu-card-item.vip-item {
+      background: rgba(234, 179, 8, 0.05);
+      color: #fde047;
+    }
+    .menu-card-item.vip-item i {
+      color: #eab308;
+    }
+    .menu-card-item.vip-item:hover {
+      background: rgba(234, 179, 8, 0.1);
+    }
+
+    /* Rodapé do Card */
+    .menu-card-footer {
+      margin-top: 12px;
       padding-top: 12px;
-      border-top: 1px solid rgba(148, 163, 184, 0.15);
-      flex-shrink: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
     }
 
-    /* Estilo do Botão Sair na Gaveta */
-    .btn-sair {
+    .btn-sair-card {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       width: 100%;
       padding: 10px;
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      color: #ef4444;
-      font-size: 0.85rem;
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      font-size: 0.88rem;
       font-weight: 600;
       border-radius: 10px;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
-    .btn-sair:hover {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: rgba(239, 68, 68, 0.6);
+
+    .btn-sair-card:hover {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.4);
       color: #fff;
     }
 
-    .menu-overlay-pro { 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100vw; 
-      height: 100vh; 
-      background: rgba(0, 0, 0, 0.6); 
-      backdrop-filter: blur(4px); 
-      z-index: 9998; 
-      opacity: 0; 
-      visibility: hidden; 
-      transition: all 0.3s ease; 
+    /* Overlay */
+    .menu-overlay-pro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
     }
     .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
+
 
 /* 2. Ajuste automático para COMPUTADOR / Telas maiores (Acima de 768px) */
 @media (min-width: 768px) {
@@ -620,36 +753,59 @@ body {
     </button>
   </header>
 
-  <!-- Menu Lateral Retátil (Gaveta) -->
-  <div class="menu-lateral-pro" id="menuLateral">
-    <div class="menu-header-pro">
-      <div class="menu-user-info">
-        <div class="menu-avatar-icon"><i class="fa-solid fa-user"></i></div>
-        <div>
-          <div class="user-name" id="display-name" style="font-size: 0.9rem; font-weight: 600; color: #f8fafc;"><i class="fa-solid fa-spinner fa-spin"></i> Carregando...</div>
-          <div class="user-email" id="display-email" style="font-size: 0.75rem; color: #94a3b8;">...</div>
-        </div>
+<!-- Menu Retangular Flutuante (Card Pop-up) -->
+<div class="menu-retangulo-flutuante" id="menuLateral">
+  <!-- Topo com Perfil -->
+  <div class="menu-card-header">
+    <div class="menu-user-info">
+      <div class="menu-avatar-box">
+        <img id="avatar-menu" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
       </div>
-      <button onclick="toggleMenu()" class="close-menu-pro">&times;</button>
+      <div class="menu-user-texts">
+        <span class="menu-status-tag">Conta Ativa</span>
+        <span id="saudacao-usuario">Visitante</span>
+      </div>
     </div>
-
-    <!-- Links do Menu -->
-    <div class="menu-links-pro">                                                                                                                                
-      <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início (WhatsApp)</span></a>
-      <a href="/telegram.html" class="menu-item-pro" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
-        <i class="fa-brands fa-telegram"></i> <span>Grupos Telegram</span>
-      </a>    
-      <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a>
-      <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a>
-      <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a>
-    </div>
-
-    <!-- Botão de Sair fixo e visível no rodapé interno -->
-    <div class="menu-footer-pro">
-      <button class="btn-sair" onclick="sair()"><i class="fa-solid fa-right-from-bracket"></i> Sair da Conta</button>
-    </div>
+    <button onclick="toggleMenu()" class="close-card-btn" aria-label="Fechar menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
   </div>
-  <div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
+
+  <!-- Links de Navegação -->
+  <div class="menu-card-links">
+    <a href="/" class="menu-card-item active">
+      <i class="fa-solid fa-house-chimney"></i>
+      <span>Página Inicial</span>
+    </a>
+    <a href="/telegram.html" class="menu-card-item">
+      <i class="fa-brands fa-telegram"></i>
+      <span>Grupos Telegram</span>
+    </a>
+    <a href="/planos.html" class="menu-card-item vip-item">
+      <i class="fa-solid fa-crown"></i>
+      <span>Seja VIP / Impulsionar</span>
+    </a>
+    <a href="/painel.html" class="menu-card-item">
+      <i class="fa-solid fa-gauge-high"></i>
+      <span>Painel de Controle</span>
+    </a>
+    <a href="/login.html" class="menu-card-item">
+      <i class="fa-solid fa-right-to-bracket"></i>
+      <span>Entrar / Cadastrar</span>
+    </a>
+  </div>
+
+  <!-- Rodapé com Botão Sair -->
+  <div class="menu-card-footer">
+    <button class="btn-sair-card" onclick="sair()">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <span>Encerrar Sessão</span>
+    </button>
+  </div>
+</div>
+
+<!-- Overlay Escuro de Fundo -->
+<div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
 
 <!-- BOTAO HOME -->
   <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>
@@ -728,48 +884,107 @@ body {
 
 </div>
 
-    <!-- Seção Meu Perfil -->
-    <div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
-      <h3 style="margin-top: 0; color: #38bdf8; font-size: 1.25rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-        <i class="fa-solid fa-user-gear"></i> Meu Perfil & Dados
+<!-- Seção Meu Perfil (Exibição Limpa: Foto + Nome + Status + Botão de Configurações) -->
+<div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; text-align: center;">
+
+  <!-- Área da Foto de Perfil com Botão de Lápis para Trocar o Avatar -->
+  <div style="position: relative; width: 85px; height: 85px; margin: 0 auto 12px;">
+    <img id="avatar-atual-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; background: #1e293b;">
+
+    <!-- Botão de Lápis para abrir a seleção de avatar -->
+    <button onclick="abrirModalAvatares()" style="position: absolute; bottom: 0; right: 0; background: #3b82f6; border: 2px solid #0f172a; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);" title="Alterar Avatar">
+      <i class="fa-solid fa-pen" style="font-size: 0.8rem;"></i>
+    </button>
+  </div>
+
+  <!-- Nome de Exibição Dinâmico -->
+  <h2 id="display-nome-perfil" style="color: #f8fafc; font-size: 1.2rem; font-weight: 700; margin-bottom: 4px;">Carregando...</h2>
+  <p id="display-email-perfil" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 12px;">...</p>
+
+  <!-- Card de Status da Conta (VIP / Parceiro / Comum) -->
+  <div style="display: flex; align-items: center; justify-content: space-between; background: #161e2e; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px;">
+    <span style="font-size: 0.85rem; color: #94a3b8;">Classificação:</span>
+    <span id="tag-status" class="badge badge-ativo" style="font-size: 0.8rem; padding: 6px 12px;">Carregando...</span>
+  </div>
+
+  <!-- Botão para Abrir Configurações (Trocar Nome / Senha) -->
+  <button onclick="abrirModalConfiguracoes()" class="btn-blue" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #38bdf8; padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; transition: 0.2s;">
+    <i class="fa-solid fa-user-gear"></i> Configurações de Nome e Senha
+  </button>
+</div>
+
+<!-- MODAL DE CONFIGURAÇÕES (Trocar Nome de Exibição, Senha e Zona de Perigo) -->
+<div id="modal-configuracoes" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 99999; justify-content: center; align-items: center; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.7); max-height: 90vh; overflow-y: auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="color: #38bdf8; margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-sliders"></i> Configurações da Conta
       </h3>
-
-      <!-- Área da Foto de Perfil com Botão de Lápis -->
-      <div style="text-align: center; margin-bottom: 20px;">
-        <div style="position: relative; width: 85px; height: 85px; margin: 0 auto 12px;">
-          <img id="avatar-atual-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">
-          
-          <!-- Botão de Lápis para abrir a seleção -->
-          <button onclick="abrirModalAvatares()" style="position: absolute; bottom: 0; right: 0; background: #3b82f6; border: 2px solid #0f172a; color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4); transition: transform 0.2s;">
-            <i class="fa-solid fa-pen" style="font-size: 0.8rem;"></i>
-          </button>
-        </div>
-      </div>
-
-    <!-- Card de Status da Conta (Simplificado) -->
-    <div class="card" style="margin-bottom: 24px; background: #0f172a; border: 1px solid #1e293b; padding: 22px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
-      <h3 style="font-size: 0.95rem; color: #38bdf8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-transform: uppercase;">
-        <i class="fa-solid fa-id-badge"></i> Status da Conta
-      </h3>
-                                                                                                                                                                  
-      <div style="display: flex; align-items: center; justify-content: space-between; background: #161e2e; border: 1px solid #334155; padding: 16px; border-radius: 12px;">
-        <span style="font-size: 0.9rem; color: #94a3b8;">Sua Classificação:</span>
-
-        <!-- O ID 'tag-status' vai permitir que o JavaScript mude o conteúdo automaticamente -->
-        <span id="tag-status" class="badge badge-ativo" style="font-size: 0.8rem; padding: 6px 12px;">Carregando...</span>
-      </div>
+      <button onclick="fecharModalConfiguracoes()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
-
-      <!-- Configuração de Nome -->
-      <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Nome de Exibição</label>
-      <input type="text" id="input-nome" placeholder="Seu Nome" style="width: 100%; background: #0f172a; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 8px; box-sizing: border-box; margin-bottom: 12px;">
-      <button class="btn-blue" onclick="salvarNome()" style="width: 100%; margin-bottom: 20px; padding: 10px; background: #3b82f6; border: none; border-radius: 8px; color: #fff; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-floppy-disk"></i> Salvar Nome</button>
-
-      <!-- Configuração de Senha -->
-      <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 6px;">Segurança da Conta</label>
-      <button class="btn-blue" onclick="salvarSenha()" style="width: 100%; background: #334155; border: none; border-radius: 8px; color: #fff; padding: 10px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-key"></i> Enviar E-mail para Alterar Senha</button>
+    <!-- Configuração de Nome -->
+    <div style="margin-bottom: 16px; text-align: left;">
+      <label style="color: #94a3b8; font-size: 0.8rem; display: block; margin-bottom: 6px; font-weight: 500;">Novo Nome de Exibição</label>
+      <input type="text" id="input-nome-config" placeholder="Digite seu novo nome" style="width: 100%; background: #161e2e; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
     </div>
+    <button class="btn-blue" onclick="salvarNomeExibicao()" style="width: 100%; margin-bottom: 20px; padding: 10px; background: #3b82f6; border: none; border-radius: 8px; color: #fff; font-weight: 600; cursor: pointer;">Salvar Novo Nome</button>
+
+    <hr style="border: none; border-top: 1px solid rgba(148, 163, 184, 0.15); margin-bottom: 20px;">
+
+    <!-- Configuração de Senha -->
+    <div style="margin-bottom: 16px; text-align: left;">
+      <label style="color: #94a3b8; font-size: 0.8rem; display: block; margin-bottom: 6px; font-weight: 500;">Segurança da Conta</label>
+      <p style="color: #cbd5e1; font-size: 0.78rem; margin-bottom: 10px;">Clique abaixo para receber um e-mail de redefinição de senha.</p>
+    </div>
+    <button class="btn-blue" onclick="enviarEmailRedefinicaoSenha()" style="width: 100%; margin-bottom: 20px; background: #334155; border: none; border-radius: 8px; color: #fff; padding: 10px; font-weight: 600; cursor: pointer;">Redefinir Senha por E-mail</button>
+
+    <hr style="border: none; border-top: 1px solid rgba(148, 163, 184, 0.15); margin-bottom: 20px;">
+
+    <!-- Botão da Zona de Perigo -->
+    <div class="danger-zone-card" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 14px; text-align: left; margin-top: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px; color: #ef4444; margin-bottom: 6px;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <h4 style="margin: 0; font-size: 0.95rem;">Zona de Perigo</h4>
+      </div>
+      <p style="color: #94a3b8; font-size: 0.75rem; margin-bottom: 12px;">A exclusão da conta é permanente e apagará todos os seus dados e históricos associados.</p>
+      <button type="button" class="btn-danger-pro" onclick="abrirModalExclusao()" style="width: 100%; background: #ef4444; color: #fff; border: none; border-radius: 8px; padding: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <i class="fa-solid fa-user-xmark"></i> Excluir Conta
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Profissional de Exclusão (Inicia Oculto) -->
+<div id="modalExcluirConta" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 999999; justify-content: center; align-items: center; padding: 20px;">
+  <div class="modal-box" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.7);">
+
+    <div class="modal-icon-wrapper" style="width: 50px; height: 50px; background: rgba(239, 68, 68, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #ef4444; font-size: 1.5rem;">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+
+    <h3 class="modal-title" style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px;">Deseja realmente excluir sua conta?</h3>
+    <p class="modal-description" style="color: #94a3b8; font-size: 0.82rem; margin-bottom: 20px; line-height: 1.4;">
+      Esta ação é irreversível. Todos os seus acessos, dados salvos e privilégios no <strong>GruposNJ</strong> serão permanentemente removidos.
+    </p>
+
+    <!-- Feedback de Status Dinâmico -->
+    <div id="statusExclusao" class="modal-status" style="display: none; color: #38bdf8; font-size: 0.85rem; margin-bottom: 15px;">
+      <i class="fa-solid fa-circle-notch fa-spin"></i> <span id="statusText">Processando exclusão...</span>
+    </div>
+
+    <div class="modal-actions" style="display: flex; gap: 10px;">
+      <button type="button" class="modal-btn modal-btn-cancel" onclick="fecharModalExclusao()" style="flex: 1; background: #334155; color: #fff; border: none; border-radius: 8px; padding: 10px; font-weight: 600; cursor: pointer;">
+        Cancelar
+      </button>
+      <button type="button" class="modal-btn modal-btn-confirm" id="btnConfirmarExclusao" onclick="confirmarDelecaoFirebase()" style="flex: 1; background: #ef4444; color: #fff; border: none; border-radius: 8px; padding: 10px; font-weight: 600; cursor: pointer;">
+        Sim, excluir
+      </button>
+    </div>
+  </div>
+</div>
 
     <!-- MODAL / CARD DE SELEÇÃO DE AVATARES EM ESTILO DESENHO -->
     <div id="modal-avatares" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
@@ -841,6 +1056,67 @@ body {
           <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Storm')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Storm" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Storm" style="width: 100%; height: 100%; object-fit: contain;">
           </div>
+          
+                    <!-- Avatar 13 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Matrix')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Matrix">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Matrix" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 14 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Glitch')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Glitch">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Glitch" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 15 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Hunter')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Hunter">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Hunter" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 16 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Rebel')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Rebel">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Rebel" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 17 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Apex')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Apex">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Apex" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 18 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Vortex')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Vortex">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Vortex" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+ 
+                    <!-- Avatar 19 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=CyberNet')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=CyberNet">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=CyberNet" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 20 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Megatron')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Megatron">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Megatron" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 21 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Samurai')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Samurai">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Samurai" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 22 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Viking')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Viking">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Viking" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 23 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Ghost')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Ghost">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ghost" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 24 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Specter')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Specter">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Specter" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
 
         </div>
 
@@ -1080,49 +1356,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <i class="fa-solid fa-arrow-left" style="color: #fff;"></i> Voltar para a Página Inicial
       </a>
 
-<!-- Botão da Zona de Perigo -->
-<div class="danger-zone-card">
-  <div class="danger-zone-icon">
-    <i class="fa-solid fa-triangle-exclamation"></i>
-  </div>
-  <div class="danger-zone-info">
-    <h4>Zona de Perigo</h4>
-    <p>A exclusão da conta é permanente e apagará todos os seus dados e históricos associados.</p>
-  </div>
-  <button type="button" class="btn-danger-pro" onclick="abrirModalExclusao()">
-    <i class="fa-solid fa-user-xmark"></i> Excluir Conta
-  </button>
-</div>
-
-<!-- Modal Profissional de Exclusão (Inicia Oculto) -->
-<div id="modalExcluirConta" class="modal-overlay" style="display: none;">
-  <div class="modal-box">
-    <div class="modal-icon-wrapper">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-    </div>
-    
-    <h3 class="modal-title">Deseja realmente excluir sua conta?</h3>
-    <p class="modal-description">
-      Esta ação é irreversível. Todos os seus acessos, dados salvos e privilégios no <strong>GruposNJ</strong> serão permanentemente removidos.
-    </p>
-
-    <!-- Feedback de Status Dinâmico -->
-    <div id="statusExclusao" class="modal-status" style="display: none;">
-      <i class="fa-solid fa-circle-notch fa-spin"></i> <span id="statusText">Processando exclusão...</span>
-    </div>
-
-    <div class="modal-actions">
-      <button type="button" class="modal-btn modal-btn-cancel" onclick="fecharModalExclusao()">
-        Cancelar
-      </button>
-      <button type="button" class="modal-btn modal-btn-confirm" id="btnConfirmarExclusao" onclick="confirmarDelecaoFirebase()">
-        Sim, excluir permanentemente
-      </button>
-    </div>
-  </div>
-</div>
-
-
   <!-- Modal Aviso Dark -->
   <div class="modal-overlay" id="modal-aviso">
     <div class="modal-box">
@@ -1259,54 +1492,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <!-- Scripts e Lógica -->
     <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
-      authDomain: "gruposnj-41858.firebaseapp.com",
-      projectId: "gruposnj-41858",
-      storageBucket: "gruposnj-41858.firebasestorage.app",
-      messagingSenderId: "249583894572",
-      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
-    };
+// Configuração e inicialização segura do Firebase (Versão Única e Limpa)
+const firebaseConfig = {
+  apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+  authDomain: "gruposnj-41858.firebaseapp.com",
+  projectId: "gruposnj-41858",
+  storageBucket: "gruposnj-41858.firebasestorage.app",
+  messagingSenderId: "249583894572",
+  appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+// Inicializa o app do Firebase apenas se já não houver nenhum iniciado
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-    let usuarioAtual = null;
-    let grupoIdSelecionado = null;
-    let grupoSelecionadoId = null;
-    let planoSelecionado = { dias: 10, valor: 20.00 };
-    let checagemInterval = null;
+// Declaração única das variáveis globais do painel
+const auth = firebase.auth();
+let usuarioAtual = null;
+let grupoIdSelecionado = null;
+let grupoSelecionadoId = null;
+let planoSelecionado = { dias: 10, valor: 20.00 };
+let checagemInterval = null;
 
-    // Autenticação e Carregamento Isolado por Conta
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        window.location.href = '/login.html';
+// Autenticação e Carregamento Isolado por Conta
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    window.location.href = '/login.html';
+  } else {
+    usuarioAtual = user;
+
+    // 1. Atualiza os textos no novo card de perfil do topo
+    const displayPerfil = document.getElementById('display-nome-perfil');
+    if (displayPerfil) displayPerfil.innerText = user.displayName || 'Usuário';
+
+    const displayEmail = document.getElementById('display-email-perfil');
+    if (displayEmail) displayEmail.innerText = user.email;
+
+    const displayNameGaveta = document.getElementById('display-name');
+    if (displayNameGaveta) displayNameGaveta.innerText = user.displayName || 'Usuário';
+
+    // 2. Chama a sua função que carrega os grupos
+    carregarMeusGrupos(user.email);
+
+    // 3. Carrega a foto de perfil específica desta conta
+    const emailKey = user.email ? user.email.trim() : 'visitante';
+    const fotoSalva = user.photoURL || localStorage.getItem('foto_' + emailKey) || localStorage.getItem(`fotoPerfil_${emailKey}`);
+
+    const imgPreview = document.getElementById('avatar-atual-preview');
+    if (imgPreview) {
+      if (fotoSalva) {
+        imgPreview.src = fotoSalva;
       } else {
-        usuarioAtual = user;
-        document.getElementById('display-name').innerText = user.displayName || 'Usuário';
-        document.getElementById('display-email').innerText = user.email;
-        document.getElementById('input-nome').value = user.displayName || '';
-        carregarMeusGrupos(user.email);
-
-        // Carrega a foto específica desta conta do Firebase
-        const fotoSalva = localStorage.getItem('foto_' + user.email);
-        if (fotoSalva) {
-          const imgPreview = document.getElementById('foto-perfil-preview');
-          if (imgPreview) imgPreview.src = fotoSalva;
-        } else {
-          // Reseta para o padrão caso a nova conta não tenha foto
-          const imgPreview = document.getElementById('foto-perfil-preview');
-          if (imgPreview) imgPreview.src = 'https://via.placeholder.com/90';
-        }
-
-        // Carrega a rede social específica desta conta do Firebase
-        const socialSalva = localStorage.getItem('redeSocial_' + user.email);
-        const inputSocial = document.getElementById('input-social');
-        if (inputSocial) {
-          inputSocial.value = socialSalva || '';
-        }
+        imgPreview.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Ninja';
       }
-    });
+    }
+
+    // 4. Sincroniza IMEDIATAMENTE a foto com o menu flutuante centralizado
+    const avatarMenu = document.getElementById('avatar-menu');
+    if (avatarMenu && imgPreview) {
+      // Pequeno delay para garantir que a tag carregou a fonte corretamente
+      setTimeout(() => {
+        avatarMenu.src = imgPreview.src;
+      }, 100);
+    }
+
+    // 5. Carrega a rede social específica desta conta
+    const socialSalva = localStorage.getItem('redeSocial_' + emailKey);
+    const inputSocial = document.getElementById('input-social');
+    if (inputSocial) {
+      inputSocial.value = socialSalva || '';
+    }
+  }
+});
 
 // Função para mostrar uma notificação bonita e moderna no lugar do alert
 function mostrarNotificacao(mensagem, tipo = 'sucesso') {
@@ -1719,8 +1977,8 @@ async function carregarMeusGrupos(email) {
     }
 
     // Função para Alterar Senha (Envia e-mail seguro via Firebase)
-    function salvarSenha() {
-      const user = firebase.auth().currentUser;
+    function enviarEmailRedefinicaoSenha() {
+      const user = firebase.auth().currentUser || usuarioAtual;
 
       if (!user || !user.email) {
         mostrarAviso('Você precisa estar logado para alterar a senha.');
@@ -1730,8 +1988,9 @@ async function carregarMeusGrupos(email) {
       firebase.auth().sendPasswordResetEmail(user.email)
         .then(() => {
             mostrarAviso('Pronto! Enviamos um e-mail de redefinição de senha para a sua caixa de entrada.');
-            const inputSenha = document.getElementById('input-senha');
-            if (inputSenha) inputSenha.value = '';
+            if (typeof fecharModalConfiguracoes === 'function') {
+                fecharModalConfiguracoes();
+            }
         })
         .catch((error) => {
             mostrarAviso('Erro ao enviar e-mail: ' + error.message);
@@ -1869,13 +2128,6 @@ async function enviarSolicitudeParceriaFinal() {
   }
 }
 
-    function toggleMenu() {
-        const menu = document.getElementById('menuLateral');
-        const overlay = document.getElementById('menuOverlay');
-        if (menu) menu.classList.toggle('ativo');
-        if (overlay) overlay.classList.toggle('ativo');
-    }
-
 // Força a tag a atualizar imediatamente para evitar que fique travada
 document.addEventListener("DOMContentLoaded", () => {
   const tagStatus = document.getElementById('tag-status');
@@ -1980,6 +2232,30 @@ function confirmarDelecaoFirebase() {
   });
 }
 
+// Função para abrir o modal de configurações de nome e senha
+function abrirModalConfiguracoes() {
+    const modal = document.getElementById('modal-configuracoes');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Preenche o input com o nome atual do usuário se estiver logado
+        if (typeof auth !== 'undefined' && auth.currentUser && auth.currentUser.displayName) {
+            const inputNome = document.getElementById('input-nome-config');
+            if (inputNome) {
+                inputNome.value = auth.currentUser.displayName;
+            }
+        }
+    }
+}
+
+// Função para fechar o modal
+function fecharModalConfiguracoes() {
+    const modal = document.getElementById('modal-configuracoes');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+
 function gerarBreadcrumbs() {
   const container = document.getElementById('breadcrumb-container');
   if (!container) return;
@@ -2023,18 +2299,94 @@ function gerarBreadcrumbs() {
 
 window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
 
-    // Salvar Nome do Perfil
-    async function salvarNome() {
-      const novoNome = document.getElementById('input-nome').value.trim();
+    // Salvar Nome do Perfil (Versão Nova / Modal de Configurações)
+    async function salvarNomeExibicao() {
+      const inputEl = document.getElementById('input-nome-config');
+      if (!inputEl) return mostrarAviso('Campo de nome não encontrado.');
+
+      const novoNome = inputEl.value.trim();
       if (!novoNome) return mostrarAviso('Digite um nome válido.');
 
+      if (!usuarioAtual) return mostrarAviso('Usuário não autenticado.');
+
       try {
-        await usuarioAtual.updateProfile({ displayName: novoNome });
-        document.getElementById('display-name').innerText = novoNome;
+        // Usa a importação/função moderna do Firebase v9+ para atualizar o perfil
+        await updateProfile(usuarioAtual, { displayName: novoNome });
+        
+        // Atualiza os textos na interface instantaneamente
+        const displayPerfil = document.getElementById('display-nome-perfil');
+        if (displayPerfil) displayPerfil.innerText = novoNome;
+
+        const displayGaveta = document.getElementById('display-name');
+        if (displayGaveta) displayGaveta.innerText = novoNome;
+
         mostrarAviso('Nome alterado com sucesso!');
+        fecharModalConfiguracoes();
       } catch (e) {
-        mostrarAviso('Não foi possível alterar o nome.');
+        console.error(e);
+        mostrarAviso('Não foi possível alterar o nome: ' + e.message);
       }
+    }
+
+// Salvar Nome de Exibição (Com recarregamento da página)
+async function salvarNomeExibicao() {
+  const inputEl = document.getElementById('input-nome-config');
+  if (!inputEl) return mostrarAviso('Campo de nome não encontrado.');
+
+  const novoNome = inputEl.value.trim();
+  if (!novoNome) return mostrarAviso('Digite um nome válido.');
+
+  const user = usuarioAtual || auth.currentUser;
+  if (!user) return mostrarAviso('Usuário não autenticado.');
+
+  try {
+    await user.updateProfile({ displayName: novoNome });
+    
+    mostrarAviso('Nome alterado com sucesso! Atualizando...');
+    fecharModalConfiguracoes();
+
+    // Recarrega a página após 1 segundo para aplicar em todo o painel
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+
+  } catch (e) {
+    console.error(e);
+    mostrarAviso('Não foi possível alterar o nome: ' + e.message);
+  }
+}
+
+// Funções auxiliares para abrir/fechar o modal de exclusão da conta
+function abrirModalExclusao() {
+  const modal = document.getElementById('modalExcluirConta');
+  if (modal) modal.style.display = 'flex';
+}
+
+function fecharModalExclusao() {
+  const modal = document.getElementById('modalExcluirConta');
+  if (modal) modal.style.display = 'none';
+}
+
+
+    function toggleMenu() {
+      const menu = document.getElementById('menuLateral');
+      const overlay = document.getElementById('menuOverlay');
+      if (menu) menu.classList.toggle('ativo');
+      if (overlay) overlay.classList.toggle('ativo');
+    }
+
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().onAuthStateChanged((user) => {
+        const saudacao = document.getElementById('saudacao-usuario');
+        if (saudacao) {
+          if (user) {
+            const nome = user.displayName || user.email.split('@')[0];
+            saudacao.innerText = `Olá, ${nome}`;
+          } else {
+            saudacao.innerText = 'Olá, Visitante';
+          }
+        }
+      });
     }
   </script>
 

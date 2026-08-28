@@ -189,40 +189,277 @@
     </button> 
   </header> 
 
-  <!-- Menu Lateral Retátil (Gaveta) --> 
-  <div class="menu-lateral-pro" id="menuLateral"> 
-    <div class="menu-header-pro"> 
-      <div class="menu-user-info"> 
-        <div class="menu-avatar-icon"><i class="fa-solid fa-user"></i></div> 
-        <span id="saudacao-usuario">Olá, Visitante</span> 
-      </div> 
-      <button onclick="toggleMenu()" class="close-menu-pro">&times;</button> 
-    </div> 
-    <div class="menu-links-pro"> 
-      <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início (WhatsApp)</span></a> 
-      <a href="/telegram.html" class="menu-item-pro" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;"><i class="fa-brands fa-telegram"></i> <span>Grupos Telegram</span></a> 
-      <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a> 
-      <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a> 
-      <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a> 
-    </div> 
-  </div> 
-  <div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div> 
+<!-- Menu Retangular Flutuante Centralizado -->
+<div class="menu-retangulo-flutuante" id="menuLateral">
+  <!-- Topo com Perfil -->
+  <div class="menu-card-header">
+    <div class="menu-user-info">
+      <div class="menu-avatar-box">
+        <img id="avatar-menu" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+      </div>
+      <div class="menu-user-texts">
+        <span class="menu-status-tag">Conta Ativa</span>
+        <span id="saudacao-usuario">Visitante</span>
+      </div>
+    </div>
+    <button onclick="toggleMenu()" class="close-card-btn" aria-label="Fechar menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Links de Navegação -->
+  <div class="menu-card-links">
+    <a href="/" class="menu-card-item active">
+      <i class="fa-solid fa-house-chimney"></i>
+      <span>Página Inicial</span>
+    </a>
+    <a href="/telegram.html" class="menu-card-item">
+      <i class="fa-brands fa-telegram"></i>
+      <span>Grupos Telegram</span>
+    </a>
+    <a href="/planos.html" class="menu-card-item vip-item">
+      <i class="fa-solid fa-crown"></i>
+      <span>Seja VIP / Impulsionar</span>
+    </a>
+    <a href="/painel.html" class="menu-card-item">
+      <i class="fa-solid fa-gauge-high"></i>
+      <span>Painel de Controle</span>
+    </a>
+    <a href="/login.html" class="menu-card-item">
+      <i class="fa-solid fa-right-to-bracket"></i>
+      <span>Entrar / Cadastrar</span>
+    </a>
+  </div>
+</div>
+
+<!-- Overlay Escuro de Fundo -->
+<div class="menu-overlay-pro" id="menuOverlay" onclick="toggleMenu()"></div>
 
   <style> 
-    .menu-lateral-pro { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(20px); border-left: 1px solid rgba(148, 163, 184, 0.15); box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 9999; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; } 
-    .menu-lateral-pro.ativo { right: 0; } 
-    .menu-header-pro { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); margin-bottom: 20px; } 
-    .menu-user-info { display: flex; align-items: center; gap: 10px; color: #f8fafc; font-weight: 600; font-size: 0.9rem; } 
-    .menu-avatar-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3); } 
-    .close-menu-pro { background: transparent; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; } 
-    .close-menu-pro:hover { color: #fff; } 
-    .menu-links-pro { display: flex; flex-direction: column; gap: 10px; } 
-    .menu-item-pro { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: #cbd5e1; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-radius: 12px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(148, 163, 184, 0.08); transition: all 0.25s ease; } 
-    .menu-item-pro i { color: #64748b; font-size: 1.1rem; } 
-    .menu-item-pro:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: #fff; transform: translateX(4px); } 
-    .menu-item-pro.vip-item { background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08)); border-color: rgba(234, 176, 8, 0.4); color: #eab008; font-weight: 600; } 
-    .menu-overlay-pro { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s ease; } 
-    .menu-overlay-pro.ativo { opacity: 1; visibility: visible; } 
+    /* Menu Retangular Flutuante Centralizado */
+    .menu-retangulo-flutuante {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 90%;
+      max-width: 340px;
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      
+      /* Animação suave de abertura ao centro */
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-retangulo-flutuante.ativo {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Cabeçalho do Card */
+    .menu-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      margin-bottom: 12px;
+    }
+
+    .menu-user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .menu-avatar-box {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: #fff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .menu-user-texts {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .menu-status-tag {
+      font-size: 0.68rem;
+      color: #60a5fa;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+    }
+
+    #saudacao-usuario {
+      color: #f8fafc;
+      font-weight: 600;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+    }
+
+    .close-card-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .close-card-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+
+    /* Links do Card */
+    .menu-card-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .menu-card-links::-webkit-scrollbar { width: 3px; }
+    .menu-card-links::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+
+    .menu-card-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 10px;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .menu-card-item i {
+      color: #64748b;
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      transition: color 0.2s ease;
+    }
+
+    .menu-card-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .menu-card-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #f1f5f9;
+    }
+
+    .menu-card-item:hover i {
+      color: #cbd5e1;
+    }
+
+    .menu-card-item.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .menu-card-item.active i {
+      color: #60a5fa;
+    }
+
+    /* Item VIP */
+    .menu-card-item.vip-item {
+      background: rgba(234, 179, 8, 0.05);
+      color: #fde047;
+    }
+    .menu-card-item.vip-item i {
+      color: #eab308;
+    }
+    .menu-card-item.vip-item:hover {
+      background: rgba(234, 179, 8, 0.1);
+    }
+
+    /* Rodapé do Card */
+    .menu-card-footer {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-sair-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px;
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-sair-card:hover {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fff;
+    }
+
+    /* Overlay */
+    .menu-overlay-pro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
+
     .header-principal { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(148, 163, 184, 0.15); box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; } 
     .header-principal .logo-area { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } 
     .logo-text { font-family: 'Outfit', system-ui, -apple-system, sans-serif; font-size: 1.2rem; font-weight: 800; color: #f8fafc; } 
@@ -350,14 +587,48 @@
     console.warn("Erro ao iniciar Firebase:", e); 
   } 
 
-  function toggleMenu() { 
-    const menu = document.getElementById('menuLateral'); 
-    const overlay = document.getElementById('menuOverlay'); 
-    if (menu && overlay) { 
-      menu.classList.toggle('ativo'); 
-      overlay.classList.toggle('ativo'); 
-    } 
-  } 
+    // Função para alternar a exibição do menu centralizado
+    function toggleMenu() {
+      const menu = document.getElementById('menuLateral');
+      const overlay = document.getElementById('menuOverlay');
+      
+      if (menu && overlay) {
+        menu.classList.toggle('ativo');
+        overlay.classList.toggle('ativo');
+      }
+    }
+
+    // Integração de Autenticação, Nome e Foto no Menu Flutuante
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // 1. Atualiza o nome do usuário no menu
+        const saudacaoEl = document.getElementById('saudacao-usuario');
+        if (saudacaoEl) {
+          saudacaoEl.innerText = user.displayName || 'Usuário';
+        }
+
+        // 2. Resgata e aplica a foto correta da conta (LocalStorage ou Firebase)
+        const emailKey = user.email ? user.email.trim() : 'visitante';
+        const fotoSalva = user.photoURL || localStorage.getItem('foto_' + emailKey) || localStorage.getItem(`fotoPerfil_${emailKey}`);
+
+        const avatarMenu = document.getElementById('avatar-menu');
+        if (avatarMenu) {
+          if (fotoSalva) {
+            avatarMenu.src = fotoSalva;
+          } else {
+            avatarMenu.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Ninja';
+          }
+        }
+      } else {
+        // Se não estiver logado
+        const saudacaoEl = document.getElementById('saudacao-usuario');
+        if (saudacaoEl) saudacaoEl.innerText = 'Visitante';
+        
+        const avatarMenu = document.getElementById('avatar-menu');
+        if (avatarMenu) avatarMenu.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Ninja';
+      }
+    });
+
 
   if (typeof firebase !== 'undefined' && firebase.auth) { 
     firebase.auth().onAuthStateChanged((user) => { 
