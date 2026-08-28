@@ -377,6 +377,220 @@ body {
     gap: 20px;
   }
 }
+
+/* Card da Zona de Perigo */
+.danger-zone-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: rgba(239, 68, 68, 0.03);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  transition: all 0.2s ease;
+}
+
+.danger-zone-card:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.danger-zone-icon {
+  width: 45px;
+  height: 45px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.danger-zone-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.danger-zone-info h4 {
+  color: #f87171;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.danger-zone-info p {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.btn-danger-pro {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-danger-pro:hover {
+  background: #ef4444;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Modal Overlay (Inicia OCULTO por padrão para não abrir sozinho) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: none; /* CORRIGIDO: Agora começa oculto */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Quando estiver ativo via JS */
+.modal-overlay.active {
+  display: flex;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+/* Caixa do Modal */
+.modal-box {
+  background: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.modal-title {
+  color: #f8fafc;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.modal-description {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.modal-status {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.modal-btn-cancel {
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.modal-btn-cancel:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+.modal-btn-confirm {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.modal-btn-confirm:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Animações suaves */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 576px) {
+  .danger-zone-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .danger-zone-icon {
+    margin: 0 auto;
+  }
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+}
+
   </style>
 
   <!-- Scripts Firebase -->
@@ -865,6 +1079,49 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="/" class="btn-voltar" style="background: rgba(255, 255, 255, 0.08); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500; transition: 0.2s;">
         <i class="fa-solid fa-arrow-left" style="color: #fff;"></i> Voltar para a Página Inicial
       </a>
+
+<!-- Botão da Zona de Perigo -->
+<div class="danger-zone-card">
+  <div class="danger-zone-icon">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+  </div>
+  <div class="danger-zone-info">
+    <h4>Zona de Perigo</h4>
+    <p>A exclusão da conta é permanente e apagará todos os seus dados e históricos associados.</p>
+  </div>
+  <button type="button" class="btn-danger-pro" onclick="abrirModalExclusao()">
+    <i class="fa-solid fa-user-xmark"></i> Excluir Conta
+  </button>
+</div>
+
+<!-- Modal Profissional de Exclusão (Inicia Oculto) -->
+<div id="modalExcluirConta" class="modal-overlay" style="display: none;">
+  <div class="modal-box">
+    <div class="modal-icon-wrapper">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    
+    <h3 class="modal-title">Deseja realmente excluir sua conta?</h3>
+    <p class="modal-description">
+      Esta ação é irreversível. Todos os seus acessos, dados salvos e privilégios no <strong>GruposNJ</strong> serão permanentemente removidos.
+    </p>
+
+    <!-- Feedback de Status Dinâmico -->
+    <div id="statusExclusao" class="modal-status" style="display: none;">
+      <i class="fa-solid fa-circle-notch fa-spin"></i> <span id="statusText">Processando exclusão...</span>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="modal-btn modal-btn-cancel" onclick="fecharModalExclusao()">
+        Cancelar
+      </button>
+      <button type="button" class="modal-btn modal-btn-confirm" id="btnConfirmarExclusao" onclick="confirmarDelecaoFirebase()">
+        Sim, excluir permanentemente
+      </button>
+    </div>
+  </div>
+</div>
+
 
   <!-- Modal Aviso Dark -->
   <div class="modal-overlay" id="modal-aviso">
@@ -1628,6 +1885,101 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// ==========================================
+// MÓDULO DE EXCLUSÃO DE CONTA (FIREBASE)
+// ==========================================
+
+function abrirModalExclusao() {
+  const modal = document.getElementById('modalExcluirConta');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function fecharModalExclusao() {
+  const modal = document.getElementById('modalExcluirConta');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  
+  // Reseta os estados visuais e os botões ao fechar
+  const statusEl = document.getElementById('statusExclusao');
+  const btnConfirmar = document.getElementById('btnConfirmarExclusao');
+  
+  if (statusEl) {
+    statusEl.style.display = 'none';
+  }
+  if (btnConfirmar) {
+    btnConfirmar.disabled = false;
+    btnConfirmar.style.opacity = '1';
+  }
+}
+
+function confirmarDelecaoFirebase() {
+  // Garante que a variável 'auth' está acessível no escopo global
+  const currentAuth = typeof auth !== 'undefined' ? auth : (typeof firebase !== 'undefined' ? firebase.auth() : null);
+  
+  if (!currentAuth || !currentAuth.currentUser) {
+    window.location.href = "/login.html";
+    return;
+  }
+
+  const user = currentAuth.currentUser;
+  const statusEl = document.getElementById('statusExclusao');
+  const statusText = document.getElementById('statusText');
+  const btnConfirmar = document.getElementById('btnConfirmarExclusao');
+
+  // Trava os botões e exibe estado de carregamento elegante
+  if (btnConfirmar) {
+    btnConfirmar.disabled = true;
+    btnConfirmar.style.opacity = '0.6';
+  }
+
+  if (statusEl && statusText) {
+    statusEl.style.display = 'flex';
+    statusEl.style.background = 'rgba(56, 189, 248, 0.1)';
+    statusEl.style.borderColor = 'rgba(56, 189, 248, 0.2)';
+    statusEl.style.color = '#38bdf8';
+    statusText.innerHTML = 'Excluindo conta com segurança...';
+  }
+
+  user.delete().then(() => {
+    if (statusText) {
+      statusText.innerHTML = 'Conta excluída com sucesso! Redirecionando...';
+    }
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1200);
+  }).catch((error) => {
+    console.error("Erro ao deletar conta:", error);
+    
+    if (!statusEl || !statusText) return;
+
+    if (error.code === 'auth/requires-recent-login') {
+      statusEl.style.background = 'rgba(245, 158, 11, 0.1)';
+      statusEl.style.borderColor = 'rgba(245, 158, 11, 0.2)';
+      statusEl.style.color = '#f59e0b';
+      statusText.innerHTML = 'Sessão expirada. Faça login novamente para prosseguir.';
+      
+      setTimeout(() => {
+        currentAuth.signOut().then(() => {
+          window.location.href = "/login.html";
+        });
+      }, 2500);
+    } else {
+      statusEl.style.background = 'rgba(239, 68, 68, 0.1)';
+      statusEl.style.borderColor = 'rgba(239, 68, 68, 0.2)';
+      statusEl.style.color = '#f87171';
+      statusText.innerHTML = 'Erro: ' + error.message;
+      
+      if (btnConfirmar) {
+        btnConfirmar.disabled = false;
+        btnConfirmar.style.opacity = '1';
+      }
+    }
+  });
+}
+
 function gerarBreadcrumbs() {
   const container = document.getElementById('breadcrumb-container');
   if (!container) return;
@@ -1686,84 +2038,95 @@ window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
     }
   </script>
 
-  <!-- Footer Profissional -->
+  <!-- Footer -->
   <footer class="footer-pro">
     <div class="footer-content">
       <p class="footer-copy">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
       
       <div class="footer-links">
         <a href="mailto:suporte.gruposnj@gmail.com" class="footer-link">
-          <i class="fa-solid fa-envelope"></i> 
-          <span>Suporte: suporte.gruposnj@gmail.com</span>
+          <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
         </a>
-        <span class="footer-divider">•</span>
+        <span class="footer-divider">|</span>
         <a href="termos.html" class="footer-link">
-          <i class="fa-solid fa-file-contract"></i> 
-          <span>Termos de Uso</span>
+          <i class="fa-solid fa-file-contract"></i> Termos de Uso
+        </a>
+        <span class="footer-divider">|</span>
+        <a href="privacidade.html" class="footer-link">
+          <i class="fa-solid fa-shield-halved"></i> Política de Privacidade
         </a>
       </div>
+
+      <!-- Aviso e Link Oficial do RTA -->
+      <p style="margin-top: 6px; font-size: 12px; color: var(--text-muted);">
+        Conteúdo restrito para maiores de idade. Protegido pelo selo
+        <a href="https://rtalabel.org/" target="_blank" style="color: var(--accent); text-decoration: underline;">
+          RTA (Restricted to Adults)
+        </a>.
+      </p>
     </div>
   </footer>
 
-<style>
-/* Estilo profissional para o Rodapé */
-.footer-pro {
-  margin-top: 40px;
-  padding: 30px 20px;
-  background: rgba(15, 23, 42, 0.75);
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
-  backdrop-filter: blur(10px);
-  text-align: center;
-  color: #94a3b8;
-  font-size: 0.85rem;
-}
+  <style>
+  /* Estilo profissional para o Rodapé */
+  .footer-pro {
+    margin-top: 40px;
+    padding: 30px 20px;
+    background: rgba(15, 23, 42, 0.75);
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+  }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 
-.footer-copy {
-  margin: 0;
-  color: #64748b;
-  font-weight: 500;
-}
+  .footer-copy {
+    margin: 0;
+    color: #64748b;
+    font-weight: 500;
+  }
 
-.footer-links {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 
-.footer-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #94a3b8;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
 
-.footer-link:hover {
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
-  transform: translateY(-1px);
-}
+  .footer-link:hover {
+    color: var(--accent);
+    background: rgba(34, 197, 94, 0.1);
+    transform: translateY(-1px);
+  }
 
-.footer-divider {
-  color: #475569;
-  font-size: 0.8rem;
-}
-</style>
+  .footer-divider {
+    color: #475569;
+    font-size: 0.8rem;
+  }
+  </style>
+
 
 </body>
 </html>

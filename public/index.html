@@ -1236,26 +1236,31 @@ body {
     </section>
 
   <!-- Footer -->
-  <footer>                                                                                                                                                    
+  <footer>                                                                                                                                            
     <p style="margin-bottom: 8px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
     <p style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
       <a href="mailto:suporte.gruposnj@gmail.com" style="color: var(--accent); text-decoration: none;">
         <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
       </a>
       <span style="color: var(--border-color);">|</span>
-      <a href="termos.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'">
+      <a href="termos.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
         <i class="fa-solid fa-file-contract"></i> Termos de Uso
-      </a>                                                                                                                                                    
+      </a>
+      <span style="color: var(--border-color);">|</span>
+      <a href="privacidade.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
+        <i class="fa-solid fa-shield-halved"></i> Política de Privacidade
+      </a>
     </p>
-    
+
     <!-- Aviso e Link Oficial do RTA -->
     <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
-      Conteúdo restrito para maiores de idade. Protegido pelo selo 
+      Conteúdo restrito para maiores de idade. Protegido pelo selo
       <a href="https://rtalabel.org/" target="_blank" style="color: var(--accent); text-decoration: underline;">
         RTA (Restricted to Adults)
       </a>.
     </p>
   </footer>
+
 
   <script>
     const firebaseConfig = {
