@@ -6,7 +6,7 @@
   <title>Detalhes do Grupo - Grupos NJ</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+     * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
 
     body {
       background: #070a12;
@@ -42,12 +42,29 @@
       color: #f8fafc;
     }
 
-    main {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      padding: 20px 15px;
-    }
+main {
+  width: 100%;
+  max-width: 580px; /* Largura perfeita para leitura de detalhes no celular e no PC */
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Garante que os cards dentro preencham toda a largura útil do main */
+main > * {
+  width: 100%;
+}
+
+/* Em computadores reais (acima de 768px), damos um respiro maior nas margens */
+@media (min-width: 768px) {
+  main {
+    max-width: 640px; /* Deixa o card central um pouco mais encorpado no PC */
+    padding: 40px 20px;
+  }
+}
 
     .card-detalhes {
       background: rgba(15, 23, 42, 0.85);
@@ -146,6 +163,7 @@
       border-radius: 12px;
       padding: 12px;
       margin-bottom: 25px;
+      text-align: center;
     }
     .stars { display: flex; justify-content: center; gap: 8px; font-size: 1.6rem; cursor: pointer; }
     .star { color: #475569; transition: transform 0.2s, color 0.2s; }
@@ -363,8 +381,7 @@
       font-size: 0.85rem;
       color: #38bdf8;
     }
-  
-
+ 
   </style>
 </head>
 <body>
@@ -585,17 +602,17 @@
         <!-- Descrição -->
         <div class="descricao" id="desc-grupo" style="background: rgba(13, 27, 42, 0.65); color: #cbd5e1; padding: 20px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.94rem; line-height: 1.65; margin-bottom: 22px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);">Carregando detalhes do grupo...</div>
 
-        <!-- Avaliação -->
-        <div class="avaliacao-box" style="text-align: center; background: rgba(15, 23, 42, 0.6); padding: 18px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 22px;">
-          <div class="stars" id="stars-container" style="font-size: 1.6rem; color: #fbbf24; cursor: pointer; display: flex; justify-content: center; gap: 8px; margin-bottom: 6px; filter: drop-shadow(0 2px 4px rgba(251,191,36,0.3));">
-            <span class="star" onclick="avaliar(1)">★</span>
-            <span class="star" onclick="avaliar(2)">★</span>
-            <span class="star" onclick="avaliar(3)">★</span>
-            <span class="star" onclick="avaliar(4)">★</span>
-            <span class="star" onclick="avaliar(5)">★</span>
-          </div>
-          <div class="star-txt" id="star-label" style="font-size: 0.78rem; color: #94a3b8; font-weight: 600;">Clique nas estrelas para avaliar este grupo</div>
-        </div>
+<!-- Avaliação Inteligente -->
+<div class="avaliacao-box">
+  <div class="stars" id="stars-container">
+    <span class="star" onmouseover="marcarEstrelas(1)" onmouseout="restaurarMediaReal()" onclick="avaliar(1)">★</span>
+    <span class="star" onmouseover="marcarEstrelas(2)" onmouseout="restaurarMediaReal()" onclick="avaliar(2)">★</span>
+    <span class="star" onmouseover="marcarEstrelas(3)" onmouseout="restaurarMediaReal()" onclick="avaliar(3)">★</span>
+    <span class="star" onmouseover="marcarEstrelas(4)" onmouseout="restaurarMediaReal()" onclick="avaliar(4)">★</span>
+    <span class="star" onmouseover="marcarEstrelas(5)" onmouseout="restaurarMediaReal()" onclick="avaliar(5)">★</span>
+  </div>
+  <div class="star-txt" id="star-label">Carregando avaliações...</div>
+</div>
 
         <!-- BOTÃO DE ENTRAR PRINCIPAL -->
         <button type="button" id="btn-entrar-link" data-id="SEU_ID_DO_GRUPO" onclick="registrarAcessoEEntrar(event)" style="display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%); color: #fff; border: none; padding: 18px; border-radius: 18px; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.45), inset 0 2px 0 rgba(255,255,255,0.35); transition: all 0.2s ease; margin-bottom: 14px; letter-spacing: 0.04em;">
@@ -646,33 +663,71 @@
     </div>
   </div>
 
-<!-- Grupos Relacionados Premium -->
-<div style="margin: 40px auto; max-width: 580px; background: linear-gradient(145deg, #0d1b2a 0%, #070d16 100%); padding: 32px 24px; border-radius: 24px; border: 1px solid rgba(56, 189, 248, 0.3); position: relative; box-shadow: 0 20px 40px rgba(3, 7, 18, 0.6); overflow: hidden; font-family: 'Inter', system-ui, -apple-system, sans-serif;">
+<!-- Container Principal / Seções Organizadas -->
+<div style="max-width: 580px; margin: 40px auto; display: flex; flex-direction: column; gap: 30px;">
 
-  <!-- Detalhe de brilho de fundo decorativo -->
-  <div style="position: absolute; top: -50px; right: -50px; width: 180px; height: 180px; background: rgba(56, 189, 248, 0.08); filter: blur(50px); pointer-events: none; z-index: 0;"></div>
+  <!-- Grupos Relacionados Premium -->
+  <div style="position: relative; background: linear-gradient(145deg, #0d1b2a 0%, #070d16 100%); padding: 32px 24px; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);">
 
-  <div style="position: relative; z-index: 1;">
-    <!-- Cabeçalho da Seção -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div style="width: 42px; height: 42px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);">
-          <i class="fa-solid fa-fire-flame-curved" style="color: #f59e0b; font-size: 1.1rem; animation: pulsarFogo 1.5s infinite;"></i>
-        </div>
-        <div>
-          <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em; margin: 0;">
-            Você Também Pode Curtir
-          </h3>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 3px 0 0 0;">Grupos selecionados da mesma categoria</p>
+    <!-- Detalhe de brilho de fundo decorativo -->
+    <div style="position: absolute; top: -50px; right: -50px; width: 180px; height: 180px; background: rgba(56, 189, 248, 0.08); filter: blur(50px); pointer-events: none;"></div>
+
+    <div style="position: relative; z-index: 1;">
+      <!-- Cabeçalho da Seção -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 42px; height: 42px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-fire-flame-curved" style="color: #f59e0b; font-size: 1.1rem; animation: pulsarFogo 1.5s infinite;"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em; margin: 0;">
+              Você Também Pode Curtir
+            </h3>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin: 3px 0 0 0;">Grupos selecionados da mesma categoria</p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Container dos Cards -->
-    <div id="grupos-relacionados-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-      <p style="color: #64748b; font-size: 0.9rem; grid-column: span 2; text-align: center; padding: 20px 0;">Carregando recomendações...</p>
+      <!-- Container dos Cards -->
+      <div id="grupos-relacionados-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <p style="color: #64748b; font-size: 0.9rem; grid-column: span 2; text-align: center; padding: 20px 0;">Carregando recomendações...</p>
+      </div>
     </div>
   </div>
+
+
+  <!-- Bloco de Destaque / Divulgação com verificação de login -->
+  <div class="card-divulgacao" style="position: relative; background: linear-gradient(145deg, #0d1b2a 0%, #070d16 100%); padding: 28px 24px; border-radius: 24px; text-align: center; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);">
+
+    <!-- Efeito de brilho sutil superior -->
+    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 220px; height: 80px; background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%); filter: blur(20px); pointer-events: none;"></div>
+
+    <div style="position: relative; z-index: 1;">
+
+      <!-- Ícone com fundo elegante -->
+      <div style="width: 54px; height: 54px; margin: 0 auto 16px auto; background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+        <i class="fa-solid fa-bullhorn" style="color: #38bdf8; font-size: 1.3rem;"></i>
+      </div>
+
+      <h4 style="font-size: 1.15rem; color: #ffffff; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.01em;">Divulgue seu Grupo ou Canal Aqui!</h4>
+
+      <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">
+        Quer mais membros ativos no seu grupo do WhatsApp ou canal do Telegram? Cadastre agora e destaque-se com o plano VIP!
+      </p>
+
+      <!-- Botão inteligente que verifica o login -->
+      <a href="javascript:void(0);" onclick="verificarLoginDivulgar()" class="btn-ver-mais-grupos" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-weight: 700; font-size: 0.95rem; padding: 12px 24px; border-radius: 14px; text-decoration: none; border: 1px solid rgba(56, 189, 248, 0.4); transition: all 0.3s ease;">
+        <i class="fa-solid fa-rocket" style="font-size: 1.1rem;"></i> Divulgar Agora
+      </a>
+
+      <!-- Termos de uso logo abaixo -->
+      <p style="font-size: 0.72rem; color: #64748b; margin-top: 16px; line-height: 1.5; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 14px;">
+        Ao prosseguir, você concorda com os <a href="/termos.html" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">Termos de Uso</a> da plataforma.
+      </p>
+
+    </div>
+  </div>
+
 </div>
 
 <style>
@@ -698,44 +753,18 @@
 .card-relacionado-item img {
   transition: transform 0.4s ease;
 }
+
+/* Efeito hover do botão */
+.btn-ver-mais-grupos:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(2, 132, 199, 0.5);
+  border-color: rgba(56, 189, 248, 0.7);
+}
 </style>
-
-
-<!-- Bloco de Destaque / Divulgação com verificação de login -->
-<div class="card-divulgacao" style="margin: 30px auto; max-width: 580px; background: linear-gradient(145deg, #0d1b2a 0%, #070d16 100%); padding: 28px 24px; border-radius: 24px; border: 1px solid rgba(56, 189, 248, 0.3); position: relative; box-shadow: 0 20px 40px rgba(3, 7, 18, 0.6), 0 0 30px rgba(14, 165, 233, 0.1); text-align: center; overflow: hidden; font-family: 'Inter', system-ui, -apple-system, sans-serif;">
-
-  <!-- Efeito de brilho sutil superior -->
-  <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 220px; height: 80px; background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%); filter: blur(30px); pointer-events: none; z-index: 0;"></div>
-
-  <div style="position: relative; z-index: 1;">
-    
-    <!-- Ícone com fundo elegante -->
-    <div style="width: 54px; height: 54px; margin: 0 auto 16px auto; background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);">
-      <i class="fa-solid fa-bullhorn" style="color: #38bdf8; font-size: 1.3rem;"></i>
-    </div>
-
-    <h4 style="font-size: 1.15rem; color: #ffffff; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.01em;">Divulgue seu Grupo ou Canal Aqui!</h4>
-
-    <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">
-      Quer mais membros ativos no seu grupo do WhatsApp ou canal do Telegram? Cadastre agora e destaque-se com o plano VIP!
-    </p>
-
-    <!-- Botão inteligente que verifica o login -->
-    <a href="javascript:void(0);" onclick="verificarLoginDivulgar()" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%); color: #fff; font-size: 0.95rem; font-weight: 800; padding: 16px 20px; border-radius: 16px; text-decoration: none; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.35), inset 0 2px 0 rgba(255,255,255,0.35); transition: all 0.2s ease; letter-spacing: 0.03em;">
-      <i class="fa-solid fa-rocket" style="font-size: 1.1rem;"></i> Divulgar Agora
-    </a>
-
-    <!-- Termos de uso logo abaixo -->
-    <p style="font-size: 0.72rem; color: #64748b; margin-top: 16px; line-height: 1.5; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 14px;">
-      Ao prosseguir, você concorda com os <a href="/termos.html" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">Termos de Uso</a> e Políticas da plataforma.
-    </p>
-
-  </div>
-</div>
 
 <script>
 function verificarLoginDivulgar() {
-  // Verifica se o usuário tem a senha ou dados salvos no navegador (indicando que está logado)
   const logado = localStorage.getItem('adminPassword') || localStorage.getItem('userEmail') || localStorage.getItem('usuarioLogado');
 
   if (logado) {
@@ -745,7 +774,6 @@ function verificarLoginDivulgar() {
   }
 }
 </script>
-
 
   <!-- Footer Corrigido -->
   <footer style="text-align: center; padding: 25px 15px; margin-top: 40px; border-top: 1px solid #1e293b; color: #94a3b8; font-size: 0.8rem;">
@@ -815,7 +843,6 @@ let grupoId = '';
   grupoId = window.location.pathname.split('/').pop() || urlParams.get('id');
 })();
 
-
 async function carregarDetalhes() {
   try {
     const res = await fetch('/api/grupos/' + grupoId);
@@ -837,19 +864,15 @@ async function carregarDetalhes() {
     }
 
     const nomeAutor = grupo.autor || 'Comunidade';
-
-    // Tenta buscar se existe um Nome de Exibição salvo no navegador para esse autor
     const nomeExibicaoSalvo = localStorage.getItem(`nomeExibicao_${nomeAutor}`);
     const nomeParaExibir = nomeExibicaoSalvo ? nomeExibicaoSalvo : nomeAutor;
 
     const autorElemento = document.getElementById('autor-grupo');
     if (autorElemento) {
       autorElemento.href = `/perfil.html?autor=${encodeURIComponent(nomeAutor)}`;
-
-      // Atualiza o HTML interno mantendo a estrutura do card azul escuro
       autorElemento.innerHTML = `
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #0ea5e9, #2563eb); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(14,165,233,0.4);">
+          <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #0ea5e9, #2563eb); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
             <i class="fa-solid fa-user-astronaut" style="color: #fff; font-size: 1rem;"></i>
           </div>
           <div>
@@ -871,7 +894,6 @@ async function carregarDetalhes() {
       badgeVip.style.display = grupo.isVip ? 'block' : 'none';
     }
 
-    // 🔥 Badge de Parceiro Oficial corrigida (sem o erro de corte)
     const badgeParceiro = document.getElementById('badge-parceiro');
     if (badgeParceiro) {
       const ehParceiro = grupo.isParceiro || grupo.statusParceria === 'aprovado';
@@ -889,10 +911,11 @@ async function carregarDetalhes() {
       btnEntrar.setAttribute('data-id', grupo.id);
     }
 
-    const avaliacaoSalva = localStorage.getItem('rating_' + grupoId);
-    if (avaliacaoSalva && typeof marcarEstrelas === 'function') {
-      marcarEstrelas(parseInt(avaliacaoSalva));
+    // Inicializa a avaliação inteligente usando os dados reais do grupo carregado
+    if (typeof inicializarDetalhesAvaliacao === 'function') {
+      inicializarDetalhesAvaliacao(grupo);
     }
+
   } catch (e) {
     console.error("Erro ao carregar grupo", e);
     const nomeGrupoEl = document.getElementById('nome-grupo');
@@ -904,13 +927,76 @@ async function carregarDetalhes() {
 
 window.onload = carregarDetalhes;
 
-function avaliar(nota) {
-  localStorage.setItem('rating_' + grupoId, nota);
-  if (typeof marcarEstrelas === 'function') {
-    marcarEstrelas(nota);
+// Função de inicialização limpa (sem travas e sem cortes)
+function inicializarDetalhesAvaliacao(grupo) {
+  const idReal = grupo._id || grupo.id || window.grupoId;
+  if (!idReal) return;
+
+  window.grupoId = idReal;
+  mediaAtualGlobal = grupo.mediaAvaliacao || 0;
+  totalVotosGlobal = grupo.totalVotos || 0;
+
+  const label = document.getElementById('star-label');
+  const containerEstrelas = document.querySelector('.stars');
+
+  // Libera as estrelas para poder votar quantas vezes quiser
+  if (containerEstrelas) {
+    containerEstrelas.style.pointerEvents = 'auto';
+    containerEstrelas.style.opacity = '1';
+  }
+
+  if (totalVotosGlobal > 0) {
+    const mediaArredondada = Number(mediaAtualGlobal).toFixed(1);
+    if (typeof marcarEstrelas === 'function') {
+      marcarEstrelas(Math.round(mediaAtualGlobal));
+    }
+    if (label) {
+      label.innerHTML = `Média: <strong style="color: #eab308;">${mediaArredondada}</strong> de 5 estrelas (${totalVotosGlobal} ${totalVotosGlobal === 1 ? 'voto' : 'votos'})`;
+    }
+  } else {
+    if (label) {
+      label.innerText = "Seja o primeiro a avaliar este grupo!";
+    }
   }
 }
 
+// Função de envio de avaliação sem travas e sem alertas chatos
+async function avaliar(nota) {
+  const idDoGrupo = window.grupoId || (typeof grupoId !== 'undefined' ? grupoId : null);
+
+  if (!idDoGrupo) {
+    console.error("ID do grupo não encontrado!");
+    return;
+  }
+
+  if (typeof marcarEstrelas === 'function') {
+    marcarEstrelas(nota);
+  }
+
+  try {
+    const res = await fetch(`/api/grupo/${idDoGrupo}/avaliar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nota })
+    });
+
+    const dados = await res.json();
+
+    if (dados.sucesso) {
+      mediaAtualGlobal = dados.media;
+      totalVotosGlobal = dados.totalVotos;
+
+      const label = document.getElementById('star-label');
+      if (label) {
+        label.innerHTML = `Média geral: <strong style="color: #eab308;">${Number(dados.media).toFixed(1)}</strong> de 5 estrelas (${dados.totalVotos} ${dados.totalVotos === 1 ? 'voto' : 'votos'})`;
+      }
+    } else {
+      console.error(dados.erro || "Erro ao registrar voto.");
+    }
+  } catch (err) {
+    console.error('Erro ao enviar avaliação para o banco:', err);
+  }
+}
 
 function obterPlataforma(link) {
   const l = (link || '').toLowerCase();
@@ -970,7 +1056,7 @@ async function carregarGruposRelacionados(categoriaAtual, idAtual, linkAtual) {
 
       return plataformaAtual === plataformaGrupo;
 
-    }).slice(0, 6);
+    }).slice(0, 10);
 
     if (relacionados.length === 0) {
       container.innerHTML = '<p style="color: #64748b; font-size: 0.85rem; grid-column: span 2; text-align: center;">Nenhum outro grupo nesta categoria.</p>';
@@ -1035,18 +1121,6 @@ async function carregarGruposRelacionados(categoriaAtual, idAtual, linkAtual) {
     container.innerHTML = '<p style="color: #ef4444; font-size: 0.85rem; grid-column: span 2; text-align: center;">Erro ao carregar relacionados.</p>';
   }
 }
-
-    function marcarEstrelas(nota) {
-      const stars = document.querySelectorAll('.star');
-      stars.forEach((s, idx) => {
-        if (idx < nota) {
-          s.classList.add('selected');
-        } else {
-          s.classList.remove('selected');
-        }
-      });
-      document.getElementById('star-label').innerText = `Sua avaliação: ${nota} de 5 estrelas registrada!`;
-    }
 
        // Funções do Modal de Denúncia
     function abrirModalDenuncia() {
@@ -1199,6 +1273,88 @@ if (typeof firebase !== 'undefined' && firebase.auth) {
         }
     });
 }
+
+  let grupoIdAtual = null; // Defina com o ID do grupo atual da página
+  let mediaAtualGlobal = 0;
+  let totalVotosGlobal = 0;
+
+  // Função chamada ao carregar os dados do grupo na página de detalhes
+  function inicializarDetalhesAvaliacao(grupo) {
+    grupoIdAtual = grupo._id || grupo.id; // Ajuste conforme seu objeto
+    mediaAtualGlobal = grupo.mediaAvaliacao || 0;
+    totalVotosGlobal = grupo.totalVotos || 0;
+
+    exibirMediaNaTela();
+  }
+
+  // Atualiza as estrelas e o texto com a média real (ex: 4.5)
+  function exibirMediaNaTela() {
+    const label = document.getElementById('star-label');
+    const avaliacaoSalva = localStorage.getItem('rating_' + grupoIdAtual);
+
+    if (avaliacaoSalva) {
+      marcarEstrelas(parseInt(avaliacaoSalva));
+      label.innerHTML = `Sua avaliação: ${avaliacaoSalva} de 5 | Média geral: <strong style="color: #eab308;">${Number(mediaAtualGlobal).toFixed(1)}</strong> (${totalVotosGlobal} ${totalVotosGlobal === 1 ? 'voto' : 'votos'})`;
+    } else if (totalVotosGlobal > 0) {
+      const mediaArredondada = Number(mediaAtualGlobal).toFixed(1);
+      marcarEstrelas(Math.round(mediaAtualGlobal));
+      label.innerHTML = `Média: <strong style="color: #eab308;">${mediaArredondada}</strong> de 5 estrelas (${totalVotosGlobal} ${totalVotosGlobal === 1 ? 'voto' : 'votos'})`;
+    } else {
+      label.innerText = "Seja o primeiro a avaliar este grupo!";
+    }
+  }
+
+  // Sua função original de marcar estrelas (usada no hover e no clique)
+  function marcarEstrelas(nota) {
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((s, idx) => {
+      if (idx < nota) {
+        s.classList.add('selected');
+      } else {
+        s.classList.remove('selected');
+      }
+    });
+    document.getElementById('star-label').innerText = `Sua avaliação: ${nota} de 5 estrelas`;
+  }
+
+  // Restaura a visualização da média real quando o mouse sai de cima das estrelas
+  function restaurarMediaReal() {
+    exibirMediaNaTela();
+  }
+
+  // Envia o voto para a API do MongoDB
+  async function enviarAvaliacao(nota) {
+    if (!grupoIdAtual) return;
+
+    // Salva no navegador para registrar o voto do usuário localmente
+    localStorage.setItem('rating_' + grupoIdAtual, nota);
+    marcarEstrelas(nota);
+
+    try {
+      const res = await fetch(`/api/grupo/${grupoIdAtual}/avaliar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nota })
+      });
+
+      const dados = await res.json();
+
+      if (dados.sucesso) {
+        mediaAtualGlobal = dados.media;
+        totalVotosGlobal = dados.totalVotos;
+        exibirMediaNaTela();
+      }
+    } catch (err) {
+      console.error('Erro ao enviar avaliação:', err);
+    }
+  }
+
+  // Verificação automática ao carregar a página se já houver um voto salvo localmente
+  const avaliacaoSalvaLocal = localStorage.getItem('rating_' + grupoIdAtual);
+  if (avaliacaoSalvaLocal && typeof marcarEstrelas === 'function') {
+    marcarEstrelas(parseInt(avaliacaoSalvaLocal));
+  }
+
 
 function gerarBreadcrumbs() {
   const container = document.getElementById('breadcrumb-container');

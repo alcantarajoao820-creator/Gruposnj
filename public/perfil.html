@@ -6,131 +6,158 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfil do Criador - Grupos NJ</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     :root {
-      --bg-main: #0f172a;
-      --bg-card: #1e293b;
+      --bg-main: #090d16;
+      --bg-card: #131b2e;
       --accent: #3b82f6;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --border: #334155;
+      --border: #1e293b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
-    header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { color: var(--text-main); font-size: 1.25rem; font-weight: bold; text-decoration: none; }
-    .logo span { color: var(--accent); }
     .container { max-width: 600px; margin: 20px auto; padding: 0 15px; width: 100%; flex: 1; }
-    .perfil-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-    .avatar-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent); background: #334155; display: flex; align-items: center; justify-content: center; }
-    .avatar { width: 100%; height: 100%; object-fit: cover; }
-    .perfil-card h2 { font-size: 1.5rem; margin-bottom: 8px; color: var(--text-main); }
-    .badge-cargo { display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; }
-    .social-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; }
-    .social-btn:hover { opacity: 0.9; }
-    .secao-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-    .secao-titulo { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-    .sem-grupos { text-align: center; color: var(--text-muted); padding: 20px; font-size: 0.95rem; }
-    footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: auto; }
+
+    /* CARD DE PERFIL REESTILIZADO */
+    .perfil-card { 
+      background: linear-gradient(145deg, #131b2e, #0f172a); 
+      border: 1px solid var(--border); 
+      border-radius: 20px; 
+      padding: 35px 20px; 
+      text-align: center; 
+      margin-bottom: 20px; 
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); 
+    }
+    .avatar-container { 
+      width: 105px; 
+      height: 105px; 
+      margin: 0 auto 15px auto; 
+      border-radius: 50%; 
+      overflow: hidden; 
+      border: 3px solid var(--accent); 
+      background: #1e293b; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    .perfil-card h2 { font-size: 1.6rem; margin-bottom: 8px; color: var(--text-main); font-weight: 700; }
+    
+    .social-btn { 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 8px; 
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+      color: #fff; 
+      padding: 12px 24px; 
+      border-radius: 12px; 
+      text-decoration: none; 
+      font-weight: 600; 
+      font-size: 0.9rem; 
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    .social-btn:hover { transform: translateY(-2px); opacity: 0.95; }
+
+    /* SEÇÃO DE GRUPOS REESTILIZADA */
+    .secao-card-pro {
+      background: linear-gradient(135deg, rgba(19, 27, 46, 0.8), rgba(9, 13, 22, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 25px 20px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      margin-top: 20px;
+    }
+    .secao-titulo-pro {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #f8fafc;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .titulo-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      color: #60a5fa;
+      font-size: 1rem;
+    }
+    .sem-grupos-pro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 14px;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: rgba(9, 13, 22, 0.4);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+    }
+    .loading-spinner-pro {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(59, 130, 246, 0.2);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spinLoadingPro 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    @keyframes spinLoadingPro { to { transform: rotate(360deg); } }
+
+    footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 25px 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: auto; }
     footer a:hover { color: var(--accent); }
 
-   @keyframes pulseGlow {
-  0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
-  50% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.4); }
-  100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
-}
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
+      50% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.4); }
+      100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
+    }
 
-/* Card da seção com efeito Glassmorphism */
-.secao-card-pro {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.9));
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  border-radius: 20px;
-  padding: 25px 20px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-  margin-top: 25px;
-}
+/* 2. Ajuste automático para COMPUTADOR / Telas maiores (Acima de 768px) */
+@media (min-width: 768px) {
+  .container {
+    max-width: 900px; /* Aumenta a largura útil da página no PC */
+  }
 
-/* Título estilizado da seção */                                                                                                                          .secao-titulo-pro {
-  display: flex;
-  align-items: center;                                                                                                                                      gap: 12px;
-  color: #f8fafc;
-  font-size: 1.15rem;
-  font-weight: 700;                                                                                                                                         margin-top: 0;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-}
-
-/* Ícone com caixa translúcida */
-.titulo-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: 10px;
-  color: #60a5fa;
-  font-size: 1rem;
-}
-
-/* Estado de carregamento elegante */
-.sem-grupos-pro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  gap: 14px;
-  color: #94a3b8;
-  font-size: 0.9rem;
-  font-weight: 500;
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px dashed rgba(148, 163, 184, 0.2);
-  border-radius: 14px;
-}
-                                                                                                                                                          /* Spinner animado moderno */
-.loading-spinner-pro {
-  width: 32px;
-  height: 32px;
-  border: 3px solid rgba(59, 130, 246, 0.2);
-  border-top-color: #3b82f6;
-  border-radius: 50%;
-  animation: spinLoadingPro 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-}
-
-@keyframes spinLoadingPro {
-  to {
-    transform: rotate(360deg);
+  /* Se você quiser transformar o painel em duas colunas lado a lado no PC */
+  .painel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colunas iguais */
+    gap: 20px;
   }
 }
   </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO -->
   <header class="header-principal">
     <div class="logo-area">
       <i class="fa-brands fa-whatsapp" style="color: #25d366 !important; font-size: 1.5rem; display: inline-block;"></i>
       <span class="logo-text">Grupos <span style="color: #25d366;">NJ</span></span>
-
-      <!-- Retângulo Profissional para o Telegram -->
       <div class="badge-telegram-header">
         <i class="fa-brands fa-telegram"></i>
         <span>Telegram</span>
       </div>
     </div>
-
-    <!-- Botão de Menu Retornado para Abrir a Gaveta -->
     <button onclick="toggleMenu()" class="btn-nav-pro btn-blue-pro" title="Menu" aria-label="Abrir Menu">
       <i class="fa-solid fa-bars"></i>
     </button>
   </header>
 
-  <!-- Menu Lateral Retátil (Gaveta) -->
   <div class="menu-lateral-pro" id="menuLateral">
     <div class="menu-header-pro">
       <div class="menu-user-info">
@@ -139,12 +166,11 @@
       </div>
       <button onclick="toggleMenu()" class="close-menu-pro">&times;</button>
     </div>
-
-    <div class="menu-links-pro">                                                                                                                                
+    <div class="menu-links-pro">                                                                                                                          
       <a href="/" class="menu-item-pro"><i class="fa-solid fa-home"></i> <span>Início (WhatsApp)</span></a>
       <a href="/telegram.html" class="menu-item-pro" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
         <i class="fa-brands fa-telegram"></i> <span>Grupos Telegram</span>
-      </a>    
+      </a>
       <a href="/planos.html" class="menu-item-pro vip-item"><i class="fa-solid fa-crown"></i> <span>Seja VIP / Impulsionar</span></a>
       <a href="/painel.html" class="menu-item-pro"><i class="fa-solid fa-user-gear"></i> <span>Minha Conta / Painel</span></a>
       <a href="/login.html" class="menu-item-pro"><i class="fa-solid fa-right-to-bracket"></i> <span>Entrar / Cadastrar</span></a>
@@ -154,142 +180,43 @@
 
   <div class="container">
 
-
   <style>
-    .header-principal {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 20px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo-text {
-      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #f8fafc;
-    }
-
-    .badge-telegram-header {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(14, 116, 144, 0.18) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #38bdf8;
-      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
-
-    .badge-telegram-header i {
-      font-size: 0.85rem;
-      color: #38bdf8;
-    }
-
-    /* Botão do Menu Estilizado */
-    .btn-nav-pro {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      border-radius: 12px;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(8px);
-      outline: none;
-    }
-
-    .btn-blue-pro {
-      background: rgba(30, 41, 59, 0.75);
-      color: #60a5fa;
-      width: 40px;
-      height: 40px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-blue-pro:hover {
-      background: rgba(59, 130, 246, 0.25);
-      color: #fff;
-      border-color: rgba(59, 130, 246, 0.5);
-      transform: translateY(-2px);
-    }
-
-    .menu-lateral-pro {
-      position: fixed;
-      top: 0;
-      right: -300px;
-      width: 280px;
-      height: 100vh;
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(20px);                                                                                                                              
-      border-left: 1px solid rgba(148, 163, 184, 0.15);
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;                                                                                                                                   
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
+    .header-principal { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; width: 100%; box-sizing: border-box; }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-text { font-family: 'Outfit', system-ui, sans-serif; font-size: 1.2rem; font-weight: 800; color: #f8fafc; }
+    .badge-telegram-header { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(14, 116, 144, 0.18) 100%); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
+    .badge-telegram-header i { font-size: 0.85rem; color: #38bdf8; }
+    .btn-nav-pro { display: inline-flex; align-items: center; justify-content: center; padding: 10px; border-radius: 12px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.15); transition: all 0.3s ease; outline: none; }
+    .btn-blue-pro { background: rgba(30, 41, 59, 0.75); color: #60a5fa; width: 40px; height: 40px; }
+    .btn-blue-pro:hover { background: rgba(59, 130, 246, 0.25); color: #fff; }
+    .menu-lateral-pro { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-left: 1px solid rgba(148, 163, 184, 0.15); box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 9999; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
     .menu-lateral-pro.ativo { right: 0; }
-
-    .menu-header-pro {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
-      margin-bottom: 20px;
-    }
-
+    .menu-header-pro { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); margin-bottom: 20px; }
     .menu-user-info { display: flex; align-items: center; gap: 10px; color: #f8fafc; font-weight: 600; font-size: 0.9rem; }
     .menu-avatar-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3); }
     .close-menu-pro { background: transparent; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; }
-    .close-menu-pro:hover { color: #fff; }
-
     .menu-links-pro { display: flex; flex-direction: column; gap: 10px; }
     .menu-item-pro { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: #cbd5e1; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-radius: 12px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(148, 163, 184, 0.08); transition: all 0.25s ease; }
     .menu-item-pro i { color: #64748b; font-size: 1.1rem; }
-    .menu-item-pro:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: #fff; transform: translateX(4px); }
-    .menu-item-pro.vip-item { background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08)); border-color: rgba(234, 176, 8, 0.4); color: #eab008; font-weight: 600; }
-    
+    .menu-item-pro:hover { background: rgba(59, 130, 246, 0.15); color: #fff; transform: translateX(4px); }
+    .menu-item-pro.vip-item { background: linear-gradient(135deg, rgba(234, 176, 8, 0.15), rgba(202, 138, 4, 0.08)); border-color: rgba(234, 176, 8, 0.4); color: #eab008; }
     .menu-overlay-pro { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
     .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
   </style>
 
-<!-- BOTAO HOME -->
-  <div id="breadcrumb-container" style="padding: 10px 15px; max-width: 600px; margin: 0 auto;"></div>
+    <div id="breadcrumb-container" style="padding: 10px 0; max-width: 600px; margin: 0 auto;"></div>
 
-    <!-- Card de Perfil -->
     <div class="perfil-card">
       <div id="avatar-container" class="avatar-container">
-        <!-- SVG inicial (boneco padrão) -->
         <svg id="perfil-svg" viewBox="0 0 24 24" width="60" height="60" fill="#94a3b8" style="width: 60%; height: 60%;">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
         </svg>
       </div>
       <h2 id="perfil-nome">Carregando...</h2>
-<div class="badge-cargo" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2)); color: #60a5fa; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 0 12px rgba(59, 130, 246, 0.2); animation: pulseGlow 2s infinite ease-in-out;">
-  <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i> 
-  <span>Membro Criador</span>
-</div>
+      <div class="badge-cargo" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2)); color: #60a5fa; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 0 12px rgba(59, 130, 246, 0.2); animation: pulseGlow 2s infinite ease-in-out; margin-bottom: 15px;">
+        <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i>
+        <span>Membro Criador</span>
+      </div>
 
       <div id="container-social" style="display: none; margin-top: 15px;">
         <a id="perfil-social-link" href="#" target="_blank" class="social-btn">
@@ -298,22 +225,20 @@
       </div>
     </div>
 
-  <!-- Grupos Publicados -->
-  <div class="secao-card-pro">
-    <h3 class="secao-titulo-pro">
-      <div class="titulo-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
-      <span>Grupos Publicados</span>
-    </h3>
-    <div id="lista-grupos-criador">
-      <div class="sem-grupos-pro">
-        <div class="loading-spinner-pro"></div>
-        <span>Buscando grupos publicados...</span>
+    <div class="secao-card-pro">
+      <h3 class="secao-titulo-pro">
+        <div class="titulo-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
+        <span>Grupos Publicados</span>
+      </h3>
+      <div id="lista-grupos-criador">
+        <div class="sem-grupos-pro">
+          <div class="loading-spinner-pro"></div>
+          <span>Buscando grupos publicados...</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-  <!-- Footer -->
   <footer>
     <p style="margin-bottom: 8px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
     <p style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
@@ -332,84 +257,66 @@
     </p>
   </footer>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
   <script>
-// Configuração e inicialização segura do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
-  authDomain: "gruposnj-41858.firebaseapp.com",
-  projectId: "gruposnj-41858",
-  storageBucket: "gruposnj-41858.firebasestorage.app",
-  messagingSenderId: "249583894572",
-  appId: "1:249583894572:web:f61a19ffe2a0867b441189"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+      authDomain: "gruposnj-41858.firebaseapp.com",
+      projectId: "gruposnj-41858",
+      storageBucket: "gruposnj-41858.firebasestorage.app",
+      messagingSenderId: "249583894572",
+      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+    };
 
-let auth = null;
-try {
-  if (typeof firebase !== 'undefined') {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    let auth = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        auth = firebase.auth();
+      }
+    } catch (e) {
+      console.warn("Erro ao iniciar Firebase:", e);
     }
-    auth = firebase.auth();
-  }
-} catch (e) {
-  console.warn("Erro ao iniciar Firebase:", e);
-}
 
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-  function aplicarFoto(url) {
-    console.log("-> Tentando aplicar a URL da foto:", url); // <--- Adicione isso aqui
-    if (containerAvatar && url) {
-      containerAvatar.innerHTML = `<img src="${url}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-    }
-  }
+    window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const autorUrl = urlParams.get('autor');
+      const nomeCriador = autorUrl ? decodeURIComponent(autorUrl).trim() : "manoel153153";
 
-window.addEventListener('DOMContentLoaded', async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const autorUrl = urlParams.get('autor');
-  
-  const nomeCriador = autorUrl ? decodeURIComponent(autorUrl).trim() : "manoel153153";
+      const elNome = document.getElementById('perfil-nome');
+      if (elNome) elNome.innerText = nomeCriador;
 
-  const elNome = document.getElementById('perfil-nome');
-  if (elNome) elNome.innerText = nomeCriador;
+      const containerAvatar = document.getElementById('avatar-container');
+      const FOTO_PADRAO = "https://i.postimg.cc/G2hfzxXs/avatar-padrao.png";
 
-  const containerAvatar = document.getElementById('avatar-container');
+      function aplicarFoto(url) {
+        if (containerAvatar) {
+          const imgFinal = (url && url.startsWith('http')) ? url : FOTO_PADRAO;
+          containerAvatar.innerHTML = `<img src="${imgFinal}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+        }
+      }
 
-  // CAMINHO DA FOTO PADRÃO NA RAIZ DO PROJETO
-// Cole o link direto da imagem aqui dentro:
-const FOTO_PADRAO = "https://i.postimg.cc/G2hfzxXs/avatar-padrao.png";
+      let fotoParaExibir = localStorage.getItem(`fotoPerfil_${nomeCriador}`);
+      if (fotoParaExibir) {
+        aplicarFoto(fotoParaExibir);
+      } else {
+        aplicarFoto(FOTO_PADRAO);
+      }
 
-  function aplicarFoto(url) {
-    if (containerAvatar) {
-      const imgFinal = (url && url.startsWith('http')) ? url : FOTO_PADRAO;
-      containerAvatar.innerHTML = `<img src="${imgFinal}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-    }
-  }
+      if (typeof carregarGruposDoPerfil === 'function') {
+        await carregarGruposDoPerfil(nomeCriador);
+      }
+    });
 
-  // Verifica se o usuário tem foto personalizada salva localmente
-  let fotoParaExibir = localStorage.getItem(`fotoPerfil_${nomeCriador}`);
-  
-  if (fotoParaExibir) {
-    aplicarFoto(fotoParaExibir);
-  } else {
-    // Se não tiver, aplica a nova imagem padrão da coroa que você acabou de salvar!
-    aplicarFoto(FOTO_PADRAO);
-  }
-
-  // Carrega os grupos publicados do criador normalmente
-  if (typeof carregarGruposDoPerfil === 'function') {
-    await carregarGruposDoPerfil(nomeCriador);
-  }
-});
-
-
-    // Função auxiliar para detectar o ícone da plataforma com base no link
     function obterPlataformaIcone(link) {
       const l = (link || '').toLowerCase();
       if (l.includes('t.me') || l.includes('telegram.me')) {
@@ -418,54 +325,44 @@ const FOTO_PADRAO = "https://i.postimg.cc/G2hfzxXs/avatar-padrao.png";
       if (l.includes('instagram.com')) {
         return '<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); color: #ec4899; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;"><i class="fa-brands fa-instagram"></i> Instagram</span>';
       }
-      // Padrão WhatsApp
       return '<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</span>';
     }
 
     async function carregarGruposDoPerfil(nomeCriador) {
-      const container = document.getElementById('lista-grupos-criador');                                                                                        
+      const container = document.getElementById('lista-grupos-criador');                                                                                  
       if (!container) return;
 
       try {
         const res = await fetch('/api/grupos');
         if (!res.ok) throw new Error();
         const grupos = await res.json();
-
         const busca = nomeCriador.toLowerCase().trim();
 
-        // Filtro inteligente que confere todas as possibilidades de salvamento do autor
         const gruposDoCriador = grupos.filter(g => {
           const autorGrupo = (g.autor || "").toString().toLowerCase().trim();
           const criadorGrupo = (g.criador || "").toString().toLowerCase().trim();
           const usuarioGrupo = (g.usuario || "").toString().toLowerCase().trim();
           const emailGrupo = (g.email || "").toString().toLowerCase().trim();
 
-          // Se qualquer um dos campos do grupo bater com o nome ou e-mail do criador
           return (
             (autorGrupo && (autorGrupo === busca || autorGrupo.includes(busca) || busca.includes(autorGrupo))) ||
             (criadorGrupo && (criadorGrupo === busca || criadorGrupo.includes(busca) || busca.includes(criadorGrupo))) ||
-            (usuarioGrupo && (usuarioGrupo === busca || usuarioGrupo.includes(busca) || usuarioGrupo.includes(usuarioGrupo))) ||
+            (usuarioGrupo && (usuarioGrupo === busca || usuarioGrupo.includes(busca) || busca.includes(usuarioGrupo))) ||
             (emailGrupo && emailGrupo.includes(busca))
           );
         });
 
         if (gruposDoCriador.length === 0) {
-          container.innerHTML = '<div class="sem-grupos">Este criador ainda não possui grupos publicados.</div>';
+          container.innerHTML = '<div class="sem-grupos" style="color: #94a3b8; text-align: center; padding: 20px;">Este criador ainda não possui grupos publicados.</div>';
           return;
         }
 
         container.innerHTML = gruposDoCriador.map(g => {
-          // Status VIP ou Ativo padrão
           let statusBadge = '<span style="background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem;">Ativo</span>';
-
           if (g.isVip) {
             statusBadge = '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold;">VIP</span>';
           }
-
-          // Identifica a plataforma automaticamente pelo link do grupo
           const plataformaBadge = obterPlataformaIcone(g.link);
-
-          // Verifica se o grupo é parceiro oficial
           const ehParceiro = g.isParceiro || g.statusParceria === 'aprovado';
           const parceiroBadge = ehParceiro ? `
             <span style="display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: #fff; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold;">
@@ -474,7 +371,7 @@ const FOTO_PADRAO = "https://i.postimg.cc/G2hfzxXs/avatar-padrao.png";
           ` : '';
 
           return `
-            <div class="grupo-item" style="display: flex; justify-content: space-between; align-items: center; background: #1a2234; border: 1px solid #283548; padding: 12px; border-radius: 12px; margin-bottom: 10px;">
+            <div class="grupo-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(19, 27, 46, 0.6); border: 1px solid rgba(30, 41, 59, 0.8); padding: 12px; border-radius: 14px; margin-bottom: 10px; transition: all 0.2s ease;">
               <div style="display: flex; align-items: center; gap: 12px;">
                 <img src="${g.imagem || 'https://via.placeholder.com/50'}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover;" alt="Capa">
                 <div>
@@ -496,78 +393,55 @@ const FOTO_PADRAO = "https://i.postimg.cc/G2hfzxXs/avatar-padrao.png";
 
       } catch (err) {
         console.error("Erro ao carregar grupos:", err);
-        container.innerHTML = '<div class="sem-grupos" style="color:#ef4444;">Erro ao carregar os grupos publicados.</div>';
+        container.innerHTML = '<div class="sem-grupos" style="color:#ef4444; text-align: center; padding: 20px;">Erro ao carregar os grupos publicados.</div>';
       }
     }
 
     function toggleMenu() {
-        const menu = document.getElementById('menuLateral');
-        const overlay = document.getElementById('menuOverlay');
-        if (menu) menu.classList.toggle('ativo');
-        if (overlay) overlay.classList.toggle('ativo');
+      const menu = document.getElementById('menuLateral');
+      const overlay = document.getElementById('menuOverlay');
+      if (menu) menu.classList.toggle('ativo');
+      if (overlay) overlay.classList.toggle('ativo');
     }
 
-// Certifique-se de que o Firebase SDK já foi importado e inicializado na página
-if (typeof firebase !== 'undefined' && firebase.auth) {
-    firebase.auth().onAuthStateChanged((user) => {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().onAuthStateChanged((user) => {
         const saudacao = document.getElementById('saudacao-usuario');
         if (saudacao) {
-            if (user) {
-                // Pega o nome cadastrado ou usa a primeira parte do e-mail antes do @
-                const nome = user.displayName || user.email.split('@')[0];
-                saudacao.innerText = `Olá, ${nome}`;
-            } else {
-                saudacao.innerText = 'Olá, Visitante';
-            }
+          if (user) {
+            const nome = user.displayName || user.email.split('@')[0];
+            saudacao.innerText = `Olá, ${nome}`;
+          } else {
+            saudacao.innerText = 'Olá, Visitante';
+          }
         }
-    });
-}
+      });
+    }
 
+    function gerarBreadcrumbs() {
+      const container = document.getElementById('breadcrumb-container');
+      if (!container) return;
+      const caminho = window.location.pathname;
 
-function gerarBreadcrumbs() {
-  const container = document.getElementById('breadcrumb-container');
-  if (!container) return;
+      if (caminho === '/' || caminho.includes('index.html')) {
+        container.innerHTML = `
+          <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+            <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Home</a>
+          </div>
+        `;
+        return;
+      }
 
-  const caminho = window.location.pathname;
+      container.innerHTML = `
+        <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+          <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
+          <span style="color: #475569;">/</span>
+          <span style="color: #f8fafc; font-weight: 600;">Detalhes</span>
+        </div>
+      `;
+    }
 
-  // Se estiver na página inicial, exibe o link clicável para a Home
-  if (caminho === '/' || caminho.includes('index.html')) {
-    container.innerHTML = `
-      <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-        <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Home</a>
-      </div>
-    `;
-    return;
-  }
-
-  // Para as demais páginas internas
-  let nomePagina = 'Página';
-  if (caminho.includes('/grupo/')) {
-    nomePagina = 'Detalhes do Grupo';
-  } else if (caminho.includes('perfil.html')) {
-    nomePagina = 'Detalhes';
-  } else if (caminho.includes('publicar.html')) {
-    nomePagina = 'Publicar Grupo';
-  } else if (caminho.includes('termos.html')) {
-    nomePagina = 'Termos de Uso';
-  } else if (caminho.includes('painel.html')) {
-    nomePagina = 'Painel do Usuário';
-  } else if (caminho.includes('planos.html')) {
-    nomePagina = "Planos VIP's";
-  }
-
-  container.innerHTML = `
-    <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-      <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
-      <span style="color: #475569;">/</span>
-      <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span>
-    </div>
-  `;
-}
-
-window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
-
+    window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
   </script>
-
 </body>
 </html>

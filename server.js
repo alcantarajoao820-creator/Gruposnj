@@ -31,10 +31,15 @@ const GrupoSchema = new mongoose.Schema({
   data: { type: Date, default: Date.now },
   isParceiro: { type: Boolean, default: false },
   statusParceria: { type: String, enum: ['nenhum', 'pendente', 'aprovado'], default: 'nenhum' },
-  parceriaAte: { type: Date, default: null }, // <--- Adicione este campo aqui!
-  usuarioDonoEmail: { type: String, default: '' }
+  parceriaAte: { type: Date, default: null },
+  usuarioDonoEmail: { type: String, default: '' },
+  somaNotas: { type: Number, default: 0 },
+  totalVotos: { type: Number, default: 0 },
+  mediaAvaliacao: { type: Number, default: 0 },
+  emailsVotantes: [{ type: String }]
 });
 const Grupo = mongoose.model('Grupo', GrupoSchema);
+
 
 const SolicitacaoSchema = new mongoose.Schema({
   id: Number,
@@ -562,6 +567,55 @@ app.post('/api/grupos/solicitar-parceria', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao processar parceria.' });
+  }
+});
+
+app.post('/api/grupo/:id/avaliar', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nota } = req.body;
+
+    if (!nota || nota < 1 || nota > 5) {
+      return res.status(400).json({ sucesso: false, erro: 'Nota inválida' });
+    }
+
+    let filtro = {};
+    if (id.length === 24 && id.match(/^[0-9a-fA-F]{24}$/)) {
+      filtro = { _id: id };
+    } else {
+      filtro = { id: isNaN(id) ? id : Number(id) };
+    }
+
+    const grupo = await Grupo.findOne(filtro);
+    if (!grupo) {
+      return res.status(404).json({ sucesso: false, erro: 'Grupo não encontrado' });
+    }
+
+    const novaSoma = Number(grupo.somaNotas || 0) + Number(nota);
+    const novoTotal = Number(grupo.totalVotos || 0) + 1;
+    const novaMedia = Number((novaSoma / novoTotal).toFixed(1));
+
+    // Usando returnDocument: 'after' para eliminar o aviso de depreciação do Mongoose
+    const grupoAtualizado = await Grupo.findOneAndUpdate(
+      filtro,
+      { 
+        $set: { 
+          somaNotas: novaSoma, 
+          totalVotos: novoTotal, 
+          mediaAvaliacao: novaMedia 
+        } 
+      },
+      { returnDocument: 'after', runValidators: false }
+    );
+
+    res.json({
+      sucesso: true,
+      media: grupoAtualizado.mediaAvaliacao,
+      totalVotos: grupoAtualizado.totalVotos
+    });
+  } catch (err) {
+    console.error("Erro ao avaliar:", err);
+    res.status(500).json({ sucesso: false, erro: 'Erro interno ao salvar' });
   }
 });
 

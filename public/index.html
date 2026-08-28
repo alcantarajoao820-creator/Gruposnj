@@ -236,21 +236,58 @@
 <body>
 
   <div class="container">
-    <!-- Navbar -->
-    <header class="navbar">
-      <a href="/" class="brand"><i class="fa-brands fa-whatsapp" style="color: #22c55e;"></i> Grupos<span>NJ</span></a>
-      <div class="nav-btns">
-         <button onclick="irParaDivulgar()" class="btn-nav-pro btn-green-pro">
-    <i class="fa-solid fa-plus"></i> 
-    <span>Divulgar</span>
-  </button>
-  <button class="btn-nav-pro btn-blue-pro" onclick="toggleMenu()" title="Menu">
-    <i class="fa-solid fa-bars"></i>
-  </button>
-</div>
+<header class="navbar">
+  <a href="/" class="brand"><i class="fa-brands fa-whatsapp" style="color: #22c55e;"></i> Grupos<span>NJ</span></a>
+  <div class="nav-btns">
+    <button onclick="irParaDivulgar()" class="btn-nav-pro btn-green-pro">
+      <i class="fa-solid fa-plus"></i>
+      <span>Divulgar</span>
+    </button>
+    <button class="btn-nav-pro btn-blue-pro" onclick="toggleMenu()" title="Menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
 </header>
 
 <style>
+/* 1. Torna o corpo preparado para o header fixo não sobrepor o conteúdo */
+body {
+  padding-top: 75px; /* Ajuste conforme a altura real do seu cabeçalho */
+}
+
+/* 2. Deixa o cabeçalho fixo no topo */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Garante que fique acima de tudo */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(15, 23, 42, 0.85); /* Fundo semi-transparente */
+  backdrop-filter: blur(12px); /* Efeito borrado elegante */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+}
+
+.brand {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Estilo base profissional para os botões do header */
 .btn-nav-pro {
   display: inline-flex;
@@ -303,6 +340,7 @@
   transform: translateY(0);
 }
 </style>
+
 
 <!-- Menu Lateral Retátil (Gaveta) -->
 <div class="menu-lateral-pro" id="menuLateral">

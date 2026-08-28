@@ -20,7 +20,13 @@
     }
 
     * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
-    body { background: var(--bg-primary); color: var(--text-main); padding: 20px 10px; line-height: 1.7; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-main);
+  padding: 20px 10px;
+  padding-top: 70px; /* <--- Aumente para 110px (ou 120px se quiser mais folga) */
+  line-height: 1.7;
+}
     
     .container { 
       max-width: 950px; 
@@ -34,17 +40,27 @@
 
     /* Cabeçalho */
     .header-logo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: var(--bg-primary); /* Fundo igual ao do site para cobrir o conteúdo ao rolar */
+      padding: 15px 20px;            /* Espaçamento interno */
+      box-sizing: border-box;        /* Garante que o padding não estoure a largura */
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 1.4rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 25px;
+      margin-bottom: 0;              /* Removido o margin-bottom antigo para não atrapalhar */
       text-decoration: none;
+      border-bottom: 1px solid var(--border-color); /* Opcional: linha sutil separando do site */
     }
     .header-logo i { color: var(--accent); }
     .header-logo span { color: var(--accent); }
+
 
     /* Topo da Página */
     .hero-section {
@@ -335,20 +351,32 @@
 .menu-overlay-pro { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
 .menu-overlay-pro.ativo { opacity: 1; visibility: visible; }
 
-    .header-principal {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 20px;
-      width: 100%;
-      box-sizing: border-box;
-    }
+.header-principal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  box-sizing: border-box;
+  
+  /* Adicione e ajuste estas propriedades para alinhar tudo na mesma linha: */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
 
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+/* Garante que a área do logo e do telegram fiquem juntas e alinhadas */
+.header-principal .logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; /* Evita quebra feia caso a tela seja muito pequena */
+}
+
 
     .logo-text {
       font-family: 'Outfit', system-ui, -apple-system, sans-serif;
