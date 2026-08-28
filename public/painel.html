@@ -1274,7 +1274,6 @@ async function salvarNovoAvatar() {
     return;
   }
 
-  // Pega o nome exato da conta que está visível na URL do painel ou na sessão
   const urlParams = new URLSearchParams(window.location.search);
   const nomeUsuario = urlParams.get('usuario') || urlParams.get('autor') || localStorage.getItem('usuario_logado') || '';
   const emailAtual = pegarEmailSalvo();
@@ -1284,7 +1283,7 @@ async function salvarNovoAvatar() {
     return;
   }
 
-  // SALVA NA CHAVE EXATA DO NOME DE USUÁRIO (Que é exatamente o que o perfil.html procura)
+  // 1. Salva localmente (como você já faz)
   if (nomeUsuario) {
     localStorage.setItem(`fotoPerfil_${nomeUsuario.trim()}`, avatarTemporario);
   }
@@ -1292,7 +1291,27 @@ async function salvarNovoAvatar() {
     localStorage.setItem(`fotoPerfil_${emailAtual.trim()}`, avatarTemporario);
   }
 
-  // Sincroniza no Firebase se houver
+  // 2. 🔥 SALVA NO BANCO DE DADOS (MONDBODB VIA SEU BACK-END)
+  try {
+    const respostaServidor = await fetch('/api/usuario/perfil', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: emailAtual || (firebase.auth().currentUser ? firebase.auth().currentUser.email : ''),
+        foto: avatarTemporario,
+        nomeExibicao: nomeUsuario || undefined
+      })
+    });
+    
+    const resultado = await respostaServidor.json();
+    if (!resultado.success) {
+      console.error("Erro ao salvar no servidor:", resultado.message);
+    }
+  } catch (err) {
+    console.error("Erro de conexão ao salvar foto no servidor:", err);
+  }
+
+  // Sincroniza no Firebase Auth se houver
   try {
     if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
       const user = firebase.auth().currentUser;
@@ -1312,29 +1331,6 @@ async function salvarNovoAvatar() {
   mostrarAvisoPersonalizado("Avatar salvo com sucesso!");
   fecharModalAvatares();
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof firebase !== 'undefined' && firebase.auth) {
-    firebase.auth().onAuthStateChanged((user) => {
-      const imgAvatarEl = document.getElementById('avatar-publico') || document.getElementById('foto-perfil-usuario');
-
-      if (user && user.email) {
-        // Pega estritamente do Firebase ou da chave local exclusiva deste e-mail
-        const fotoUsuario = user.photoURL || localStorage.getItem(`fotoPerfil_${user.email.trim()}`);
-
-        if (imgAvatarEl && fotoUsuario) {
-          imgAvatarEl.src = fotoUsuario;
-        }
-      } else {
-        // Visitante / Não logado
-        if (imgAvatarEl) {
-          imgAvatarEl.src = 'https://via.placeholder.com/65';
-        }
-      }
-    });
-  }
-});
-
    
     </script>
 

@@ -392,70 +392,64 @@ async function carregarGruposDoPerfil(nomeCriador) {
 }
 
 // ==========================================
-// 3. INICIALIZAÇÃO E BUSCA PRECISA DE FOTO
+// 3. BUSCA DE PERFIL DIRETO DO BANCO (BACK-END)
 // ==========================================
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const autorUrl = params.get('autor');
-  
-  let nomeExibicao = autorUrl ? decodeURIComponent(autorUrl).trim() : "manoel153153";
+
+  let termoBusca = autorUrl ? decodeURIComponent(autorUrl).trim() : null;
   const FOTO_PADRAO = "https://api.dicebear.com/7.x/bottts/svg?seed=Ninja";
-  
-  function buscarFotoExata(nome) {
-    const chavesPossiveis = [
-      `fotoPerfil_${nome}`,
-      `foto_${nome}`,
-      `perfil_foto_${nome}`,
-      'fotoPerfil_usuario',
-      'foto_usuario_atual',
-      'avatar_atual'
-    ];
 
-    for (let chave of chavesPossiveis) {
-      let val = localStorage.getItem(chave);
-      if (val && val.startsWith('http')) return val;
-    }
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const chave = localStorage.key(i);
-      if (chave && (chave.includes('foto') || chave.includes('avatar'))) {
-        const valor = localStorage.getItem(chave);
-        if (valor && valor.startsWith('http') && chave.toLowerCase().includes(nome.toLowerCase())) {
-          return valor;
-        }
+  // Função para buscar o perfil real lá no seu back-end/MongoDB
+  async function carregarPerfilDoServidor(identificador) {
+    try {
+      const res = await fetch(`/api/usuario/perfil?nome=${encodeURIComponent(identificador)}`);
+      const data = await res.json();
+      if (data.success && data.usuario) {
+        return data.usuario;
       }
+    } catch (err) {
+      console.error("Erro ao buscar perfil:", err);
     }
-
     return null;
   }
 
-  let fotoExibicao = buscarFotoExata(nomeExibicao) || FOTO_PADRAO;
-  aplicarDadosNaTela(nomeExibicao, fotoExibicao);
-  atualizarLinkPerfilAutor(nomeExibicao);
+  let dadosUsuario = null;
 
-  if (typeof carregarGruposDoPerfil === 'function') {
-    carregarGruposDoPerfil(nomeExibicao).catch(err => console.log("Aviso ao carregar grupos:", err));
+  // 1. Se tem o parâmetro na URL (ex: perfil.html?autor=fulano), busca por ele
+  if (termoBusca) {
+    dadosUsuario = await carregarPerfilDoServidor(termoBusca);
+  } 
+  // 2. Se não tem na URL, tenta ver se o Firebase tem o usuário logado para buscar pelo e-mail
+  else if (typeof firebase !== 'undefined' && firebase.auth) {
+    // Aguarda o estado do auth verificar
+    await new Promise((resolve) => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+        unsubscribe();
+        if (user && user.email) {
+          dadosUsuario = await carregarPerfilDoServidor(user.email);
+          // Se o banco não tiver, pega ao menos a foto do Google Auth se houver
+          if (dadosUsuario && !dadosUsuario.foto && user.photoURL) {
+            dadosUsuario.foto = user.photoURL;
+          }
+        }
+        resolve();
+      });
+    });
   }
 
-  if (typeof firebase !== 'undefined' && firebase.auth) {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        if (!autorUrl) {
-          nomeExibicao = user.displayName || nomeExibicao;
-          const emailKey = user.email ? user.email.trim() : '';
-          
-          const fotoDoPainel = user.photoURL || 
-                               localStorage.getItem('foto_' + emailKey) || 
-                               localStorage.getItem('fotoPerfil_' + emailKey) ||
-                               buscarFotoExata(nomeExibicao) || 
-                               fotoExibicao;
+  // Define os valores finais baseados estritamente no que veio do banco de dados
+  const nomeFinal = dadosUsuario?.nomeExibicao || dadosUsuario?.email || termoBusca || "manoel153153";
+  const fotoFinal = dadosUsuario?.foto || FOTO_PADRAO;
 
-          aplicarDadosNaTela(nomeExibicao, fotoDoPainel);
-          atualizarLinkPerfilAutor(nomeExibicao);
-        }
-      }
-    });
+  // Aplica na tela
+  aplicarDadosNaTela(nomeFinal, fotoFinal);
+  atualizarLinkPerfilAutor(nomeFinal);
+
+  if (typeof carregarGruposDoPerfil === 'function') {
+    carregarGruposDoPerfil(nomeFinal).catch(err => console.log("Aviso ao carregar grupos:", err));
   }
 });
 
