@@ -809,6 +809,7 @@ app.delete('/api/meus-grupos/:id', async (req, res) => {
   }
 });
 
+
 // Rota GET para carregar o perfil do usuário (por nome ou email)
 app.get('/api/usuario/perfil', async (req, res) => {
   try {

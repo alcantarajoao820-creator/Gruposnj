@@ -133,19 +133,19 @@
     .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; position: relative; transition: transform 0.2s, border-color 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
     .card:hover { transform: translateY(-2px); border-color: #334155; }
     .card.vip { border: 1px solid #eab308; background: linear-gradient(180deg, rgba(234, 179, 8, 0.05) 0%, #0f172a 100%); }
-    
+
     .vip-badge { position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px; }
 
     .card-info { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
     .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; border: 1px solid #334155; }
     .card-title { font-size: 0.9rem; color: #fff; font-weight: 700; line-height: 1.2; }
-    .card-members { font-size: 0.7rem; color: #38bdf8; font-weight: 600; margin-top: 2px; }
+    .card-members { font-size: 0.7rem; color: #22c55e; font-weight: 600; margin-top: 2px; }
 
     .card-desc { font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 32px; }
 
     .btn-card { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; font-size: 0.85rem; transition: 0.2s; }
-    .btn-entrar { background: #38bdf8; color: #0f172a; }
-    .btn-entrar:hover { background: #0284c7; color: #fff; }
+    .btn-entrar { background: #22c55e; color: #052e16; }
+    .btn-entrar:hover { background: #16a34a; color: #fff; }
 
     /* Footer Profissional */
     footer { background: #0b0f19; border-top: 1px solid #1e293b; margin-top: 40px; padding: 20px 15px; text-align: center; font-size: 0.75rem; color: #64748b; }
@@ -215,6 +215,45 @@
     @keyframes spinLoading {
       to { transform: rotate(360deg); }
     }
+
+/* Estilo profissional para a área de carregamento de grupos */
+.loading-state {                                                                                                                                            grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;                                                                                                                                       background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);                                                                                                                gap: 16px;
+}
+
+/* Spinner de carregamento animado com neon */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(59, 130, 246, 0.2);                                                                                                                border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spinLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;                                                                                        box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.loading-state p {
+  color: #94a3b8;
+  font-size: 0.9rem;                                                                                                                                        font-weight: 500;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  animation: pulseText 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spinLoading {                                                                                                                                    to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }                                                                                                                                    }
   </style>
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -1346,7 +1385,7 @@ body {
             avatarMenu.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Ninja';
           }
         }
-      } else {
+      } else {y
         // Se não estiver logado
         const saudacaoEl = document.getElementById('saudacao-usuario');
         if (saudacaoEl) saudacaoEl.innerText = 'Visitante';
@@ -1386,18 +1425,56 @@ body {
       const container = document.getElementById('lista-grupos');
       if (!container) return;
 
+      // Injeta os estilos modernos, animação do VIP e efeitos profissionais de hover
       if (!document.getElementById('estilo-animacao-vip')) {
         const styleAnim = document.createElement('style');
         styleAnim.id = 'estilo-animacao-vip';
         styleAnim.innerHTML = `
           @keyframes pulseVip {
-            0% { box-shadow: 0 0 8px rgba(234, 179, 8, 0.3), inset 0 0 4px rgba(234, 179, 8, 0.1); }
-            50% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.7), inset 0 0 8px rgba(234, 179, 8, 0.3); }
-            100% { box-shadow: 0 0 8px rgba(234, 179, 8, 0.3), inset 0 0 4px rgba(234, 179, 8, 0.1); }
+            0% { box-shadow: 0 0 12px rgba(234, 179, 8, 0.2), inset 0 0 8px rgba(234, 179, 8, 0.08); }
+            50% { box-shadow: 0 0 24px rgba(234, 179, 8, 0.55), inset 0 0 12px rgba(234, 179, 8, 0.2); }
+            100% { box-shadow: 0 0 12px rgba(234, 179, 8, 0.2), inset 0 0 8px rgba(234, 179, 8, 0.08); }
           }
           .card-vip-animado {
-            animation: pulseVip 2.5s infinite ease-in-out;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: pulseVip 3.5s infinite ease-in-out;
+            border: 1.5px solid rgba(234, 179, 8, 0.75) !important;
+            background: linear-gradient(145deg, #1e293b, #172136) !important;
+            position: relative;
+            overflow: hidden;
+          }
+          .card-vip-animado:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(234, 179, 8, 0.35) !important;
+          }
+          .card-parceiro-borda {
+            border: 1.5px solid rgba(59, 130, 246, 0.6) !important;
+            background: linear-gradient(145deg, #1e293b, #172136) !important;
+            position: relative;
+            overflow: hidden;
+          }
+          .card-parceiro-borda:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.25) !important;
+          }
+          .card-comum-pro {
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            background: #1e293b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .card-comum-pro:hover {
+            transform: translateY(-4px);
+            border-color: rgba(71, 85, 105, 1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+          }
+          .btn-entrar-pro {
+            transition: all 0.2s ease;
+          }
+          .btn-entrar-pro:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4) !important;
+          }
+          .btn-entrar-pro:active {
+            transform: scale(0.97);
           }
         `;
         document.head.appendChild(styleAnim);
@@ -1421,7 +1498,7 @@ body {
       });
 
       if (listaTelegram.length === 0) {
-        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8; padding: 20px;">Nenhum canal ou grupo do Telegram cadastrado ainda.</p>';
+        container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #94a3b8; padding: 20px;">Nenhum canal ou grupo do Telegram cadastrado.</p>';
         atualizarControlesPaginacao(1);
         return;
       }
@@ -1459,10 +1536,9 @@ body {
 
         let badgeHtml = '';
         if (g.isVip) {
-          badgeHtml += '<span style="background: linear-gradient(135deg, #f59e0b, #eab308); color: #0f172a; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 800;"><i class="fa-solid fa-crown" style="margin-right: 3px;"></i> VIP</span>';
-        }
-        if (ehParceiro) {
-          badgeHtml += '<span style="background: #2563eb; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: bold;">Parceiro</span>';
+          badgeHtml = '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600;"><i class="fa-solid fa-crown"></i> VIP</span>';
+        } else if (ehParceiro) {
+          badgeHtml = '<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600;"><i class="fa-solid fa-handshake"></i> Parceiro</span>';
         }
 
         const imagemGrupo = g.imagem && g.imagem.trim() !== '' ? escapeHtml(g.imagem) : 'https://via.placeholder.com/65';
@@ -1471,35 +1547,58 @@ body {
         const categoriaGrupo = escapeHtml(g.categoria || 'Telegram');
         const descricaoGrupo = escapeHtml(g.descricao || 'Sem descrição informada.');
 
-        const classeCard = g.isVip ? 'card vip card-vip-animado' : 'card';
-        const estiloCard = g.isVip 
-          ? 'display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; background: #1e293b; border-radius: 12px; padding: 12px; border: 2px solid #eab008;' 
-          : 'display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; background: #1e293b; border-radius: 12px; padding: 12px; border: 1px solid #334155;';
+        // 🌟 Seleção limpa das classes e estilos do Card (Variáveis declaradas de forma correta e sem cortes)
+        let classeCard = 'card card-comum-pro';
+        if (g.isVip) {
+          classeCard = 'card vip card-vip-animado';
+        } else if (ehParceiro) {
+          classeCard = 'card parceiro card-parceiro-borda';
+        }
+
+        const estiloCard = 'display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; border-radius: 16px; padding: 16px;';
 
         return `
         <div class="${classeCard}" style="${estiloCard}">
           <div>
-            <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-              <img src="${imagemGrupo}" style="width: 65px; height: 65px; border-radius: 12px; object-fit: cover; border: 1px solid #334155;" alt="Ícone">
+            <!-- Foto do grupo no topo centralizada com acabamento profissional -->
+            <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+              <div style="position: relative; width: 64px; height: 64px;">
+                <img src="${imagemGrupo}" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.1);" alt="Ícone">
+              </div>
             </div>
-            <div class="card-title" style="font-size: 0.9rem; font-weight: bold; color: #fff; margin-bottom: 6px; text-align: center; word-break: break-word;">${nomeGrupo}</div>
-            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+
+            <!-- Nome do Grupo com Selo de Verificação -->
+            <div class="card-title" style="font-size: 0.88rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px; text-align: center; word-break: break-word; display: flex; align-items: center; justify-content: center; gap: 5px;">
+              ${nomeGrupo}
+              ${g.isVip || ehParceiro ? '<i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 0.75rem;" title="Criador Verificado"></i>' : ''}
+            </div>
+
+            <!-- Tags VIP / Parceiro -->
+            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
               ${badgeHtml}
             </div>
-            <div style="display: flex; justify-content: center; gap: 8px; align-items: center; font-size: 0.7rem; color: #94a3b8; margin-bottom: 8px;">
-              <span><i class="fa-solid fa-users"></i> ${membrosGrupo} inscritos</span>
-              <span>•</span>
-              <span style="color: #38bdf8;"><i class="fa-solid fa-tag"></i> ${categoriaGrupo}</span>
+
+            <!-- Informações (Membros e Categoria) -->
+            <div style="display: flex; justify-content: center; gap: 8px; align-items: center; font-size: 0.7rem; color: #94a3b8; margin-bottom: 10px;">
+              <span style="display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-users" style="font-size: 0.65rem; color: #64748b;"></i> ${membrosGrupo}</span>
+              <span style="color: #475569;">•</span>
+              <span style="color: #38bdf8; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-tag" style="font-size: 0.65rem;"></i> ${categoriaGrupo}</span>
             </div>
-            <div class="card-desc" style="font-size: 0.75rem; color: #cbd5e1; text-align: center; line-height: 1.3; margin-bottom: 10px;">${descricaoGrupo}</div>
+
+            <!-- Descrição -->
+            <div class="card-desc" style="font-size: 0.74rem; color: #cbd5e1; text-align: center; line-height: 1.4; margin-bottom: 14px; opacity: 0.95;">${descricaoGrupo}</div>
           </div>
-          <a href="/grupo/${g.id}" class="btn-card btn-entrar" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; display: inline-block; padding: 8px; background: #0284c7; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.8rem;"><i class="fa-brands fa-telegram"></i> Ver Detalhes/Entrar</a>
+
+          <a href="/grupo/${g.id}" class="btn-card btn-entrar btn-entrar-pro" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; background: #2563eb; color: #fff; padding: 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar no Grupo/Canal
+          </a>
         </div>
         `;
       }).join('');
 
       atualizarControlesPaginacao(totalPaginas);
     }
+
 
     function atualizarControlesPaginacao(totalPaginas) {
         const spanInfo = document.getElementById('info-pagina');

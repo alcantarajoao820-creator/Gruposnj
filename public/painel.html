@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -901,6 +900,21 @@ body {
   <h2 id="display-nome-perfil" style="color: #f8fafc; font-size: 1.2rem; font-weight: 700; margin-bottom: 4px;">Carregando...</h2>
   <p id="display-email-perfil" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 12px;">...</p>
 
+<!-- Bloco de Selo de Verificação e Tempo de Membro -->
+<div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 14px;">
+  
+  <!-- Selo de Verificado (com tooltip ou cor de destaque) -->
+  <div id="badge-verificado-perfil" style="display: none; align-items: center; gap: 5px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); padding: 4px 10px; border-radius: 20px; color: #38bdf8; font-size: 0.75rem; font-weight: 600;">
+    <i class="fa-solid fa-circle-check"></i> Verificado
+  </div>
+
+  <!-- Indicador de Membro Desde -->
+  <div style="display: flex; align-items: center; gap: 5px; background: rgba(148, 163, 184, 0.1); border: 1px solid rgba(148, 163, 184, 0.2); padding: 4px 10px; border-radius: 20px; color: #94a3b8; font-size: 0.75rem;">
+    <i class="fa-solid fa-calendar-days"></i> <span id="display-membro-desde">Membro desde...</span>
+  </div>
+
+</div>
+
   <!-- Card de Status da Conta (VIP / Parceiro / Comum) -->
   <div style="display: flex; align-items: center; justify-content: space-between; background: #161e2e; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px;">
     <span style="font-size: 0.85rem; color: #94a3b8;">Classificação:</span>
@@ -998,7 +1012,7 @@ body {
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; max-height: 240px; overflow-y: auto; padding: 4px;">
           
           <!-- Avatar 1 -->
-          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Ninja')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Coringa')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" style="width: 70px; height: 70px; margin: 0 auto; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid #334155; background: #1e293b; padding: 4px; transition: all 0.2s;">
             <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Ninja" style="width: 100%; height: 100%; object-fit: contain;">
           </div>
 
@@ -1115,6 +1129,186 @@ body {
           <!-- Avatar 24 -->
           <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Specter')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Specter">
             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Specter" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+                    <!-- Avatar 25 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Cyberpunk')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Cyberpunk">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cyberpunk" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 26 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Mecha')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Mecha">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Mecha" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 27 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Ninja')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Ninja">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Ninja" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 28 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Assassin')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Assassin">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Assassin" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 29 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=NinjaDB')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=NinjaDB">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=NinjaDB" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 30 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Fortaleza')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Fortaleza">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Fortaleza" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 31 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=RoboCop')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=RoboCop">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=RoboCop" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 32 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Terminator')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Terminator">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Terminator" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 33 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Shadow')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Shadow">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Shadow" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 34 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Phoenix')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Phoenix">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Phoenix" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 35 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Dragon')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Dragon">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Dragon" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 36 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Titan')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Titan">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Titan" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 37 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Warrior')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Warrior">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Warrior" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 38 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Knight')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Knight">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Knight" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 39 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Android')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Android">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Android" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 40 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/bottts/svg?seed=Glitch')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Glitch">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Glitch" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+         
+                    <!-- Avatar 41 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 42 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Gabriel')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Gabriel">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Gabriel" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 43 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Matheus')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Matheus">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Matheus" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 44 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Bruno')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Bruno">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bruno" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 45 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Beatriz')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Beatriz">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Beatriz" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 46 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Juliana')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Juliana">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Juliana" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 47 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Camila')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Camila">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Camila" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 48 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 49 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Leonardo')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Leonardo">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Leonardo" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 50 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Rafael')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Rafael">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Rafael" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 51 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Isabella')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Isabella">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Isabella" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 52 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/lorelei/svg?seed=Leticia')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/lorelei/svg?seed=Leticia">
+            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Leticia" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+         
+                    <!-- Avatar 53 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=CJ')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=CJ">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=CJ" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 54 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=BigSmoke')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=BigSmoke">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=BigSmoke" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 55 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Ryder')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Ryder">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Ryder" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 56 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Sweet')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Sweet">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sweet" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 57 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Cesalpando')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Cesalpando">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Cesalpando" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 58 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Tenpenny')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Tenpenny">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Tenpenny" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 59 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Woozie')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Woozie">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Woozie" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          <!-- Avatar 60 -->
+          <div onclick="selecionarOpcaoAvatar('https://api.dicebear.com/7.x/adventurer/svg?seed=Truth')" class="avatar-opcao" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Truth">
+            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Truth" style="width: 100%; height: 100%; object-fit: contain;">
           </div>
 
 
@@ -1528,6 +1722,25 @@ auth.onAuthStateChanged((user) => {
     const displayNameGaveta = document.getElementById('display-name');
     if (displayNameGaveta) displayNameGaveta.innerText = user.displayName || 'Usuário';
 
+    // 👉 1.1. Lógica do Selo de Verificação
+    const seloVerificado = document.getElementById('badge-verificado-perfil');
+    if (seloVerificado) {
+      if (user.emailVerified) {
+        seloVerificado.style.display = 'flex';
+      } else {
+        seloVerificado.style.display = 'none';
+      }
+    }
+
+    // 👉 1.2. Lógica do Tempo de Cadastro ("Membro Desde")
+    const displayMembroDesde = document.getElementById('display-membro-desde');
+    if (displayMembroDesde && user.metadata && user.metadata.creationTime) {
+      const dataCriacao = new Date(user.metadata.creationTime);
+      const mesAno = dataCriacao.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
+      const formatado = mesAno.charAt(0).toUpperCase() + mesAno.slice(1);
+      displayMembroDesde.innerText = `Membro desde ${formatado}`;
+    }
+
     // 2. Chama a sua função que carrega os grupos
     carregarMeusGrupos(user.email);
 
@@ -1547,7 +1760,6 @@ auth.onAuthStateChanged((user) => {
     // 4. Sincroniza IMEDIATAMENTE a foto com o menu flutuante centralizado
     const avatarMenu = document.getElementById('avatar-menu');
     if (avatarMenu && imgPreview) {
-      // Pequeno delay para garantir que a tag carregou a fonte corretamente
       setTimeout(() => {
         avatarMenu.src = imgPreview.src;
       }, 100);
@@ -1561,6 +1773,7 @@ auth.onAuthStateChanged((user) => {
     }
   }
 });
+
 
 // Função para mostrar uma notificação bonita e moderna no lugar do alert
 function mostrarNotificacao(mensagem, tipo = 'sucesso') {

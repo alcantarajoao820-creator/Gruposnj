@@ -376,6 +376,29 @@
       }
     });
 
+
+// 🛡️ FUNÇÃO DE VALIDAÇÃO ANTI-SPAM
+function validarDescricaoAntiSpam(texto) {
+  if (!texto) return false;
+
+  // 1. Detecta letras repetidas consecutivas em excesso (ex: "jjjjjjjj", "kkkkkk")
+  const temSpamLetras = /(.)\1{4,}/.test(texto);
+  if (temSpamLetras) {
+    mostrarAviso('Atenção', 'Sua descrição contém muitas letras repetidas seguidas.');
+    return false;
+  }
+
+  // 2. Detecta se há alguma palavra muito longa sem espaços
+  const palavras = texto.split(/\s+/);
+  const temPalavraGigante = palavras.some(palavra => palavra.length > 22);
+  if (temPalavraGigante) {
+    mostrarAviso('Atenção', 'Sua descrição possui palavras muito longas sem espaços.');
+    return false;
+  }
+
+  return true;
+}
+
 // Função: Enviar Formulário de Cadastro com Validação de Plataforma
 document.getElementById('form-publicar').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -385,6 +408,11 @@ document.getElementById('form-publicar').addEventListener('submit', async (e) =>
 
   if (textoDescricao.length !== 150) {
     mostrarAviso('Atenção', 'A descrição precisa ter exatamente 150 caracteres!');
+    return;
+  }
+
+  // 🛡️ Validação Anti-Spam e Anti-Palavras Gigantes com mostrarAviso
+  if (!validarDescricaoAntiSpam(textoDescricao)) {
     return;
   }
 
@@ -431,6 +459,7 @@ document.getElementById('form-publicar').addEventListener('submit', async (e) =>
     mostrarAviso('Erro de Conexão', 'Não foi possível conectar ao servidor.');
   }
 });
+
 
     function gerarBreadcrumbs() {
       const container = document.getElementById('breadcrumb-container');

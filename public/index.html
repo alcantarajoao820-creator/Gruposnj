@@ -1525,6 +1525,7 @@ body {
       }
     }
 
+
     function renderizarGrupos(lista) {
       const container = document.getElementById('lista-grupos');
       if (!container) return;
@@ -1648,10 +1649,10 @@ body {
         // Montagem das Badges
         let badgeHtml = '';
         if (g.isVip) {
-          badgeHtml += '<span style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);">⭐ VIP</span>';
+          badgeHtml += '<span style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-crown"></i> VIP</span>';
         }
         if (ehParceiro) {
-          badgeHtml += '<span style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);">🤝 PARCEIRO</span>';
+          badgeHtml += '<span style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-shield-halved"></i> Parceiro</span>';
         }
 
         const imagemGrupo = g.imagem && g.imagem.trim() !== '' ? escapeHtml(g.imagem) : 'https://via.placeholder.com/65';
@@ -1680,8 +1681,11 @@ body {
               </div>
             </div>
 
-            <!-- Nome do Grupo -->
-            <div class="card-title" style="font-size: 0.88rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px; text-align: center; word-break: break-word; line-height: 1.3;">${nomeGrupo}</div>
+            <!-- Nome do Grupo com Selo de Verificação -->
+            <div class="card-title" style="font-size: 0.88rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px; text-align: center; word-break: break-word; display: flex; align-items: center; justify-content: center; gap: 5px;">
+              ${nomeGrupo}
+              ${g.isVip || ehParceiro ? '<i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 0.75rem;" title="Criador Verificado"></i>' : ''}
+            </div>
 
             <!-- Tags VIP / Parceiro -->
             <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
@@ -1699,7 +1703,9 @@ body {
             <div class="card-desc" style="font-size: 0.74rem; color: #cbd5e1; text-align: center; line-height: 1.4; margin-bottom: 14px; opacity: 0.95;">${descricaoGrupo}</div>
           </div>
 
-          <a href="/grupo/${g.id}" class="btn-card btn-entrar btn-entrar-pro" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; display: inline-block; padding: 9px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border-radius: 9px; font-size: 0.75rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);">Ver Detalhes/Entrar</a>
+           <a href="/grupo/${g.id}" class="btn-card btn-entrar btn-entrar-pro" data-adulto="${ehAdulto}" style="width: 100%; text-align: center; box-sizing: border-box; background: #2563eb; color: #fff; padding: 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar no Grupo
+          </a>
         </div>
         `;
       }).join('');
@@ -1708,6 +1714,7 @@ body {
         atualizarControlesPaginacao(totalPaginas);
       }
     }
+
 
 
     function atualizarControlesPaginacao(totalPaginas) {

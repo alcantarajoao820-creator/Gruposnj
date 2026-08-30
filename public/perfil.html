@@ -181,24 +181,42 @@
 <!-- Espaçamento superior para o conteúdo não ficar por baixo do cabeçalho fixo -->
 <div style="margin-top: 80px;"></div>
 
-<div class="perfil-card">
-  <div id="avatar-container" class="avatar-container">
-    <img id="avatar-atual-preview" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+<div class="perfil-card" style="text-align: center; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+  
+  <div id="avatar-container" class="avatar-container" style="position: relative; width: 90px; height: 90px; margin: 0 auto 12px;">
+    <img id="avatar-atual-preview" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid #38bdf8;">
   </div>
 
-  <h2 id="perfil-nome">Carregando...</h2>
+  <!-- Nome + Selo de Verificado -->
+  <h2 id="perfil-nome" style="color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+    Carregando...
+    <i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 0.85rem;" title="Criador Verificado"></i>
+  </h2>
 
-  <div class="badge-cargo" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05)); padding: 6px 12px; border-radius: 20px; margin-top: 10px; border: 1px solid rgba(59, 130, 246, 0.3);">
+  <!-- Badge de Cargo -->
+  <div class="badge-cargo" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(30, 27, 75, 0.5)); border: 1px solid rgba(59, 130, 246, 0.4); padding: 4px 12px; border-radius: 20px; color: #60a5fa; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px;">
     <i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i>
     <span>Membro Criador</span>
   </div>
 
+    <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.72rem; color: #94a3b8; margin-bottom: 16px;">
+    <span style="display: flex; align-items: center; gap: 4px;">
+      <i class="fa-solid fa-calendar-days" style="color: #38bdf8;"></i> <span id="perfil-membro-desde">Membro recente</span>
+    </span>
+ 
+    <span style="display: flex; align-items: center; gap: 4px;">
+      <i class="fa-solid fa-layer-group" style="color: #38bdf8;"></i> <span id="perfil-total-grupos">0 Grupos</span>
+    </span>
+  </div>
+
+  <!-- Rede Social / Contato -->
   <div id="container-social" style="display: none; margin-top: 15px;">
-    <a id="perfil-social-link" href="#" target="_blank" class="social-btn">
+    <a id="perfil-social-link" href="#" target="_blank" class="social-btn" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; padding: 10px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: 600; width: 100%; box-sizing: border-box;">
       <i class="fa-solid fa-share-nodes"></i> Visitar Rede Social / Contato
     </a>
   </div>
 </div>
+
 
 <div class="secao-card-pro">
   <h3 class="secao-titulo-pro">
@@ -243,27 +261,27 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
-      authDomain: "gruposnj-41858.firebaseapp.com",
-      projectId: "gruposnj-41858",
-      storageBucket: "gruposnj-41858.firebasestorage.app",
-      messagingSenderId: "249583894572",
-      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
+  authDomain: "gruposnj-41858.firebaseapp.com",
+  projectId: "gruposnj-41858",
+  storageBucket: "gruposnj-41858.firebasestorage.app",
+  messagingSenderId: "249583894572",
+  appId: "1:249583894572:web:f61a19ffe2a0867b441189"
+};
 
-    let auth = null;
-    try {
-      if (typeof firebase !== 'undefined') {
-        if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-        }
-        auth = firebase.auth();
-      }
-    } catch (e) {
-      console.warn("Erro ao iniciar Firebase:", e);
+let auth = null;
+try {
+  if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-    
+    auth = firebase.auth();
+  }
+} catch (e) {
+  console.warn("Erro ao iniciar Firebase:", e);
+}
+
 // ==========================================
 // 1. FUNÇÕES GERAIS E DE INTERFACE
 // ==========================================
@@ -273,27 +291,59 @@ function escapeHtml(str) {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-function aplicarDadosNaTela(nome, urlFoto) {
+function aplicarDadosNaTela(nome, urlFoto, membrosDesde, totalGrupos, linkSocial) {
   const padrao = "https://api.dicebear.com/7.x/bottts/svg?seed=Ninja";
   const fotoFinal = (urlFoto && urlFoto.startsWith('http')) ? urlFoto : padrao;
 
+  // 1. Nome do Perfil
   const elNome = document.getElementById('perfil-nome');
-  if (elNome) elNome.innerText = nome;
+  if (elNome) {
+    elNome.innerHTML = `${escapeHtml(nome)} <i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 0.85rem;" title="Criador Verificado"></i>`;
+  }
 
+  // 2. Avatar
   const containerAvatar = document.getElementById('avatar-container');
   if (containerAvatar) {
-    containerAvatar.innerHTML = `<img src="${fotoFinal}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+    containerAvatar.innerHTML = `<img src="${escapeHtml(fotoFinal)}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+  }
+
+  // 👉 Lógica do Tempo de Cadastro ("Membro Desde")
+  const displayMembroDesde = document.getElementById('display-membro-desde');
+  if (displayMembroDesde) {
+    const currentUser = auth ? auth.currentUser : null;
+    
+    if (currentUser && currentUser.metadata && currentUser.metadata.creationTime) {
+      const dataCriacao = new Date(currentUser.metadata.creationTime);
+      const mesAno = dataCriacao.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
+      const formatado = mesAno.charAt(0).toUpperCase() + mesAno.slice(1);
+      displayMembroDesde.innerText = `Membro desde ${formatado}`;
+    } else {
+      const fallback = (membrosDesde && membrosDesde.trim() !== '') ? membrosDesde : '2026';
+      displayMembroDesde.innerText = `Membro desde ${fallback}`;
+    }
+  }
+
+  // 5. Rede Social / Contato
+  const containerSocial = document.getElementById('container-social');
+  const elSocialLink = document.getElementById('perfil-social-link');
+  if (containerSocial && elSocialLink) {
+    if (linkSocial && linkSocial.trim() !== '') {
+      elSocialLink.href = linkSocial;
+      containerSocial.style.display = 'block';
+    } else {
+      containerSocial.style.display = 'none';
+    }
   }
 }
 
 function atualizarLinkPerfilAutor(nomeCriador) {
   const linkPerfil = document.getElementById('autor-grupo');
   const textoNome = document.getElementById('nome-autor-texto');
-  
+
   if (textoNome) {
     textoNome.innerText = nomeCriador;
   }
-  
+
   if (linkPerfil) {
     const autorCodificado = encodeURIComponent(nomeCriador.trim());
     linkPerfil.href = `perfil.html?autor=${autorCodificado}`;
@@ -312,7 +362,7 @@ function obterPlataformaIcone(link) {
   if (l.includes('instagram.com')) {
     return '<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(236, 72, 153, 0.15); color: #ec4899; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem;"><i class="fa-brands fa-instagram"></i> Instagram</span>';
   }
-  return '<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem;"><i class="fa-solid fa-globe"></i> Link</span>';
+  return '<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</span>';
 }
 
 async function carregarGruposDoPerfil(nomeCriador) {
@@ -321,7 +371,7 @@ async function carregarGruposDoPerfil(nomeCriador) {
 
   try {
     const res = await fetch('/api/grupos');
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error('Erro na API');
     const grupos = await res.json();
     const busca = nomeCriador.toLowerCase().trim();
 
@@ -346,6 +396,13 @@ async function carregarGruposDoPerfil(nomeCriador) {
       atualizarLinkPerfilAutor(nomeCriador);
     }
 
+    // Atualiza o total de grupos na tela
+    const elTotalGrupos = document.getElementById('perfil-total-grupos');
+    if (elTotalGrupos) {
+      const qtd = gruposDoCriador.length;
+      elTotalGrupos.innerText = `${qtd} ${qtd === 1 ? 'Grupo' : 'Grupos'}`;
+    }
+
     if (gruposDoCriador.length === 0) {
       container.innerHTML = '<div class="sem-grupos" style="color: #94a3b8; text-align: center; padding: 20px;">Este criador ainda não possui grupos publicados.</div>';
       return;
@@ -354,8 +411,9 @@ async function carregarGruposDoPerfil(nomeCriador) {
     container.innerHTML = gruposDoCriador.map(g => {
       let statusBadge = '<span style="background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem;">Ativo</span>';
       if (g.isVip) {
-        statusBadge = '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">VIP</span>';
+        statusBadge = '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold;">VIP</span>';
       }
+      
       const plataformaBadge = obterPlataformaIcone(g.link);
       const ehParceiro = g.isParceiro || g.statusParceria === 'aprovado';
       const parceiroBadge = ehParceiro ? `
@@ -365,11 +423,11 @@ async function carregarGruposDoPerfil(nomeCriador) {
       ` : '';
 
       return `
-        <div class="grupo-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(19, 27, 46, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 10px;">
+        <div class="grupo-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(19, 27, 46, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); padding: 12px; border-radius: 12px; margin-bottom: 8px;">
           <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
-            <img src="${g.imagem || 'https://via.placeholder.com/50'}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; flex-shrink: 0;" alt="Grupo">
+            <img src="${escapeHtml(g.imagem || 'https://via.placeholder.com/50')}" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover;" alt="Ícone">
             <div style="overflow: hidden;">
-              <strong style="font-size: 1rem; color: #fff; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(g.nome || 'Grupo sem nome')}</strong>
+              <strong style="font-size: 1rem; color: #fff; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(g.nome || 'Grupo')}</strong>
               <div style="margin-top: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                 ${statusBadge}
                 ${plataformaBadge}
@@ -378,7 +436,7 @@ async function carregarGruposDoPerfil(nomeCriador) {
               </div>
             </div>
           </div>
-          <a href="${g.link || '#'}" target="_blank" class="btn-entrar" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+          <a href="${escapeHtml(g.link || '#')}" target="_blank" class="btn-entrar" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 0.8rem; font-weight: bold; white-space: nowrap;">
             <i class="fa-solid fa-right-to-bracket"></i> Entrar
           </a>
         </div>
