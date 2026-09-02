@@ -422,27 +422,29 @@ app.get('/api/grupos', async (req, res) => {
   }
 });
 
+const multer = require('multer');
+const upload = multer({ limits: { fileSize: 2 * 1024 * 1024 } }); // Limite de 2MB para não pesar o banco
 
-app.post('/api/solicitar', async (req, res) => {
+app.post('/api/solicitar', upload.single('imagem'), async (req, res) => {
   try {
-    const { nome, link, categoria, descricao, imagem, email, aceitouTermos } = req.body;
+    let { nome, link, categoria, descricao, email, aceitouTermos, plataforma } = req.body;
+    let arquivoImagem = req.file;
 
     if (!nome || !link) {
       return res.status(400).json({ error: 'Preencha todos os campos obrigatórios.' });
     }
 
-    if (!aceitouTermos) {
-      return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso para enviar o grupo.' });
+    if (aceitouTermos === 'false' || !aceitouTermos) {
+      return res.status(400).json({ error: 'Você precisa aceitar os Termos de Uso.' });
     }
 
-    const linkFormatado = link.trim().toLowerCase();
-
-    const existeEmGrupos = await Grupo.findOne({ link: { $regex: new RegExp(`^${linkFormatado}$`, 'i') } });
-    const existeEmSolicitacoes = await Solicitacao.findOne({ link: { $regex: new RegExp(`^${linkFormatado}$`, 'i') } });
-
-    if (existeEmGrupos || existeEmSolicitacoes) {
-      return res.status(400).json({ error: 'Este link de grupo já está cadastrado ou em análise no sistema!' });
+    if (!arquivoImagem) {
+      return res.status(400).json({ error: 'Selecione uma imagem da sua galeria.' });
     }
+
+    // Converte a imagem direto para Data URI (Base64) para salvar direto no MongoDB com segurança
+    const b64 = Buffer.from(arquivoImagem.buffer).toString('base64');
+    let imagemFinal = `data:${arquivoImagem.mimetype};base64,${b64}`;
 
     await Solicitacao.create({
       id: Date.now(),
@@ -450,17 +452,22 @@ app.post('/api/solicitar', async (req, res) => {
       link: link.trim(),
       categoria: categoria || 'Geral',
       descricao: descricao || '',
-      imagem: imagem || 'https://via.placeholder.com/100',
+      imagem: imagemFinal, // Salva a imagem inteira compactada em string direto no banco!
       email: email || 'Anonimo',
-      aceitouTermos,
+      aceitouTermos: true,
+      plataforma: plataforma || 'whatsapp',
       data: new Date()
     });
 
+    console.log("Sucesso absoluto! Imagem salva direto no banco MongoDB.");
     res.json({ success: true, mensagem: 'Grupo enviado para análise!' });
+
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao processar solicitação' });
+    console.error("Erro ao salvar solicitação:", error);
+    res.status(500).json({ error: 'Erro ao processar imagem no servidor.' });
   }
 });
+
 
 // Rota para solicitar parceria (Envia para análise do admin)
 app.post('/api/grupos/solicitar-parceria', async (req, res) => {

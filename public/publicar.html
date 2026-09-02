@@ -1,422 +1,227 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <meta name="google-site-verification" content="bKLtKz4nfHs1ztY2O5z3PUMPPnIhRUTWqVvyr7STpr4" />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Publicar Grupo - GruposNJ</title>
-  <style>
-    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
-    body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+<!DOCTYPE html> 
+<html lang="pt-BR"> 
+<head> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+<meta name="google-site-verification" content="bKLtKz4nfHs1ztY2O5z3PUMPPnIhRUTWqVvyr7STpr4" /> 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8154102341150186" crossorigin="anonymous"></script> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Publicar Grupo - GruposNJ</title> 
+<style> 
+* { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; } 
+body { background: #070a12; color: #f1f5f9; min-height: 100vh; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; } 
+.main-wrapper { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; margin: auto; } 
+.site-header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; } 
+.site-header .logo-icon { background: linear-gradient(135deg, #25d366, #128c7e); color: #fff; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); } 
+.site-header h1 { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; } 
+.site-header h1 span { color: #38bdf8; } 
+.card { background: linear-gradient(145deg, #0f172a, #0b1329); border: 1px solid #1e293b; border-radius: 20px; padding: 30px 25px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; } 
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc); } 
+h2 { color: #f8fafc; font-size: 1.3rem; margin-bottom: 20px; text-align: center; font-weight: 700; letter-spacing: -0.5px; } 
+label { font-size: 0.85rem; color: #94a3b8; display: block; margin-bottom: 6px; font-weight: 500; } 
+input, select, textarea { width: 100%; padding: 12px 14px; background: #111827; border: 1px solid #334155; color: #fff; border-radius: 10px; margin-bottom: 15px; font-size: 0.9rem; transition: all 0.2s ease; } 
+input:focus, select:focus, textarea:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); } 
+textarea { resize: vertical; min-height: 80px; } 
+.char-counter { font-size: 0.75rem; color: #94a3b8; text-align: right; margin-top: -10px; margin-bottom: 15px; display: block; } 
+.char-counter.limit { color: #ef4444; font-weight: 600; } 
+.char-counter.success { color: #22c55e; font-weight: 600; } 
+.terms-box { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: rgba(30, 41, 59, 0.5); padding: 10px 12px; border-radius: 10px; border: 1px solid #1e293b; } 
+.terms-box input[type="checkbox"] { width: 18px; height: 18px; accent-color: #38bdf8; cursor: pointer; } 
+.terms-box label { margin: 0; font-size: 0.8rem; color: #cbd5e1; cursor: pointer; } 
+.terms-box a { color: #38bdf8; text-decoration: none; font-weight: 600; } 
+.terms-box a:hover { text-decoration: underline; } 
+.preview-box { display: none; align-items: center; gap: 12px; background: #162238; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #38bdf8; } 
+.preview-box img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; } 
+.btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-weight: 700; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); transition: transform 0.2s, filter 0.2s; } 
+.btn:hover { transform: translateY(-1px); filter: brightness(1.05); } 
+.btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; margin-top: 10px; display: block; text-align: center; text-decoration: none; padding: 11px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; } 
+.btn-cancel:hover { background: rgba(51, 65, 85, 0.3); color: #fff; } 
+.submit-disclaimer { font-size: 0.72rem; color: #94a3b8; text-align: center; margin-top: 12px; line-height: 1.4; } 
+.submit-disclaimer a { color: #38bdf8; text-decoration: none; font-weight: 500; } 
+.submit-disclaimer a:hover { text-decoration: underline; } 
+.modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index: 1000; backdrop-filter: blur(5px); } 
+.modal-overlay.active { display:flex; } 
+.modal-box { background:#0f172a; border:1px solid #334155; border-radius:16px; padding:24px; width:90%; max-width:340px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); } 
+.modal-box h3 { color:#38bdf8; margin-bottom:10px; font-size: 1.15rem; } 
+.modal-box p { font-size:0.9rem; color:#cbd5e1; margin-bottom:20px; line-height: 1.4; } 
+footer { width: 100%; text-align: center; padding: 25px 15px; margin-top: 40px; border-top: 1px solid #1e293b; color: #94a3b8; font-size: 0.8rem; } 
+footer a { transition: color 0.2s; } 
+footer a:hover { color: #38bdf8 !important; } 
+</style> 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script> 
+</head> 
+<body> 
+<div class="main-wrapper"> 
+<div class="site-header" style="display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;"> 
+<div style="display: flex; align-items: center; gap: 10px;"> 
+<div class="logo-icon"> 
+<i class="fa-brands fa-whatsapp"></i> 
+</div> 
+<h1>Grupos<span>NJ</span></h1> 
+</div> 
+<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(2, 132, 199, 0.3) 100%); border: 1px solid rgba(56, 189, 248, 0.5); padding: 6px 14px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2); backdrop-filter: blur(10px);"> 
+<i class="fa-brands fa-telegram" style="color: #38bdf8; font-size: 1.1rem;"></i> 
+<span style="color: #f8fafc; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px; font-family: 'Outfit', system-ui, -apple-system, sans-serif;">Telegram</span> 
+</div> 
+</div> 
+<div id="breadcrumb-container"></div> 
+<div class="card"> 
+<h2>🚀 Publicar Novo Grupo</h2> 
+<form id="form-publicar"> 
+<label>Link do Grupo (WhatsApp ou Telegram)</label> 
+<input type="url" id="link" placeholder="https://chat.whatsapp.com/ ou https://t.me/..." required> 
 
-    .main-wrapper { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; margin: auto; }
+<label>Nome do Grupo</label> 
+<input type="text" id="nome" placeholder="Ex: Boteco dos Stickers" required> 
 
-    /* Cabeçalho do Site / Logo com ícone do Zap */
-    .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 5px;
-    }
-    .site-header .logo-icon {
-      background: linear-gradient(135deg, #25d366, #128c7e);
-      color: #fff;
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-    }
-    .site-header h1 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-    .site-header h1 span {
-      color: #38bdf8;
-    }
+<label>Categoria</label> 
+<select id="categoria"> 
+<option value="Amizade">🤝 Amizade e Relacionamento</option> 
+<option value="Figurinhas">🖼️ Figurinhas / Stickers</option> 
+<option value="Stickers +18">🔥 Stickers +18</option> 
+<option value="Stickers Engraçados">🤪 Stickers Engraçados / Memes</option> 
+<option value="Jogos">🎮 Jogos / Roblox / Free Fire</option> 
+<option value="Vendas">📢 Vendas / Divulgação / Negócios</option> 
+<option value="Memes">😂 Memes e Zoeira</option> 
+<option value="Musica">🎵 Música, Status e Vídeos</option> 
+<option value="Anime">🍥 Animes / Mangás / Otaku</option> 
+<option value="Futebol">⚽ Futebol e Esportes</option> 
+<option value="Series">🎬 Séries, Filmes e Doramas</option> 
+<option value="Tecnologia">💻 Tecnologia / Programação / IA</option> 
+<option value="Cripto">💰 Criptomoedas e Finanças</option> 
+<option value="Fofoca">🗣️ Fofocas e Babados</option> 
+<option value="Namoro">💖 Namoro e Paquera</option> 
+<option value="Adulto">🔞 Conteúdo Adulto</option> 
+<option value="Putaria">😈 Putaria / Hot</option> 
+<option value="Vazados">📸 Vazados e Proibidos</option> 
+<option value="Amadoras">⭐ Amadoras / Conteúdo Exclusivo</option> 
+<option value="Outros">📁 Outros Assuntos</option> 
+</select> 
 
-    .card { 
-      background: linear-gradient(145deg, #0f172a, #0b1329); 
-      border: 1px solid #1e293b; 
-      border-radius: 20px; 
-      padding: 30px 25px; 
-      width: 100%; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      position: relative;
-      overflow: hidden;
-    }
+<label>Foto do Grupo (Escolher da Galeria)</label> 
+<input type="file" id="imagem-file" accept="image/*" required style="padding: 10px; cursor: pointer;">
 
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
-    }
+<label>Descrição</label> 
+<textarea id="descricao" maxlength="150" placeholder="Sobre o que é o seu grupo? (Exatamente 150 caracteres)"></textarea> 
+<span class="char-counter limit" id="contador-caracteres">Faltam 150 caracteres (Total: 0/150)</span> 
 
-    h2 { 
-      color: #f8fafc; 
-      font-size: 1.3rem; 
-      margin-bottom: 20px; 
-      text-align: center; 
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+<div class="terms-box"> 
+<input type="checkbox" id="aceito-termos" required> 
+<label for="aceito-termos">Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a></label> 
+</div> 
 
-    label { font-size: 0.85rem; color: #94a3b8; display: block; margin-bottom: 6px; font-weight: 500; }
-    
-    input, select, textarea { 
-      width: 100%; 
-      padding: 12px 14px; 
-      background: #111827; 
-      border: 1px solid #334155; 
-      color: #fff; 
-      border-radius: 10px; 
-      margin-bottom: 15px; 
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-    }
+<button type="submit" class="btn">Enviar para Análise</button> 
 
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-    }
+<div class="submit-disclaimer"> 
+Ao apertar em "Enviar para Análise", você concorda com os <a href="/termos.html" target="_blank">Termos de Uso</a> e diretrizes da plataforma. 
+</div> 
+<a href="/painel.html" class="btn-cancel">Cancelar</a> 
+</form> 
+</div> 
+</div> 
 
-    textarea { resize: vertical; min-height: 80px; }
+<footer> 
+<p style="margin-bottom: 10px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p> 
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;"> 
+<a href="mailto:suporte.gruposnj@gmail.com" style="color: #38bdf8; text-decoration: none;"> 
+<i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com </a> 
+<span style="color: #475569;">|</span> 
+<a href="/termos.html" style="color: #94a3b8; text-decoration: none;"> 
+<i class="fa-solid fa-file-contract"></i> Termos de Uso </a> 
+</div> 
+</footer> 
 
-    /* Estilo para o contador de caracteres */
-    .char-counter { font-size: 0.75rem; color: #94a3b8; text-align: right; margin-top: -10px; margin-bottom: 15px; display: block; }
-    .char-counter.limit { color: #ef4444; font-weight: 600; }
-    .char-counter.success { color: #22c55e; font-weight: 600; }
+<div class="modal-overlay" id="modal-aviso"> 
+<div class="modal-box"> 
+<h3 id="modal-titulo">Aviso</h3> 
+<p id="modal-msg"></p> 
+<button onclick="fecharModal()" class="btn">OK</button> 
+</div> 
+</div> 
 
-    .terms-box { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: rgba(30, 41, 59, 0.5); padding: 10px 12px; border-radius: 10px; border: 1px solid #1e293b; }
-    .terms-box input[type="checkbox"] { width: 18px; height: 18px; accent-color: #38bdf8; cursor: pointer; }
-    .terms-box label { margin: 0; font-size: 0.8rem; color: #cbd5e1; cursor: pointer; }
-    .terms-box a { color: #38bdf8; text-decoration: none; font-weight: 600; }
-    .terms-box a:hover { text-decoration: underline; }
+<script> 
+const firebaseConfig = { apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw", authDomain: "gruposnj-41858.firebaseapp.com", projectId: "gruposnj-41858", storageBucket: "gruposnj-41858.firebasestorage.app", messagingSenderId: "249583894572", appId: "1:249583894572:web:f61a19ffe2a0867b441189" }; 
+firebase.initializeApp(firebaseConfig); 
+const auth = firebase.auth(); 
+let userEmail = ''; 
 
-    .preview-box { display: none; align-items: center; gap: 12px; background: #162238; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #38bdf8; }
-    .preview-box img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+auth.onAuthStateChanged((user) => { 
+  if (!user) { 
+    window.location.href = '/login.html'; 
+  } else { 
+    userEmail = user.email; 
+  } 
+}); 
 
-    .btn { 
-      width: 100%; 
-      padding: 13px; 
-      border: none; 
-      border-radius: 10px; 
-      font-weight: 700; 
-      background: linear-gradient(135deg, #22c55e, #16a34a); 
-      color: #fff; 
-      cursor: pointer; 
-      font-size: 0.95rem; 
-      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-      transition: transform 0.2s, filter 0.2s;
-    }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+function mostrarAviso(titulo, msg, redirecionar = false) { 
+  document.getElementById('modal-titulo').innerText = titulo; 
+  document.getElementById('modal-msg').innerText = msg; 
+  const modal = document.getElementById('modal-aviso'); 
+  modal.classList.add('active'); 
+  modal.dataset.redirecionar = redirecionar; 
+} 
 
-    .btn-cancel { 
-      background: transparent; 
-      color: #94a3b8; 
-      border: 1px solid #334155; 
-      margin-top: 10px; 
-      display: block; 
-      text-align: center; 
-      text-decoration: none; 
-      padding: 11px; 
-      border-radius: 10px; 
-      font-size: 0.85rem; 
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .btn-cancel:hover { background: rgba(51, 65, 85, 0.3); color: #fff; }
+function fecharModal() { 
+  const modal = document.getElementById('modal-aviso'); 
+  modal.classList.remove('active'); 
+  if (modal.dataset.redirecionar === 'true') { 
+    window.location.href = '/painel.html'; 
+  } 
+} 
 
-    /* Aviso legal abaixo do botão */
-    .submit-disclaimer {
-      font-size: 0.72rem;
-      color: #94a3b8;
-      text-align: center;
-      margin-top: 12px;
-      line-height: 1.4;
-    }
-    .submit-disclaimer a {
-      color: #38bdf8;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .submit-disclaimer a:hover {
-      text-decoration: underline;
-    }
+const descricaoInput = document.getElementById('descricao'); 
+const contadorSpan = document.getElementById('contador-caracteres'); 
+const limiteExato = 150; 
 
-    /* Modal Dark Customizado */
-    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index: 1000; backdrop-filter: blur(5px); }
-    .modal-overlay.active { display:flex; }
-    .modal-box { background:#0f172a; border:1px solid #334155; border-radius:16px; padding:24px; width:90%; max-width:340px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-    .modal-box h3 { color:#38bdf8; margin-bottom:10px; font-size: 1.15rem; }
-    .modal-box p { font-size:0.9rem; color:#cbd5e1; margin-bottom:20px; line-height: 1.4; }
+descricaoInput.addEventListener('input', () => { 
+  const digitados = descricaoInput.value.length; 
+  const faltam = limiteExato - digitados; 
+  if (digitados < limiteExato) { 
+    contadorSpan.innerText = `Faltam ${faltam} caracteres (Total: ${digitados}/150)`; 
+    contadorSpan.className = 'char-counter limit'; 
+  } else if (digitados === limiteExato) { 
+    contadorSpan.innerText = `Perfeito! Exatamente 150 caracteres.`; 
+    contadorSpan.className = 'char-counter success'; 
+  } else { 
+    descricaoInput.value = descricaoInput.value.substring(0, limiteExato); 
+  } 
+}); 
 
-    /* Footer Moderno */
-    footer { 
-      width: 100%; 
-      text-align: center; 
-      padding: 25px 15px; 
-      margin-top: 40px; 
-      border-top: 1px solid #1e293b; 
-      color: #94a3b8; 
-      font-size: 0.8rem; 
-    }
-    footer a { transition: color 0.2s; }
-    footer a:hover { color: #38bdf8 !important; }
-  </style>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-</head>
-<body>
-
-  <div class="main-wrapper">
-<!-- Cabeçalho do Site Atualizado: Símbolo do Zap + Nome GruposNJ + Retângulo Telegram -->
-<div class="site-header" style="display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;">
-  
-  <div style="display: flex; align-items: center; gap: 10px;">
-    <div class="logo-icon">
-      <i class="fa-brands fa-whatsapp"></i>
-    </div>
-    <h1>Grupos<span>NJ</span></h1>
-  </div>
-
-  <!-- Retângulo Azul Profissional para o Telegram -->
-  <div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(2, 132, 199, 0.3) 100%); border: 1px solid rgba(56, 189, 248, 0.5); padding: 6px 14px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2); backdrop-filter: blur(10px);">
-    <i class="fa-brands fa-telegram" style="color: #38bdf8; font-size: 1.1rem;"></i>
-    <span style="color: #f8fafc; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px; font-family: 'Outfit', system-ui, -apple-system, sans-serif;">Telegram</span>
-  </div>
-
-</div>
-
-    <!-- Trilha de Navegação (Breadcrumb) -->
-    <div id="breadcrumb-container"></div>
-
-    <div class="card">
-      <h2>🚀 Publicar Novo Grupo</h2>
-
-      <form id="form-publicar">
-<label>Link do Grupo (WhatsApp ou Telegram)</label>
-<input type="url" id="link" placeholder="https://chat.whatsapp.com/ ou https://t.me/..." required onblur="buscarDadosLink()">
-
-        <!-- Pré-visualização Automática do Link -->
-        <div class="preview-box" id="preview-container">
-          <img id="preview-img" src="" alt="Foto do grupo">
-          <span id="preview-title" style="font-size:0.85rem; color:#38bdf8; font-weight:bold;"></span>
-        </div>
-
-        <label>Nome do Grupo</label>
-        <input type="text" id="nome" placeholder="Ex: Boteco dos Stickers" required>
-
-        <label>Categoria</label>
-        <select id="categoria">
-          <option value="Amizade">🤝 Amizade e Relacionamento</option>
-          <option value="Figurinhas">🖼️ Figurinhas / Stickers</option>
-          <option value="Stickers +18">🔥 Stickers +18</option>
-          <option value="Stickers Engraçados">🤪 Stickers Engraçados / Memes</option>
-          <option value="Jogos">🎮 Jogos / Roblox / Free Fire</option>
-          <option value="Vendas">📢 Vendas / Divulgação / Negócios</option>
-          <option value="Memes">😂 Memes e Zoeira</option>
-          <option value="Musica">🎵 Música, Status e Vídeos</option>
-          <option value="Anime">🍥 Animes / Mangás / Otaku</option>
-          <option value="Futebol">⚽ Futebol e Esportes</option>
-          <option value="Series">🎬 Séries, Filmes e Doramas</option>
-          <option value="Tecnologia">💻 Tecnologia / Programação / IA</option>
-          <option value="Cripto">💰 Criptomoedas e Finanças</option>
-          <option value="Fofoca">🗣️ Fofocas e Babados</option>
-          <option value="Namoro">💖 Namoro e Paquera</option>
-          <option value="Adulto">🔞 Conteúdo Adulto</option>
-          <option value="Putaria">😈 Putaria / Hot</option>
-          <option value="Vazados">📸 Vazados e Proibidos</option>
-          <option value="Amadoras">⭐ Amadoras / Conteúdo Exclusivo</option>
-          <option value="Outros">📁 Outros Assuntos</option>
-        </select>
-
-        <label>URL da Imagem / Ícone (Auto-preenchida pelo link)</label>
-        <input type="url" id="imagem" placeholder="https://...">
-
-        <label>Descrição</label>
-        <textarea id="descricao" maxlength="150" placeholder="Sobre o que é o seu grupo? (Exatamente 150 caracteres)"></textarea>
-        <span class="char-counter limit" id="contador-caracteres">Faltam 150 caracteres (Total: 0/150)</span>
-
-        <!-- Campo de Aceite dos Termos de Uso -->
-        <div class="terms-box">
-          <input type="checkbox" id="aceito-termos" required>
-          <label for="aceito-termos">Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a></label>
-        </div>
-
-        <button type="submit" class="btn">Enviar para Análise</button>
-        
-        <!-- Texto explicativo logo abaixo do botão -->
-        <div class="submit-disclaimer">
-          Ao apertar em "Enviar para Análise", você concorda com os <a href="/termos.html" target="_blank">Termos de Uso</a> e diretrizes da plataforma.
-        </div>
-
-        <a href="/painel.html" class="btn-cancel">Cancelar</a>
-      </form>
-    </div>
-  </div>
-
-  <!-- Footer Profissional Ajustado -->
-  <footer>
-    <p style="margin-bottom: 10px;">&copy; 2026 GruposNJ. Todos os direitos reservados.</p>
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
-      <a href="mailto:suporte.gruposnj@gmail.com" style="color: #38bdf8; text-decoration: none;">
-        <i class="fa-solid fa-envelope"></i> Suporte: suporte.gruposnj@gmail.com
-      </a>
-      <span style="color: #475569;">|</span>
-      <a href="/termos.html" style="color: #94a3b8; text-decoration: none;">
-        <i class="fa-solid fa-file-contract"></i> Termos de Uso
-      </a>
-    </div>
-  </footer>
-
-  <!-- Modal Aviso Dark -->
-  <div class="modal-overlay" id="modal-aviso">
-    <div class="modal-box">
-      <h3 id="modal-titulo">Aviso</h3>
-      <p id="modal-msg"></p>
-      <button onclick="fecharModal()" class="btn">OK</button>
-    </div>
-  </div>
-
-  <script>
-    // Configurações do Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBL0KaXCwVBA9bbnjZOjARidMlG0sAI-Hw",
-      authDomain: "gruposnj-41858.firebaseapp.com",
-      projectId: "gruposnj-41858",
-      storageBucket: "gruposnj-41858.firebasestorage.app",
-      messagingSenderId: "249583894572",
-      appId: "1:249583894572:web:f61a19ffe2a0867b441189"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    let userEmail = '';
-
-    // Função: Verificar Sessão do Usuário
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        window.location.href = '/login.html';
-      } else {
-        userEmail = user.email;
-      }
-    });
-
-    // Função: Exibir Modal de Aviso
-    function mostrarAviso(titulo, msg, redirecionar = false) {
-      document.getElementById('modal-titulo').innerText = titulo;
-      document.getElementById('modal-msg').innerText = msg;
-      const modal = document.getElementById('modal-aviso');
-      modal.classList.add('active');
-      modal.dataset.redirecionar = redirecionar;
-    }
-
-    // Função: Fechar Modal
-    function fecharModal() {
-      const modal = document.getElementById('modal-aviso');
-      modal.classList.remove('active');
-      if (modal.dataset.redirecionar === 'true') {
-        window.location.href = '/painel.html';
-      }
-    }
-
-    // Função: Autopreencher Dados do Link (Scraping)
-    async function buscarDadosLink() {
-      const link = document.getElementById('link').value.trim();
-      if (!link) return;
-
-      try {
-        const res = await fetch('/api/preview-link?url=' + encodeURIComponent(link));
-        const data = await res.json();
-
-        if (data.image) {
-          document.getElementById('imagem').value = data.image;
-          document.getElementById('preview-img').src = data.image;
-          document.getElementById('preview-title').innerText = data.title || 'Imagem Encontrada';
-          document.getElementById('preview-container').style.display = 'flex';
-        }
-
-        if (data.title && !document.getElementById('nome').value) {
-          document.getElementById('nome').value = data.title;
-        }
-      } catch (e) {
-        // Falha silenciosa se não conseguir extrair metadados
-      }
-    }
-
-    // Trava e Contador Exato de 150 Caracteres
-    const descricaoInput = document.getElementById('descricao');
-    const contadorSpan = document.getElementById('contador-caracteres');
-    const limiteExato = 150;
-
-    descricaoInput.addEventListener('input', () => {
-      const digitados = descricaoInput.value.length;
-      const faltam = limiteExato - digitados;
-
-      if (digitados < limiteExato) {
-        contadorSpan.innerText = `Faltam ${faltam} caracteres (Total: ${digitados}/150)`;
-        contadorSpan.className = 'char-counter limit';
-      } else if (digitados === limiteExato) {
-        contadorSpan.innerText = `Perfeito! Exatamente 150 caracteres.`;
-        contadorSpan.className = 'char-counter success';
-      } else {
-        descricaoInput.value = descricaoInput.value.substring(0, limiteExato);
-      }
-    });
-
-
-// 🛡️ FUNÇÃO DE VALIDAÇÃO ANTI-SPAM
-function validarDescricaoAntiSpam(texto) {
-  if (!texto) return false;
-
-  // 1. Detecta letras repetidas consecutivas em excesso (ex: "jjjjjjjj", "kkkkkk")
-  const temSpamLetras = /(.)\1{4,}/.test(texto);
-  if (temSpamLetras) {
-    mostrarAviso('Atenção', 'Sua descrição contém muitas letras repetidas seguidas.');
-    return false;
-  }
-
-  // 2. Detecta se há alguma palavra muito longa sem espaços
-  const palavras = texto.split(/\s+/);
-  const temPalavraGigante = palavras.some(palavra => palavra.length > 22);
-  if (temPalavraGigante) {
-    mostrarAviso('Atenção', 'Sua descrição possui palavras muito longas sem espaços.');
-    return false;
-  }
-
-  return true;
-}
+function validarDescricaoAntiSpam(texto) { 
+  if (!texto) return false; 
+  const temSpamLetras = /(.)\1{4,}/.test(texto); 
+  if (temSpamLetras) { 
+    mostrarAviso('Atenção', 'Sua descrição contém muitas letras repetidas seguidas.'); 
+    return false; 
+  } 
+  const palavras = texto.split(/\s+/); 
+  const temPalavraGigante = palavras.some(palavra => palavra.length > 22); 
+  if (temPalavraGigante) { 
+    mostrarAviso('Atenção', 'Sua descrição possui palavras muito longas sem espaços.'); 
+    return false; 
+  } 
+  return true; 
+} 
 
 // Função: Enviar Formulário de Cadastro com Validação de Plataforma
 document.getElementById('form-publicar').addEventListener('submit', async (e) => {
   e.preventDefault();
+  console.log("Botão de envio clicado no front-end!");
 
-  const textoDescricao = descricaoInput.value;
+  const textoDescricao = document.getElementById('descricao').value;
   const linkInput = document.getElementById('link').value.trim();
+  const fileInput = document.getElementById('imagem-file').files[0];
 
   if (textoDescricao.length !== 150) {
     mostrarAviso('Atenção', 'A descrição precisa ter exatamente 150 caracteres!');
     return;
   }
 
-  // 🛡️ Validação Anti-Spam e Anti-Palavras Gigantes com mostrarAviso
   if (!validarDescricaoAntiSpam(textoDescricao)) {
     return;
   }
 
-  // Valida se o link pertence ao WhatsApp ou ao Telegram
   const isWhatsapp = linkInput.includes('chat.whatsapp.com') || linkInput.includes('wa.me');
   const isTelegram = linkInput.includes('t.me') || linkInput.includes('telegram.me');
 
@@ -425,82 +230,69 @@ document.getElementById('form-publicar').addEventListener('submit', async (e) =>
     return;
   }
 
-  const plataforma = isTelegram ? 'telegram' : 'whatsapp';
-
-  const dados = {
-    nome: document.getElementById('nome').value,
-    link: linkInput,
-    categoria: document.getElementById('categoria').value,
-    imagem: document.getElementById('imagem').value,
-    descricao: textoDescricao,
-    email: userEmail,
-    aceitouTermos: document.getElementById('aceito-termos').checked,
-    plataforma: plataforma // Envia a plataforma detectada
-  };
+  if (!fileInput) {
+    mostrarAviso('Atenção', 'Selecione uma imagem da sua galeria.');
+    return;
+  }
 
   try {
-    const res = await fetch('/api/solicitar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dados)
-    });
+    const formData = new FormData();
+    formData.append('nome', document.getElementById('nome').value);
+    formData.append('link', linkInput);
+    formData.append('categoria', document.getElementById('categoria').value);
+    formData.append('descricao', textoDescricao);
+    formData.append('email', typeof userEmail !== 'undefined' ? userEmail : 'Anonimo');
+    formData.append('aceitouTermos', document.getElementById('aceito-termos').checked);
+    formData.append('plataforma', isTelegram ? 'telegram' : 'whatsapp');
+    formData.append('imagem', fileInput);
 
-    const result = await res.json().catch(() => ({}));
+    console.log("Enviando requisição Fetch para o backend...");
+    const res = await fetch('/api/solicitar', { 
+      method: 'POST', 
+      body: formData 
+    }); 
+    
+    const result = await res.json().catch(() => ({})); 
+    console.log("Resposta recebida do backend:", result);
 
-    if (res.ok || result.success || result.ok || result.id) {
-      document.getElementById('form-publicar').reset();
-      document.getElementById('preview-container').style.display = 'none';
-
-      mostrarAviso('Sucesso!', 'Seu grupo foi enviado e está aguardando aprovação.', true);
-    } else {
-      mostrarAviso('Aviso', result.error || result.mensagem || 'Falha ao enviar o grupo.');
-    }
+    if (res.ok || result.success) { 
+      document.getElementById('form-publicar').reset(); 
+      mostrarAviso('Sucesso!', 'Seu grupo foi enviado e está aguardando aprovação.', true); 
+    } else { 
+      mostrarAviso('Aviso', result.error || result.mensagem || 'Falha ao enviar o grupo.'); 
+    } 
   } catch (err) {
-    mostrarAviso('Erro de Conexão', 'Não foi possível conectar ao servidor.');
+    console.error("Erro no fetch do front-end:", err);
+    mostrarAviso('Erro de Conexão', 'Não foi possível conectar ao servidor.'); 
   }
 });
 
+function gerarBreadcrumbs() { 
+  const container = document.getElementById('breadcrumb-container'); 
+  if (!container) return; 
+  const caminho = window.location.pathname; 
+  if (caminho === '/' || caminho.includes('index.html')) { 
+    container.innerHTML = ` <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;"> <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Início</a> </div> `; 
+    return; 
+  } 
+  let nomePagina = 'Página'; 
+  if (caminho.includes('/grupo/')) { 
+    nomePagina = 'Detalhes do Grupo'; 
+  } else if (caminho.includes('perfil.html')) { 
+    nomePagina = 'Meu Perfil'; 
+  } else if (caminho.includes('publicar.html')) { 
+    nomePagina = 'Publicar Grupo'; 
+  } else if (caminho.includes('termos.html')) { 
+    nomePagina = 'Termos de Uso'; 
+  } else if (caminho.includes('painel.html')) { 
+    nomePagina = 'Painel do Usuário'; 
+  } else if (caminho.includes('planos.html')) { 
+    nomePagina = "Planos VIP's"; 
+  } 
+  container.innerHTML = ` <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;"> <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a> <span style="color: #475569;">/</span> <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span> </div> `; 
+} 
 
-    function gerarBreadcrumbs() {
-      const container = document.getElementById('breadcrumb-container');
-      if (!container) return;
-
-      const caminho = window.location.pathname;
-
-      if (caminho === '/' || caminho.includes('index.html')) {
-        container.innerHTML = `
-          <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-            <a href="/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-house"></i> Início</a>
-          </div>
-        `;
-        return;
-      }
-
-      let nomePagina = 'Página';
-      if (caminho.includes('/grupo/')) {
-        nomePagina = 'Detalhes do Grupo';
-      } else if (caminho.includes('perfil.html')) {
-        nomePagina = 'Meu Perfil';
-      } else if (caminho.includes('publicar.html')) {
-        nomePagina = 'Publicar Grupo';
-      } else if (caminho.includes('termos.html')) {
-        nomePagina = 'Termos de Uso';
-      } else if (caminho.includes('painel.html')) {
-        nomePagina = 'Painel do Usuário';
-      } else if (caminho.includes('planos.html')) {
-        nomePagina = "Planos VIP's";
-      }
-
-      container.innerHTML = `
-        <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-          <a href="/index.html" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-house"></i> Início</a>
-          <span style="color: #475569;">/</span>
-          <span style="color: #f8fafc; font-weight: 600;">${nomePagina}</span>
-        </div>
-      `;
-    }
-
-    window.addEventListener('DOMContentLoaded', gerarBreadcrumbs);
-  </script>
-</body>
+window.addEventListener('DOMContentLoaded', gerarBreadcrumbs); 
+</script> 
+</body> 
 </html>
